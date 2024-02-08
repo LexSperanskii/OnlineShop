@@ -75,12 +75,15 @@ fun RegistrationBody(
 ) {
     Column(
         modifier = modifier
+            .padding(
+                top = 113.dp,
+                bottom = 11.dp
+            )
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 108.dp)
         ){
             RegistrationForm(
                 nameField = nameField,
@@ -125,11 +128,7 @@ fun RegistrationBody(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
-                .fillMaxWidth()
-                .height(303.dp)
-                .padding(
-                    bottom = 45.dp
-                )
+                .fillMaxSize()
         ) {
             Text(
                 text = "Нажимая кнопку “Войти”, Вы принимаете",
@@ -170,7 +169,6 @@ fun RegistrationField(
         modifier = modifier
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(
                     top = dimensionResource(id = R.dimen.padding_medium),
@@ -229,7 +227,6 @@ fun RegistrationForm(
     modifier: Modifier = Modifier
 ){
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
         RegistrationField(

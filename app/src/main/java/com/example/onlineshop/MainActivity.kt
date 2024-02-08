@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.onlineshop.ui.OnlineShopApp
+import com.example.onlineshop.ui.registrationScreen.RegistrationScreen
 import com.example.onlineshop.ui.theme.OnlineShopTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    OnlineShopApp()
+                    RegistrationScreen()
                 }
             }
         }
