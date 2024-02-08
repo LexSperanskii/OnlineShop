@@ -1,4 +1,10 @@
 package com.example.onlineshop.ui.registrationScreen
 
-class RegistrationScreenVIewModel {
+import androidx.lifecycle.ViewModel
+
+data class RegistrationScreenUiState(
+    val searchField : String = "",
+    val tableName : String = "",
+)
+class RegistrationScreenVIewModel(): ViewModel() {
 }

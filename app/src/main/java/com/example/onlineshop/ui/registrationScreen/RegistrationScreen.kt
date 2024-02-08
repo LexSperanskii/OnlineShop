@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.onlineshop.R
 import com.example.onlineshop.ui.OnlineShopTopAppBar
 import com.example.onlineshop.ui.theme.OnlineShopTheme
@@ -37,6 +38,7 @@ import com.example.onlineshop.ui.theme.OnlineShopTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(
+    registrationScreenVIewModel: RegistrationScreenVIewModel = viewModel()
 ) {
     Scaffold(
         topBar = {
