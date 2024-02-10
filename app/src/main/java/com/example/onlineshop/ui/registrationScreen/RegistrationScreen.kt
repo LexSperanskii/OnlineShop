@@ -1,5 +1,8 @@
 package com.example.onlineshop.ui.registrationScreen
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
@@ -21,10 +26,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,6 +54,7 @@ import com.example.onlineshop.ui.theme.OnlineShopTheme
 fun RegistrationScreen(
     registrationScreenVIewModel: RegistrationScreenVIewModel = viewModel()
 ) {
+    val registrationUiState = registrationScreenVIewModel.uiState.collectAsState().value
     Scaffold(
         topBar = {
             OnlineShopTopAppBar(
@@ -48,12 +63,19 @@ fun RegistrationScreen(
         }
     ) { innerPadding ->
         RegistrationBody(
-            nameField = "",
-            lastNameField = "",
-            number = "",
-            onNameFieldValueChange = {},
-            onLastNameFieldValueChange = {},
-            onNumberValueChange = {},
+            nameField = registrationUiState.name,
+            onNameFieldValueChange = {
+                registrationScreenVIewModel.updateNameField(it)
+            },
+            lastNameField = registrationUiState.lastName,
+            onLastNameFieldValueChange = {
+                registrationScreenVIewModel.updateLastNameField(it)
+            },
+            number = registrationScreenVIewModel.formatPhoneNumber(registrationUiState.number),
+            onNumberValueChange = {
+                registrationScreenVIewModel.updateNumberField(it)
+            },
+            onNumberFieldClick = {}, //registrationScreenVIewModel.onNumberFieldClick()
             onButtonClick = {},
             enabled = false,
             modifier = Modifier
@@ -73,6 +95,7 @@ fun RegistrationBody(
     onNumberValueChange: (String)->Unit,
     onButtonClick: () -> Unit,
     enabled: Boolean,
+    onNumberFieldClick : ()->Unit ,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -93,7 +116,8 @@ fun RegistrationBody(
                 number = number,
                 onNameFieldValueChange = onNameFieldValueChange,
                 onLastNameFieldValueChange = onLastNameFieldValueChange,
-                onNumberValueChange = onNumberValueChange
+                onNumberValueChange = onNumberValueChange,
+                onNumberFieldClick = onNumberFieldClick
             )
             Column(
                 modifier = Modifier
@@ -165,6 +189,8 @@ fun RegistrationField(
     text : String,
     placeholder: String,
     onValueChange: (String)->Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    onNumberFieldClick : ()->Unit = {},
     modifier: Modifier = Modifier
 ){
     Column(
@@ -210,6 +236,17 @@ fun RegistrationField(
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent
                 ),
+                keyboardOptions = keyboardOptions,
+                interactionSource = remember { MutableInteractionSource() }
+                    .also { interactionSource ->
+                        LaunchedEffect(interactionSource) {
+                            interactionSource.interactions.collect {
+                                if (it is PressInteraction.Release) {
+                                    onNumberFieldClick()
+                                }
+                            }
+                        }
+                    },
                 modifier = Modifier
                     .height(50.dp)
                     .width(343.dp)
@@ -226,6 +263,7 @@ fun RegistrationForm(
     onNameFieldValueChange: (String)->Unit,
     onLastNameFieldValueChange: (String)->Unit,
     onNumberValueChange: (String)->Unit,
+    onNumberFieldClick : ()->Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -244,7 +282,9 @@ fun RegistrationForm(
         RegistrationField(
             text = number,
             placeholder = "Номер телефона",
-            onValueChange = onNumberValueChange
+            onValueChange = onNumberValueChange,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onNumberFieldClick = onNumberFieldClick,
         )
     }
 }
@@ -272,6 +312,7 @@ fun RegistrationFormPreview() {
             onNameFieldValueChange = {},
             onLastNameFieldValueChange = {},
             onNumberValueChange = {},
+            onNumberFieldClick = {},
         )
     }
 }
@@ -288,7 +329,8 @@ fun RegistrationBodyPreview() {
             onLastNameFieldValueChange = {},
             onNumberValueChange = {},
             onButtonClick = {},
-            enabled = true
+            enabled = true,
+            onNumberFieldClick = {},
         )
     }
 }
