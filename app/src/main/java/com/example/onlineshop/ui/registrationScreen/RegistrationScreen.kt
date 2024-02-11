@@ -29,6 +29,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
@@ -41,9 +42,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.onlineshop.R
+import com.example.onlineshop.ui.AppViewModelProvider
 import com.example.onlineshop.ui.OnlineShopTopAppBar
 import com.example.onlineshop.ui.navigation.NavigationDestination
 import com.example.onlineshop.ui.theme.OnlineShopTheme
+import kotlinx.coroutines.launch
 
 object RegistrationDestination : NavigationDestination {
     override val route = "registration"
@@ -52,9 +55,21 @@ object RegistrationDestination : NavigationDestination {
 
 @Composable
 fun RegistrationScreen(
-    registrationScreenVIewModel: RegistrationScreenVIewModel = viewModel()
+    navigate : () -> Unit,
+    registrationScreenVIewModel: RegistrationScreenVIewModel = viewModel(factory = AppViewModelProvider.Factory)//RegistrationScreenVIewModel.Factory)
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val registrationUiState = registrationScreenVIewModel.uiState.collectAsState().value
+
+    coroutineScope.launch {
+        registrationScreenVIewModel.navigateToOtherScreen.collect { shouldNavigate ->
+            if (shouldNavigate) {
+                // Выполнить переход на другой экран
+                navigate()
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             OnlineShopTopAppBar(
@@ -88,14 +103,16 @@ fun RegistrationScreen(
                 registrationScreenVIewModel.onEraseNumberClick()
             },
             onNumberFieldClick = {}, //На тот случай, если действительно по наведению на поле отображать маску
-            onButtonClick = {},
+            onButtonClick = {
+                registrationScreenVIewModel.saveUser()
+                navigate()
+            },
             enabled = !registrationUiState.nameIsError &&
                     !registrationUiState.lastNameIsError &&
                     !registrationUiState.numberIsError &&
                     registrationUiState.name != "" &&
                     registrationUiState.lastName != "" &&
-                    registrationUiState.number!=""
-            ,
+                    registrationUiState.number != "",
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
@@ -245,17 +262,20 @@ fun RegistrationField(
                 onValueChange = { onValueChange(it) },
                 singleLine = true,
                 trailingIcon = {
-                    IconButton(
-                        onClick = onEraseItemClick,
-                    ){
-                        Icon(
-                            Icons.Filled.Close,
-                            contentDescription = "Delete",
-                            modifier = modifier
-                                .height(13.dp)
-                                .width(13.dp)
-                        )}
-                    },
+                    if (text != "") {
+                        IconButton(
+                            onClick = onEraseItemClick,
+                        ) {
+                            Icon(
+                                Icons.Filled.Close,
+                                contentDescription = "Delete",
+                                modifier = modifier
+                                    .height(13.dp)
+                                    .width(13.dp)
+                            )
+                        }
+                    }
+                },
                 placeholder = {
                     Text(
                         text = placeholder,
@@ -406,6 +426,8 @@ fun RegistrationBodyPreview() {
 @Composable
 fun RegistrationScreenPreview() {
     OnlineShopTheme {
-        RegistrationScreen()
+        RegistrationScreen(
+            navigate = {}
+        )
     }
 }

@@ -3,12 +3,25 @@ package com.example.onlineshop.ui.registrationScreen
 import android.util.Log
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.onlineshop.OnlineShopApplication
+import com.example.onlineshop.model.User
+import com.example.onlineshop.data.UsersRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 data class RegistrationScreenUiState(
+    val id: Int = 0,
     val name : String = "",
     val nameIsError : Boolean = false,
     val lastName : String = "",
@@ -16,11 +29,32 @@ data class RegistrationScreenUiState(
     val number : String = "",
     val numberIsError : Boolean = false
 )
-class RegistrationScreenVIewModel(): ViewModel() {
+
+class RegistrationScreenVIewModel(private val usersRepository: UsersRepository): ViewModel() {
 
     private val _uiState = MutableStateFlow(RegistrationScreenUiState())
     var uiState : StateFlow<RegistrationScreenUiState> = _uiState.asStateFlow()
 
+    private val _navigateToOtherScreen = MutableSharedFlow<Boolean>()
+    val navigateToOtherScreen: SharedFlow<Boolean> = _navigateToOtherScreen.asSharedFlow()
+
+    init {
+        viewModelScope.launch(Dispatchers.IO){
+            usersRepository.getUserStream().collect{ user ->
+                _uiState.update {
+                    it.copy(
+                        id = user?.id ?: 0,
+                        name = user?.name ?: "",
+                        lastName = user?.lastName ?: "",
+                        number = user?.phone ?: ""
+                    )
+                }
+                if (user != null && user.name.isNotBlank() && user.lastName.isNotBlank() && user.phone.isNotBlank()) {
+                    _navigateToOtherScreen.emit(true) // Отправляем сигнал о необходимости перехода на другой экран
+                }
+            }
+        }
+    }
     fun updateNameField(name: String){
         if (name.all { it.isLetter() && it.code in 0x0400..0x04FF}){
             _uiState.update {
@@ -187,4 +221,15 @@ class RegistrationScreenVIewModel(): ViewModel() {
             )
         }
     }
+    fun saveUser() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (usersRepository.countUser(uiState.value.name,uiState.value.lastName,uiState.value.number) == 0)
+            usersRepository.insertUser(uiState.value.toUser())
+        }
+    }
 }
+fun RegistrationScreenUiState.toUser(): User = User(
+    name = name,
+    lastName = lastName,
+    phone = number
+)
