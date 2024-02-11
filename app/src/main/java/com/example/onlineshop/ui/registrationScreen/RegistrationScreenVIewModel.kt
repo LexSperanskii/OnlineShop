@@ -1,6 +1,5 @@
 package com.example.onlineshop.ui.registrationScreen
 
-import android.telephony.PhoneNumberUtils
 import android.util.Log
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
@@ -11,48 +10,47 @@ import kotlinx.coroutines.flow.update
 
 data class RegistrationScreenUiState(
     val name : String = "",
-    val nameValid : Boolean = true,
+    val nameIsError : Boolean = false,
     val lastName : String = "",
-    val lastNameValid : Boolean = true,
+    val lastNameIsError : Boolean = false,
     val number : String = "",
+    val numberIsError : Boolean = false
 )
 class RegistrationScreenVIewModel(): ViewModel() {
 
     private val _uiState = MutableStateFlow(RegistrationScreenUiState())
     var uiState : StateFlow<RegistrationScreenUiState> = _uiState.asStateFlow()
 
-
     fun updateNameField(name: String){
         if (name.all { it.isLetter() && it.code in 0x0400..0x04FF}){
             _uiState.update {
                 it.copy(
                     name = name,
-                    nameValid = true
+                    nameIsError = false
                 )
             }
         }else{
             _uiState.update {
                 it.copy(
                     name = name,
-                    nameValid = false
+                    nameIsError = true
                 )
             }
         }
     }
-
     fun updateLastNameField(name: String){
         if (name.all { it.isLetter() && it.code in 0x0400..0x04FF}){
             _uiState.update {
                 it.copy(
                     lastName = name,
-                    lastNameValid = true
+                    lastNameIsError = false
                 )
             }
         }else{
             _uiState.update {
                 it.copy(
                     lastName = name,
-                    lastNameValid = false
+                    lastNameIsError = true
                 )
             }
         }
@@ -68,6 +66,7 @@ class RegistrationScreenVIewModel(): ViewModel() {
                     number = region,
                 )
             }
+            isNumberValid(number)
         }
         if (uiState.value.number.isEmpty() && number.isDigitsOnly()) {
             _uiState.update {
@@ -75,6 +74,7 @@ class RegistrationScreenVIewModel(): ViewModel() {
                     number = region + number,
                 )
             }
+            isNumberValid(number)
         }
         if (uiState.value.number.isNotEmpty()){
             val digital = number.filter { it.isDigit() }
@@ -94,9 +94,24 @@ class RegistrationScreenVIewModel(): ViewModel() {
                     number = correctNumber,
                 )
             }
+            isNumberValid(correctNumber)
         }
     }
-
+    private fun isNumberValid(number : String){
+        if (number.matches(Regex("^\\+7\\d{10}$"))){
+            _uiState.update {
+                it.copy(
+                    numberIsError = false
+                )
+            }
+        }else{
+            _uiState.update {
+                it.copy(
+                    numberIsError = true
+                )
+            }
+        }
+    }
     fun formatPhoneNumber(phoneNumber: String): String {
         return when (phoneNumber.length){
             2 -> {
@@ -146,6 +161,30 @@ class RegistrationScreenVIewModel(): ViewModel() {
             else -> {
                 phoneNumber
             }
+        }
+    }
+    fun onEraseNameClick(){
+        _uiState.update {
+            it.copy(
+                name = "",
+                nameIsError = false
+            )
+        }
+    }
+    fun onEraseLastNameClick(){
+        _uiState.update {
+            it.copy(
+                lastName = "",
+                lastNameIsError = false
+            )
+        }
+    }
+    fun onEraseNumberClick(){
+        _uiState.update {
+            it.copy(
+                number = "",
+                numberIsError = false
+            )
         }
     }
 }

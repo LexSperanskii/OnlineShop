@@ -1,6 +1,6 @@
 package com.example.onlineshop.ui.registrationScreen
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -23,18 +22,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -46,10 +42,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.onlineshop.R
 import com.example.onlineshop.ui.OnlineShopTopAppBar
+import com.example.onlineshop.ui.navigation.NavigationDestination
 import com.example.onlineshop.ui.theme.OnlineShopTheme
 
+object RegistrationDestination : NavigationDestination {
+    override val route = "registration"
+    override val titleRes = R.string.registration
+}
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(
     registrationScreenVIewModel: RegistrationScreenVIewModel = viewModel()
@@ -58,26 +58,44 @@ fun RegistrationScreen(
     Scaffold(
         topBar = {
             OnlineShopTopAppBar(
-                title = "Вход",
+                title = stringResource(RegistrationDestination.titleRes),
             )
         }
     ) { innerPadding ->
         RegistrationBody(
             nameField = registrationUiState.name,
+            isErrorName = registrationUiState.nameIsError,
             onNameFieldValueChange = {
                 registrationScreenVIewModel.updateNameField(it)
             },
+            onEraseNameClick = {
+                registrationScreenVIewModel.onEraseNameClick()
+            },
             lastNameField = registrationUiState.lastName,
+            isErrorLastName = registrationUiState.lastNameIsError,
             onLastNameFieldValueChange = {
                 registrationScreenVIewModel.updateLastNameField(it)
             },
+            onEraseLastNameClick = {
+                registrationScreenVIewModel.onEraseLastNameClick()
+            },
             number = registrationScreenVIewModel.formatPhoneNumber(registrationUiState.number),
+            isErrorNumber = registrationUiState.numberIsError,
             onNumberValueChange = {
                 registrationScreenVIewModel.updateNumberField(it)
             },
-            onNumberFieldClick = {}, //registrationScreenVIewModel.onNumberFieldClick()
+            onEraseNumberClick = {
+                registrationScreenVIewModel.onEraseNumberClick()
+            },
+            onNumberFieldClick = {}, //На тот случай, если действительно по наведению на поле отображать маску
             onButtonClick = {},
-            enabled = false,
+            enabled = !registrationUiState.nameIsError &&
+                    !registrationUiState.lastNameIsError &&
+                    !registrationUiState.numberIsError &&
+                    registrationUiState.name != "" &&
+                    registrationUiState.lastName != "" &&
+                    registrationUiState.number!=""
+            ,
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
@@ -95,7 +113,13 @@ fun RegistrationBody(
     onNumberValueChange: (String)->Unit,
     onButtonClick: () -> Unit,
     enabled: Boolean,
+    isErrorNumber: Boolean,
+    isErrorName: Boolean,
+    isErrorLastName: Boolean,
     onNumberFieldClick : ()->Unit ,
+    onEraseNameClick : () -> Unit,
+    onEraseLastNameClick : () -> Unit,
+    onEraseNumberClick : () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -117,7 +141,13 @@ fun RegistrationBody(
                 onNameFieldValueChange = onNameFieldValueChange,
                 onLastNameFieldValueChange = onLastNameFieldValueChange,
                 onNumberValueChange = onNumberValueChange,
-                onNumberFieldClick = onNumberFieldClick
+                onNumberFieldClick = onNumberFieldClick,
+                isErrorNumber = isErrorNumber,
+                isErrorName = isErrorName,
+                isErrorLastName = isErrorLastName,
+                onEraseNameClick = onEraseNameClick,
+                onEraseLastNameClick = onEraseLastNameClick,
+                onEraseNumberClick = onEraseNumberClick,
             )
             Column(
                 modifier = Modifier
@@ -191,6 +221,8 @@ fun RegistrationField(
     onValueChange: (String)->Unit,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onNumberFieldClick : ()->Unit = {},
+    isError: Boolean,
+    onEraseItemClick : () -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -213,13 +245,17 @@ fun RegistrationField(
                 onValueChange = { onValueChange(it) },
                 singleLine = true,
                 trailingIcon = {
-                    Icon(
-                        Icons.Filled.Close,
-                        contentDescription = "Delete",
-                        modifier = modifier
-                            .height(13.dp)
-                            .width(13.dp)
-                    )},
+                    IconButton(
+                        onClick = onEraseItemClick,
+                    ){
+                        Icon(
+                            Icons.Filled.Close,
+                            contentDescription = "Delete",
+                            modifier = modifier
+                                .height(13.dp)
+                                .width(13.dp)
+                        )}
+                    },
                 placeholder = {
                     Text(
                         text = placeholder,
@@ -250,6 +286,11 @@ fun RegistrationField(
                 modifier = Modifier
                     .height(50.dp)
                     .width(343.dp)
+                    .border(
+                        width = if (isError) 2.dp else 0.dp,
+                        color = if (isError) Color.Red else Color.Transparent,
+                        shape = MaterialTheme.shapes.small
+                    )
             )
         }
     }
@@ -264,6 +305,12 @@ fun RegistrationForm(
     onLastNameFieldValueChange: (String)->Unit,
     onNumberValueChange: (String)->Unit,
     onNumberFieldClick : ()->Unit,
+    isErrorNumber: Boolean,
+    isErrorName: Boolean,
+    isErrorLastName: Boolean,
+    onEraseNameClick : () -> Unit,
+    onEraseLastNameClick : () -> Unit,
+    onEraseNumberClick : () -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -272,12 +319,16 @@ fun RegistrationForm(
         RegistrationField(
             text = nameField,
             placeholder = "Имя",
-            onValueChange = onNameFieldValueChange
+            onValueChange = onNameFieldValueChange,
+            isError = isErrorName,
+            onEraseItemClick = onEraseNameClick
         )
         RegistrationField(
             text = lastNameField,
             placeholder = "Фамилия",
-            onValueChange = onLastNameFieldValueChange
+            onValueChange = onLastNameFieldValueChange,
+            isError = isErrorLastName,
+            onEraseItemClick = onEraseLastNameClick
         )
         RegistrationField(
             text = number,
@@ -285,6 +336,8 @@ fun RegistrationForm(
             onValueChange = onNumberValueChange,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             onNumberFieldClick = onNumberFieldClick,
+            isError = isErrorNumber,
+            onEraseItemClick = onEraseNumberClick
         )
     }
 }
@@ -296,7 +349,9 @@ fun RegistrationFieldPreview() {
         RegistrationField(
             text = "",
             placeholder = "Имя",
-            onValueChange = {}
+            onValueChange = {},
+            isError = false,
+            onEraseItemClick = {}
         )
     }
 }
@@ -313,6 +368,12 @@ fun RegistrationFormPreview() {
             onLastNameFieldValueChange = {},
             onNumberValueChange = {},
             onNumberFieldClick = {},
+            isErrorNumber = false,
+            isErrorName = false,
+            isErrorLastName = false,
+            onEraseNameClick = {},
+            onEraseLastNameClick = {},
+            onEraseNumberClick = {},
         )
     }
 }
@@ -331,6 +392,12 @@ fun RegistrationBodyPreview() {
             onButtonClick = {},
             enabled = true,
             onNumberFieldClick = {},
+            isErrorNumber = false,
+            isErrorName = false,
+            isErrorLastName = false,
+            onEraseNameClick = {},
+            onEraseLastNameClick = {},
+            onEraseNumberClick = {},
         )
     }
 }
