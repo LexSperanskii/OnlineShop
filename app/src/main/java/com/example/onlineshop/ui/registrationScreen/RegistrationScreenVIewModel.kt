@@ -3,20 +3,12 @@ package com.example.onlineshop.ui.registrationScreen
 import android.util.Log
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.onlineshop.OnlineShopApplication
 import com.example.onlineshop.model.User
 import com.example.onlineshop.data.UsersRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -48,7 +40,6 @@ class RegistrationScreenVIewModel(private val usersRepository: UsersRepository):
                 )
             }
         }
-//        viewModelScope.cancel()
     }
     fun updateNameField(name: String){
         if (name.all { it.isLetter() && it.code in 0x0400..0x04FF}){

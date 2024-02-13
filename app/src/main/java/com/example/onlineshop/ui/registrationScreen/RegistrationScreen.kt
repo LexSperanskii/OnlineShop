@@ -62,7 +62,6 @@ fun RegistrationScreen(
 
     LaunchedEffect(registrationUiState.id) {
         if (registrationUiState.name.isNotBlank() && registrationUiState.lastName.isNotBlank() && registrationUiState.number.isNotBlank()) {
-            Log.d("testlig","LaunchedEffect")
             navigateToCatalog()
         }
     }
@@ -102,10 +101,7 @@ fun RegistrationScreen(
             onNumberFieldClick = {}, //На тот случай, если действительно по наведению на поле отображать маску
             onButtonClick = {
                 registrationScreenVIewModel.saveUser()
-                Log.d("testlig","1")
                 navigateToGeneral()
-                Log.d("testlig","2")
-
             },
             enabled = !registrationUiState.nameIsError &&
                     !registrationUiState.lastNameIsError &&
