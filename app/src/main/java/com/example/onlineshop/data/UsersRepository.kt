@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface UsersRepository {
     suspend fun countUser(name: String, lastName: String, phone: String): Int
     suspend fun insertUser(user: User)
-    fun getUserStream(): Flow<User?>
+    fun getUser(): User?//Flow<User?>
 }

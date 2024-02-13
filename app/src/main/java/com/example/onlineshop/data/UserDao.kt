@@ -15,6 +15,6 @@ interface UserDao {
     suspend fun insert(user: User)
 
     @Query("SELECT * FROM users ORDER BY id DESC LIMIT 1")
-    fun getUser() : Flow<User>
+    fun getUser() : User? //Flow<User>
 
 }

@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">OnlineShop</string>
     <string name="registration">Вход</string>
+    <string name="general">Главная</string>
+    <string name="catalog">Каталог</string>
+    <string name="cart">Корзина</string>
+    <string name="sales">Акции</string>
+    <string name="account">Профиль</string>
 <!--    <string name="masked_number">+ 7 %1$s %2$s %3$s %4$s</string>-->
 </resources>

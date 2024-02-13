@@ -1,5 +1,6 @@
 package com.example.onlineshop.ui.registrationScreen
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
@@ -44,36 +45,32 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.onlineshop.R
 import com.example.onlineshop.ui.AppViewModelProvider
 import com.example.onlineshop.ui.OnlineShopTopAppBar
-import com.example.onlineshop.ui.navigation.NavigationDestination
+import com.example.onlineshop.ui.navigation.RegistrationDestination
 import com.example.onlineshop.ui.theme.OnlineShopTheme
 import kotlinx.coroutines.launch
 
-object RegistrationDestination : NavigationDestination {
-    override val route = "registration"
-    override val titleRes = R.string.registration
-}
+
 
 @Composable
 fun RegistrationScreen(
-    navigate : () -> Unit,
-    registrationScreenVIewModel: RegistrationScreenVIewModel = viewModel(factory = AppViewModelProvider.Factory)//RegistrationScreenVIewModel.Factory)
+    title: String,
+    navigateToGeneral : () -> Unit,
+    navigateToCatalog : () -> Unit,
+    registrationScreenVIewModel: RegistrationScreenVIewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val registrationUiState = registrationScreenVIewModel.uiState.collectAsState().value
 
-    coroutineScope.launch {
-        registrationScreenVIewModel.navigateToOtherScreen.collect { shouldNavigate ->
-            if (shouldNavigate) {
-                // Выполнить переход на другой экран
-                navigate()
-            }
+    LaunchedEffect(registrationUiState.id) {
+        if (registrationUiState.name.isNotBlank() && registrationUiState.lastName.isNotBlank() && registrationUiState.number.isNotBlank()) {
+            Log.d("testlig","LaunchedEffect")
+            navigateToCatalog()
         }
     }
 
     Scaffold(
         topBar = {
             OnlineShopTopAppBar(
-                title = stringResource(RegistrationDestination.titleRes),
+                title = title,
             )
         }
     ) { innerPadding ->
@@ -105,7 +102,10 @@ fun RegistrationScreen(
             onNumberFieldClick = {}, //На тот случай, если действительно по наведению на поле отображать маску
             onButtonClick = {
                 registrationScreenVIewModel.saveUser()
-                navigate()
+                Log.d("testlig","1")
+                navigateToGeneral()
+                Log.d("testlig","2")
+
             },
             enabled = !registrationUiState.nameIsError &&
                     !registrationUiState.lastNameIsError &&
@@ -427,7 +427,9 @@ fun RegistrationBodyPreview() {
 fun RegistrationScreenPreview() {
     OnlineShopTheme {
         RegistrationScreen(
-            navigate = {}
+            title = stringResource(RegistrationDestination.title),
+            navigateToGeneral = {},
+            navigateToCatalog = {},
         )
     }
 }
