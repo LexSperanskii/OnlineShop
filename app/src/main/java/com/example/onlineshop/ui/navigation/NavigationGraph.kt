@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.onlineshop.ui.menu.AccountScreen
 import com.example.onlineshop.ui.menu.CartScreen
-import com.example.onlineshop.ui.menu.CatalogScreen
+import com.example.onlineshop.ui.menu.catalog.CatalogScreen
 import com.example.onlineshop.ui.menu.GeneralScreen
 import com.example.onlineshop.ui.menu.SalesScreen
 import com.example.onlineshop.ui.registrationScreen.RegistrationScreen
@@ -59,7 +59,6 @@ fun OnlineShopNavHost(
         }
         composable(route = BottomBarScreens.AccountDestination.route) {
             AccountScreen(
-                title = stringResource(BottomBarScreens.AccountDestination.title),
                 navController = navController
             )
         }

@@ -33,7 +33,7 @@ fun SalesScreen(
                 .padding(innerPadding)
         ) {
             Text(
-                text = "РАСПРОДАЖИ",
+                text = "Акции",
                 modifier = Modifier.align(Alignment.Center)
             )
         }

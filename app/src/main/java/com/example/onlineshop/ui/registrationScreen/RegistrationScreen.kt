@@ -282,7 +282,7 @@ fun RegistrationField(
                     )
                 },
                 shape = MaterialTheme.shapes.small,
-                colors = TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.colors(   //textFieldColors
                     disabledTextColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,

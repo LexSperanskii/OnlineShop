@@ -8,19 +8,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.example.onlineshop.R
 import com.example.onlineshop.ui.OnlineShopTopAppBar
 
 @Composable
 fun AccountScreen(
     navController: NavHostController,
-    title :String,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
             OnlineShopTopAppBar(
-                title = title,
+                title = stringResource(R.string.accountTitle),
             )
         },
         bottomBar = {
@@ -33,7 +34,7 @@ fun AccountScreen(
                 .padding(innerPadding)
         ) {
             Text(
-                text = "Профиль",
+                text = "Личный кабинет",
                 modifier = Modifier.align(Alignment.Center)
             )
         }

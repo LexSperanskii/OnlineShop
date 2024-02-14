@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.onlineshop.OnlineShopApplication
+import com.example.onlineshop.ui.menu.catalog.CatalogScreenVIewModel
 import com.example.onlineshop.ui.registrationScreen.RegistrationScreenVIewModel
 
 
@@ -16,6 +17,9 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             RegistrationScreenVIewModel( onlineShopApplication().container.usersRepository )
+        }
+        initializer {
+            CatalogScreenVIewModel( onlineShopApplication().container.usersRepository )
         }
     }
 }

@@ -36,8 +36,9 @@ fun NavigationBottomAppBar(
                 selected = isSelected == true,
                 onClick = {
                     navController.navigate(screen.route){
-                        popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
+                        //Для того чтобы при нажатии на назад не двигаться обратно по вызовам а сразу на начальный экран
+//                        popUpTo(navController.graph.findStartDestination().id)
+//                        launchSingleTop = true
                     }
                 },
                 label = {

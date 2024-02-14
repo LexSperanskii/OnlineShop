@@ -6,5 +6,5 @@
     <string name="cart">Корзина</string>
     <string name="sales">Акции</string>
     <string name="account">Профиль</string>
-<!--    <string name="masked_number">+ 7 %1$s %2$s %3$s %4$s</string>-->
+    <string name="accountTitle">Личный кабинет</string>
 </resources>
