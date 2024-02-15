@@ -2,30 +2,34 @@ package com.example.onlineshop.ui.menu.catalog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -33,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -63,7 +66,7 @@ fun CatalogScreen(
             NavigationBottomAppBar(navController)
         }
     ) { innerPadding ->
-        Box(
+        Column(
             modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -73,7 +76,15 @@ fun CatalogScreen(
                 sortType = sortingRowUiState.sortType,
                 expandChange = {catalogScreenVIewModel.expandChange()},
                 listOfTypes = sortingRowUiState.listOfTypes,
-                onDropdownMenuItemClick = {catalogScreenVIewModel.onDropdownMenuItemClick(it)}
+                onDropdownMenuItemClick = {catalogScreenVIewModel.onDropdownMenuItemClick(it)},
+                modifier = Modifier.fillMaxWidth()
+            )
+            TagRow(
+                listOfTags = sortingRowUiState.listOfTags,
+                currentTag = sortingRowUiState.currentTag,
+                onTagClick = { catalogScreenVIewModel.onTagClick(it) },
+                onEraseTagClick = {catalogScreenVIewModel.onEraseTagClick()},
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -105,39 +116,41 @@ fun CatalogScreen(
 //    )
 //}
 //
-//@Composable
-//fun CommodityItem(info: Amphibians, modifier: Modifier = Modifier) {
-//    Card(
-//        modifier = modifier,
-//        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-//    ) {
-//        Column {
-//            Text(
-//                text = stringResource(R.string.name_and_type,info.name,info.type),
-//                style = MaterialTheme.typography.bodyLarge,
-//                fontWeight = FontWeight.Bold,
-//                modifier = Modifier.padding(16.dp)
-//            )
-//            AsyncImage(
-//                model = ImageRequest.Builder(context = LocalContext.current)
-//                    .data(info.imgSrc)
-//                    .crossfade(true)//плавное затухание
-//                    .build(),
-//                contentScale = ContentScale.FillWidth ,
-//                error = painterResource(R.drawable.ic_broken_image),
-//                placeholder = painterResource(R.drawable.loading_img),
-//                contentDescription = stringResource(R.string.amphibians),
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//            )
-//            Text(
-//                text = info.description,
-//                style = MaterialTheme.typography.bodyMedium,
-//                modifier = Modifier.padding(16.dp)
-//            )
-//        }
-//    }
-//}
+@Composable
+fun CommodityItem(modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier,
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column {
+            Box(modifier = modifier) {
+                Text(
+                    text = stringResource(R.string.name_and_type,info.name,info.type),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(16.dp)
+                )
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(info.imgSrc)
+                        .crossfade(true)//плавное затухание
+                        .build(),
+                    contentScale = ContentScale.FillWidth ,
+                    error = painterResource(R.drawable.ic_broken_image),
+                    placeholder = painterResource(R.drawable.loading_img),
+                    contentDescription = stringResource(R.string.amphibians),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                Text(
+                    text = info.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
+    }
+}
 //
 //@Composable
 //fun BookshelfGridScreen(covers: List<String>, modifier: Modifier = Modifier) {
@@ -229,7 +242,6 @@ fun Sorting(
     }
 }
 
-
 @Composable
 fun SortingRow(
     isExpanded: Boolean,
@@ -242,11 +254,7 @@ fun SortingRow(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .padding(
-                start = 16.dp,
-                end = 16.dp
-            )
-            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
     ) {
         Icon(
             painter = painterResource(R.drawable.icon_sort),
@@ -282,9 +290,7 @@ fun SortingRow(
             Icon(
                 painter = painterResource(R.drawable.icon_filter),
                 contentDescription = "Фильтр",
-                modifier = Modifier
-                    .height(24.dp)
-                    .width(24.dp)
+                modifier = Modifier.size(24.dp)
             )
             Text(
                 text = "Фильтры",
@@ -295,9 +301,79 @@ fun SortingRow(
     }
 }
 
+@Composable
+fun TagRow(
+    listOfTags : List<String>,
+    currentTag : String,
+    onTagClick: (String)->Unit,
+    onEraseTagClick : () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        contentPadding = PaddingValues(
+            start = 16.dp, top = 16.dp, end = 16.dp, bottom = 32.dp
+        )
+    ) {
+        items(items = listOfTags) { tag ->
+            if (tag == currentTag){
+                Button(
+                    onClick = { onTagClick(tag) },
+                    shape = MaterialTheme.shapes.extraLarge,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF52606D),
+                    )
+                ) {
+                    Text(
+                        text = tag,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            color = Color(0xFFFFFFFF),
+                        )
+                    )
+                    IconButton(
+                        onClick = onEraseTagClick,
+                        modifier = Modifier.size(20.dp)
+                    ) {
+                        Icon(
+                            Icons.Filled.Close,
+                            contentDescription = "Delete",
+//                            modifier = Modifier.size(8.dp)
+                        )
+                    }
+                }
+            }else{
+                Button(
+                    onClick = { onTagClick(tag) },
+                    shape = MaterialTheme.shapes.extraLarge,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFF8F8F8),
+                    )
+                ) {
+                    Text(
+                        text = tag,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            color = Color(0xFFA0A1A3),
+                        )
+                    )
+                }
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun RegistrationScreenPreview() {
     OnlineShopTheme {
+        SortingRow(
+            isExpanded = false,
+            sortType = "По популярности",
+            expandChange = {},
+            listOfTypes = listOf("По популярности", "По уменьшению цены", "По возрастанию цены"),
+            onDropdownMenuItemClick = {}
+        )
     }
 }

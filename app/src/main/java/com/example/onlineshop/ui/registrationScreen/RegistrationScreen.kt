@@ -30,7 +30,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
@@ -47,8 +46,6 @@ import com.example.onlineshop.ui.AppViewModelProvider
 import com.example.onlineshop.ui.OnlineShopTopAppBar
 import com.example.onlineshop.ui.navigation.RegistrationDestination
 import com.example.onlineshop.ui.theme.OnlineShopTheme
-import kotlinx.coroutines.launch
-
 
 
 @Composable
