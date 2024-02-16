@@ -1,5 +1,8 @@
 package com.example.onlineshop.ui.menu.catalog
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,12 +11,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -34,7 +39,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -116,38 +123,68 @@ fun CatalogScreen(
 //    )
 //}
 //
+
 @Composable
-fun CommodityItem(modifier: Modifier = Modifier) {
+fun CommodityItem(
+    images: List<Int>,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column {
-            Box(modifier = modifier) {
-                Text(
-                    text = stringResource(R.string.name_and_type,info.name,info.type),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(16.dp)
-                )
-                AsyncImage(
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(info.imgSrc)
-                        .crossfade(true)//плавное затухание
-                        .build(),
-                    contentScale = ContentScale.FillWidth ,
-                    error = painterResource(R.drawable.ic_broken_image),
-                    placeholder = painterResource(R.drawable.loading_img),
-                    contentDescription = stringResource(R.string.amphibians),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                Text(
-                    text = info.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
+        Box {
+            PagerImage(
+                images = images,
+                modifier = Modifier.fillMaxSize()
+            )
+            Image(
+                painter = painterResource(id = R.drawable.heart_image),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .size(24.dp)
+            )
+        }
+
+
+    }
+}
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun PagerImage(
+    images: List<Int>,
+    modifier: Modifier = Modifier
+){
+    val pagerState = rememberPagerState(pageCount = {images.size})
+    HorizontalPager(
+        state = pagerState,
+        modifier = modifier.fillMaxSize()
+    ) { page ->
+        Image(
+            painter = painterResource(id = images[page]),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Fit
+        )
+    }
+    Row(
+        modifier = Modifier
+            .wrapContentHeight()
+            .fillMaxWidth()
+            .padding(bottom = 8.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        repeat(pagerState.pageCount) { iteration ->
+            val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+            Box(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .clip(CircleShape)
+                    .background(color)
+                    .size(16.dp)
+            )
         }
     }
 }

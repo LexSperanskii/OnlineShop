@@ -1,6 +1,5 @@
 package com.example.onlineshop.ui.registrationScreen
 
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction

@@ -50,47 +50,47 @@ sealed class BottomBarScreens(
     )
 
 }
-//sealed class test(
+//sealed class NavigationDestination(
 //    val route: String,
 //    val title: Int
 //) {
-//    object RegistrationDestination : test(
+//    object RegistrationDestination : NavigationDestination(
 //        route = "registration",
 //        title = R.string.registration
 //    )
-//    object GeneralDestination: test(
+//    object GeneralDestination: NavigationDestination(
 //        route = "general",
 //        title = R.string.general
 //    ){
-//        val icon = R.drawable.icon_home,
+//        val icon = R.drawable.icon_home
 //        val tint = Color.Red
 //    }
-//    object CatalogDestination: test(
+//    object CatalogDestination: NavigationDestination(
 //        route = "catalog",
 //        title = R.string.catalog
 //    ){
-//        val icon = R.drawable.icon_catalog,
+//        val icon = R.drawable.icon_catalog
 //        val tint = Color.Red
 //    }
-//    object CartDestination : test(
+//    object CartDestination : NavigationDestination(
 //        route = "cart",
 //        title = R.string.cart
 //    ){
-//        val icon = R.drawable.icon_cart,
+//        val icon = R.drawable.icon_cart
 //        val tint = Color.Red
 //    }
-//    object SalesDestination : test(
+//    object SalesDestination : NavigationDestination(
 //        route = "sales",
 //        title = R.string.sales
 //    ){
-//        val icon = R.drawable.icon_sales,
+//        val icon = R.drawable.icon_sales
 //        val tint = Color.Red
 //    }
-//    object AccountDestination : test(
+//    object AccountDestination : NavigationDestination(
 //        route = "account",
 //        title = R.string.account
 //    ){
-//        val icon = R.drawable.icon_account,
+//        val icon = R.drawable.icon_account
 //        val tint = Color.Red
 //    }
 //}
