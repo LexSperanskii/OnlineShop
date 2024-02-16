@@ -7,4 +7,7 @@
     <string name="sales">Акции</string>
     <string name="account">Профиль</string>
     <string name="accountTitle">Личный кабинет</string>
+    <string name="price_with_sign">%s ₽</string>
+    <string name="discount">-%s%</string>
+    <string name="feedbackCount">(%s)</string>
 </resources>

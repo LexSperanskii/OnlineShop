@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -43,10 +45,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
@@ -124,33 +129,6 @@ fun CatalogScreen(
 //}
 //
 
-@Composable
-fun CommodityItem(
-    images: List<Int>,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-    ) {
-        Box {
-            PagerImage(
-                images = images,
-                modifier = Modifier.fillMaxSize()
-            )
-            Image(
-                painter = painterResource(id = R.drawable.heart_image),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .size(24.dp)
-            )
-        }
-
-
-    }
-}
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PagerImage(
@@ -188,7 +166,140 @@ fun PagerImage(
         }
     }
 }
-//
+
+@Composable
+fun CommodityItem(
+    images: List<Int>,
+    isFavorite : Boolean,
+    oldPrice : String,
+    newPrice : String,
+    discount : String,
+    title : String,
+    subtitle : String,
+    feedback : String,
+    rating: Float,
+    feedbackCount:Int,
+    addToFavorite: ()->Unit,
+    addToCart : ()->Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier,
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column {
+            Box {
+                PagerImage(
+                    images = images,
+                    modifier = Modifier.fillMaxSize()
+                )
+                IconButton(
+                    onClick = addToFavorite,
+                ) {
+                    Image(
+                        painter = if(isFavorite) painterResource(id = R.drawable.heart_filled) else painterResource(id = R.drawable.heart_outlined) ,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .size(24.dp)
+                    )
+                }
+            }
+            Text(
+                text = stringResource(R.string.price_with_sign, oldPrice),
+                style = TextStyle(
+                    fontSize = 9.sp,
+                    color = Color(0xFFA0A1A3),
+                    textDecoration = TextDecoration.LineThrough
+                ),
+                modifier = Modifier
+            )
+            Row(
+                modifier = Modifier.padding(vertical = 2.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.price_with_sign, newPrice),
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = Color(0xFF000000),
+                    ),
+                    modifier = Modifier
+                )
+                Text(
+                    text = stringResource(R.string.discount, discount),
+                    style = TextStyle(
+                        fontSize = 9.sp,
+                        color = Color(0xFFA0A1A3),
+                        textDecoration = TextDecoration.LineThrough
+                    ),
+                    modifier = Modifier
+                        .background(Color(0xFFD62F89))
+                        .padding(horizontal = 4.dp)
+                )
+            }
+            Text(
+                text = title,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    color = Color(0xFF000000),
+                ),
+                modifier = Modifier.padding(bottom = 2.dp)
+            )
+            Text(
+                text = subtitle,
+                style = TextStyle(
+                    fontSize = 10.sp,
+                    color = Color(0xFF3E3E3E),
+                ),
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            if (feedback!=null){
+                Row {
+                    Image(
+                        painter = painterResource(id = R.drawable.star_element),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(16.dp)
+                    )
+                    Text(
+                        text = rating.toString(),
+                        style = TextStyle(
+                            fontSize = 9.sp,
+                            color = Color(0xFFF9A249),
+                        ),
+                        modifier = Modifier
+                    )
+                    Text(
+                        text = stringResource(R.string.feedbackCount, feedbackCount.toString()),
+                        style = TextStyle(
+                            fontSize = 9.sp,
+                            color = Color(0xFFA0A1A3),
+                        ),
+                        modifier = Modifier
+                    )
+                }
+            }
+            Box(){
+                IconButton(
+                    onClick = addToCart,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.add_to_cart_plus_sign),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(32.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
 //@Composable
 //fun BookshelfGridScreen(covers: List<String>, modifier: Modifier = Modifier) {
 //    LazyVerticalGrid(
