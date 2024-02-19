@@ -19,7 +19,10 @@ object AppViewModelProvider {
             RegistrationScreenVIewModel( onlineShopApplication().container.usersRepository )
         }
         initializer {
-            CatalogScreenVIewModel( onlineShopApplication().container.usersRepository )
+            CatalogScreenVIewModel(
+                usersRepository = onlineShopApplication().container.usersRepository,
+                productsInfoRepository = onlineShopApplication().container.productsInfoRepository
+            )
         }
     }
 }

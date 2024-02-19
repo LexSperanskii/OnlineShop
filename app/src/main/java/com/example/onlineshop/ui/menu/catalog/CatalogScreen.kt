@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +18,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -55,6 +60,9 @@ import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
+import com.example.onlineshop.network.CommodityItem
+import com.example.onlineshop.network.GoodsImages
+import com.example.onlineshop.network.allGoodsPhotos
 import com.example.onlineshop.ui.AppViewModelProvider
 import com.example.onlineshop.ui.OnlineShopTopAppBar
 import com.example.onlineshop.ui.menu.NavigationBottomAppBar
@@ -68,6 +76,7 @@ fun CatalogScreen(
     catalogScreenVIewModel: CatalogScreenVIewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val sortingRowUiState = catalogScreenVIewModel.sortingRowUiState.collectAsState().value
+    val catalogScreenCommodityItemsUiState = catalogScreenVIewModel.catalogScreenCommodityItemsUiState
     Scaffold(
         topBar = {
             OnlineShopTopAppBar(
@@ -98,36 +107,48 @@ fun CatalogScreen(
                 onEraseTagClick = {catalogScreenVIewModel.onEraseTagClick()},
                 modifier = Modifier.fillMaxWidth()
             )
+            when (catalogScreenCommodityItemsUiState) {
+                is CatalogScreenCommodityItemsUiState.Loading ->
+                    LoadingScreen(modifier = modifier.fillMaxSize())
+                is CatalogScreenCommodityItemsUiState.Success ->
+                    CommodityItemsGridScreen(
+                        images = allGoodsPhotos,
+                        isFavorite = catalogScreenCommodityItemsUiState.isFavorite,
+                        addToFavorite = {},
+                        commodityItems = catalogScreenCommodityItemsUiState.listOfItems,
+                        addToCart = {},
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                is CatalogScreenCommodityItemsUiState.Error ->
+                    ErrorScreen(modifier = modifier.fillMaxSize())
+            }
         }
     }
 }
 
-//@Composable
-//fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
-//    Column(
-//        modifier = modifier,
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Image(
-//            painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
-//        )
-//        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
-//        Button(onClick = retryAction) {
-//            Text(stringResource(R.string.retry))
-//        }
-//    }
-//}
-//
-//@Composable
-//fun LoadingScreen(modifier: Modifier = Modifier) {
-//    Image(
-//        modifier = modifier.size(200.dp),
-//        painter = painterResource(R.drawable.loading_img),
-//        contentDescription = stringResource(R.string.loading)
-//    )
-//}
-//
+@Composable
+fun ErrorScreen(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
+        )
+        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
+    }
+}
+
+@Composable
+fun LoadingScreen(modifier: Modifier = Modifier) {
+    Image(
+        modifier = modifier.size(200.dp),
+        painter = painterResource(R.drawable.loading_img),
+        contentDescription = stringResource(R.string.loading)
+    )
+}
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -171,15 +192,8 @@ fun PagerImage(
 fun CommodityItem(
     images: List<Int>,
     isFavorite : Boolean,
-    oldPrice : String,
-    newPrice : String,
-    discount : String,
-    title : String,
-    subtitle : String,
-    feedback : String,
-    rating: Float,
-    feedbackCount:Int,
     addToFavorite: ()->Unit,
+    commodityItem : CommodityItem,
     addToCart : ()->Unit,
     modifier: Modifier = Modifier
 ) {
@@ -187,27 +201,27 @@ fun CommodityItem(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column {
-            Box {
+        Column( modifier = Modifier) {
+            Box( modifier = Modifier) {
                 PagerImage(
                     images = images,
                     modifier = Modifier.fillMaxSize()
                 )
                 IconButton(
                     onClick = addToFavorite,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .size(24.dp)
                 ) {
                     Image(
                         painter = if(isFavorite) painterResource(id = R.drawable.heart_filled) else painterResource(id = R.drawable.heart_outlined) ,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .size(24.dp)
                     )
                 }
             }
             Text(
-                text = stringResource(R.string.price_with_sign, oldPrice),
+                text = stringResource(R.string.price_with_sign, commodityItem.price.price),
                 style = TextStyle(
                     fontSize = 9.sp,
                     color = Color(0xFFA0A1A3),
@@ -219,7 +233,7 @@ fun CommodityItem(
                 modifier = Modifier.padding(vertical = 2.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.price_with_sign, newPrice),
+                    text = stringResource(R.string.price_with_sign, commodityItem.price.priceWithDiscount),
                     style = TextStyle(
                         fontSize = 14.sp,
                         color = Color(0xFF000000),
@@ -227,7 +241,7 @@ fun CommodityItem(
                     modifier = Modifier
                 )
                 Text(
-                    text = stringResource(R.string.discount, discount),
+                    text = stringResource(R.string.discount, commodityItem.price.discount),
                     style = TextStyle(
                         fontSize = 9.sp,
                         color = Color(0xFFA0A1A3),
@@ -239,7 +253,7 @@ fun CommodityItem(
                 )
             }
             Text(
-                text = title,
+                text = commodityItem.title,
                 style = TextStyle(
                     fontSize = 12.sp,
                     color = Color(0xFF000000),
@@ -247,14 +261,14 @@ fun CommodityItem(
                 modifier = Modifier.padding(bottom = 2.dp)
             )
             Text(
-                text = subtitle,
+                text = commodityItem.subtitle,
                 style = TextStyle(
                     fontSize = 10.sp,
                     color = Color(0xFF3E3E3E),
                 ),
                 modifier = Modifier.padding(bottom = 4.dp)
             )
-            if (feedback!=null){
+            if (commodityItem.feedback!=null){
                 Row {
                     Image(
                         painter = painterResource(id = R.drawable.star_element),
@@ -264,7 +278,7 @@ fun CommodityItem(
                             .size(16.dp)
                     )
                     Text(
-                        text = rating.toString(),
+                        text = commodityItem.feedback.rating.toString(),
                         style = TextStyle(
                             fontSize = 9.sp,
                             color = Color(0xFFF9A249),
@@ -272,7 +286,7 @@ fun CommodityItem(
                         modifier = Modifier
                     )
                     Text(
-                        text = stringResource(R.string.feedbackCount, feedbackCount.toString()),
+                        text = stringResource(R.string.feedbackCount, commodityItem.feedback.count),
                         style = TextStyle(
                             fontSize = 9.sp,
                             color = Color(0xFFA0A1A3),
@@ -300,24 +314,48 @@ fun CommodityItem(
     }
 }
 
-//@Composable
-//fun BookshelfGridScreen(covers: List<String>, modifier: Modifier = Modifier) {
-//    LazyVerticalGrid(
-//        columns = GridCells.Adaptive(150.dp),
-//        modifier = modifier.fillMaxWidth(),
-//        contentPadding = PaddingValues(4.dp)
-//    ) {
-//        items(items = covers) { cover ->
-//            BookshelfCovers(
-//                cover,
+@Composable
+fun CommodityItemsGridScreen(
+    images: List<GoodsImages>,
+    isFavorite : Boolean,
+    addToFavorite: ()->Unit,
+    commodityItems : List<CommodityItem>,
+    addToCart : ()->Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(150.dp),
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(4.dp)
+    ) {
+        itemsIndexed(commodityItems) {index, commodityItem ->
+            CommodityItem(
+                images = if(index in 0..images.lastIndex) images[index].images else images.last().images,
+                isFavorite = isFavorite,
+                addToFavorite = addToFavorite,
+                commodityItem = commodityItem,
+                addToCart = addToCart,
+                modifier = modifier
+                    .padding(4.dp)
+                    .fillMaxWidth()
+//                    .aspectRatio(0.5f)
+            )
+        }
+//        items(items = commodityItems) {index, commodityItem ->
+//            CommodityItem(
+//                images = images,
+//                isFavorite = isFavorite,
+//                addToFavorite = addToFavorite,
+//                commodityItem = commodityItem,
+//                addToCart = addToCart,
 //                modifier = modifier
 //                    .padding(4.dp)
 //                    .fillMaxWidth()
-//                    .aspectRatio(0.5f)
+////                    .aspectRatio(0.5f)
 //            )
 //        }
-//    }
-//}
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

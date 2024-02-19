@@ -10,4 +10,6 @@
     <string name="price_with_sign">%s ₽</string>
     <string name="discount">-%s%</string>
     <string name="feedbackCount">(%s)</string>
+    <string name="loading">Загрузка</string>
+    <string name="loading_failed">Загрузка не удалась</string>
 </resources>
