@@ -7,9 +7,9 @@
     <string name="sales">Акции</string>
     <string name="account">Профиль</string>
     <string name="accountTitle">Личный кабинет</string>
-    <string name="price_with_sign">%s ₽</string>
-    <string name="discount">-%s%</string>
-    <string name="feedbackCount">(%s)</string>
+    <string name="price_with_sign">%1$s %2$s</string>
+    <string name="discount">-%d%%</string>
+    <string name="feedbackCount">(%d)</string>
     <string name="loading">Загрузка</string>
     <string name="loading_failed">Загрузка не удалась</string>
 </resources>

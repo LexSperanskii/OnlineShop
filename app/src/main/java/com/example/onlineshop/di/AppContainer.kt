@@ -25,15 +25,14 @@ interface AppContainer {
  */
 class AppDataContainer(private val context: Context) : AppContainer {
 
-    private val baseUrl =
-        "https://run.mocky.io/v3/"
+    private val baseUrl = "https://run.mocky.io"
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
      */
-//    private val json = Json { ignoreUnknownKeys = true } //Если много ненужных ключей
+    private val json = Json { ignoreUnknownKeys = true } //Если много ненужных ключей
     private val retrofit = Retrofit.Builder()
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(baseUrl)
         .build()
 

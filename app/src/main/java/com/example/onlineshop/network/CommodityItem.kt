@@ -3,7 +3,7 @@ package com.example.onlineshop.network
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Item(
+data class Items(
     val items: List<CommodityItem>
 )
 @Serializable

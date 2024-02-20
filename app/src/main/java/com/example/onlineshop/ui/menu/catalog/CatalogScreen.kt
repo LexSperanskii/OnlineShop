@@ -221,7 +221,7 @@ fun CommodityItem(
                 }
             }
             Text(
-                text = stringResource(R.string.price_with_sign, commodityItem.price.price),
+                text = stringResource(R.string.price_with_sign, commodityItem.price.price, commodityItem.price.unit ),
                 style = TextStyle(
                     fontSize = 9.sp,
                     color = Color(0xFFA0A1A3),
@@ -233,7 +233,7 @@ fun CommodityItem(
                 modifier = Modifier.padding(vertical = 2.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.price_with_sign, commodityItem.price.priceWithDiscount),
+                    text = stringResource(R.string.price_with_sign, commodityItem.price.priceWithDiscount, commodityItem.price.unit ),
                     style = TextStyle(
                         fontSize = 14.sp,
                         color = Color(0xFF000000),

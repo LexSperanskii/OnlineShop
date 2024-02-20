@@ -1,9 +1,10 @@
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 
     id("com.google.devtools.ksp") version "1.8.21-1.0.11" //  1.8.21-1.0.11
+
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
 }
 
 android {
@@ -82,9 +83,6 @@ dependencies {
     ksp("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
 
-    // Coil для загрузки изображений ассинхронно AsyncImage
-    implementation("io.coil-kt:coil-compose:2.4.0")
-
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
@@ -94,4 +92,7 @@ dependencies {
 
     // Kotlin serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 }
