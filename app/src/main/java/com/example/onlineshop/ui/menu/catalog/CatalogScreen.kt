@@ -10,12 +10,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,10 +20,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -45,15 +41,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -65,9 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
-import com.example.onlineshop.network.CommodityItem
-import com.example.onlineshop.network.GoodsImages
-import com.example.onlineshop.network.allGoodsPhotos
+import com.example.onlineshop.model.GoodsItems
 import com.example.onlineshop.ui.AppViewModelProvider
 import com.example.onlineshop.ui.OnlineShopTopAppBar
 import com.example.onlineshop.ui.menu.NavigationBottomAppBar
@@ -81,7 +72,7 @@ fun CatalogScreen(
     modifier: Modifier = Modifier,
     catalogScreenVIewModel: CatalogScreenVIewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val sortingRowUiState = catalogScreenVIewModel.sortingRowUiState.collectAsState().value
+    val catalogScreenUiState = catalogScreenVIewModel.catalogScreenUiState.collectAsState().value
     val catalogScreenCommodityItemsUiState = catalogScreenVIewModel.catalogScreenCommodityItemsUiState
     Scaffold(
         topBar = {
@@ -99,16 +90,16 @@ fun CatalogScreen(
                 .padding(innerPadding)
         ) {
             SortingRow(
-                isExpanded = sortingRowUiState.isExpanded,
-                sortType = sortingRowUiState.sortType,
+                isExpanded = catalogScreenUiState.isExpanded,
+                sortType = catalogScreenUiState.sortType,
                 expandChange = {catalogScreenVIewModel.expandChange()},
-                listOfTypes = sortingRowUiState.listOfTypes,
+                listOfTypes = catalogScreenUiState.listOfTypes,
                 onDropdownMenuItemClick = {catalogScreenVIewModel.onDropdownMenuItemClick(it)},
                 modifier = Modifier.fillMaxWidth()
             )
             TagRow(
-                listOfTags = sortingRowUiState.listOfTags,
-                currentTag = sortingRowUiState.currentTag,
+                listOfTags = catalogScreenUiState.listOfTags,
+                currentTag = catalogScreenUiState.currentTag,
                 onTagClick = { catalogScreenVIewModel.onTagClick(it) },
                 onEraseTagClick = {catalogScreenVIewModel.onEraseTagClick()},
                 modifier = Modifier.fillMaxWidth()
@@ -118,10 +109,9 @@ fun CatalogScreen(
                     LoadingScreen(modifier = modifier.fillMaxSize())
                 is CatalogScreenCommodityItemsUiState.Success ->
                     CommodityItemsGridScreen(
-                        images = catalogScreenCommodityItemsUiState.listOfCurrentGoodsImages,
-                        isFavorite = catalogScreenCommodityItemsUiState.isFavorite,
+                        productItems = catalogScreenUiState.listOfProducts,
+                        isFavorite = catalogScreenUiState.isFavorite,
                         addToFavorite = {},
-                        commodityItems = catalogScreenCommodityItemsUiState.listOfCurrentItems,
                         addToCart = {},
                         modifier = Modifier.fillMaxSize()
                     )
@@ -159,10 +149,10 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PagerImage(
-    images: List<Int>,
+    productItem : GoodsItems,
     modifier: Modifier = Modifier
 ){
-    val pagerState = rememberPagerState(pageCount = {images.size})
+    val pagerState = rememberPagerState(pageCount = {productItem.images.listOfImage.size})
 
     Column(modifier = modifier) {
         HorizontalPager(
@@ -170,7 +160,7 @@ fun PagerImage(
             modifier = Modifier.weight(1f),
         ) { page ->
             Image(
-                painter = painterResource(id = images[page]),
+                painter = painterResource(id = productItem.images.listOfImage[page]),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Fit
@@ -198,10 +188,9 @@ fun PagerImage(
 
 @Composable
 fun CommodityItem(
-    images: List<Int>,
+    productItem : GoodsItems,
     isFavorite : Boolean,
     addToFavorite: ()->Unit,
-    commodityItem : CommodityItem,
     addToCart : ()->Unit,
     modifier: Modifier = Modifier
 ) {
@@ -218,7 +207,7 @@ fun CommodityItem(
             Column(modifier = Modifier.weight(1f)) {
                 Box( modifier = Modifier.fillMaxSize()) {
                     PagerImage(
-                        images = images
+                        productItem = productItem
                     )
                     IconButton(
                         onClick = addToFavorite,
@@ -242,7 +231,7 @@ fun CommodityItem(
                         .fillMaxSize()
                     ) {
                         Text(
-                            text = stringResource(R.string.price_with_sign, commodityItem.price.price, commodityItem.price.unit ),
+                            text = stringResource(R.string.price_with_sign,productItem.products.price.price, productItem.products.price.unit ),
                             style = TextStyle(
                                 fontSize = 9.sp,
                                 color = Color(0xFFA0A1A3),
@@ -255,7 +244,7 @@ fun CommodityItem(
                             modifier = Modifier.padding(bottom = 2.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.price_with_sign, commodityItem.price.priceWithDiscount, commodityItem.price.unit ),
+                                text = stringResource(R.string.price_with_sign, productItem.products.price.priceWithDiscount, productItem.products.price.unit ),
                                 style = TextStyle(
                                     fontSize = 14.sp,
                                     color = Color(0xFF000000),
@@ -272,7 +261,7 @@ fun CommodityItem(
                                     .width(34.dp)
                             ){
                                 Text(
-                                    text = stringResource(R.string.discount, commodityItem.price.discount),
+                                    text = stringResource(R.string.discount, productItem.products.price.discount),
                                     style = TextStyle(
                                         fontSize = 9.sp,
                                         color = Color(0xFFFFFFFF),
@@ -281,7 +270,7 @@ fun CommodityItem(
                             }
                         }
                         Text(
-                            text = commodityItem.title,
+                            text = productItem.products.title,
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 color = Color(0xFF000000),
@@ -289,14 +278,14 @@ fun CommodityItem(
                             modifier = Modifier.padding(bottom = 2.dp)
                         )
                         Text(
-                            text = commodityItem.subtitle,
+                            text = productItem.products.subtitle,
                             style = TextStyle(
                                 fontSize = 10.sp,
                                 color = Color(0xFF3E3E3E),
                             ),
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
-                        if (commodityItem.feedback!=null){
+                        if (productItem.products.feedback!=null){
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Image(
                                     painter = painterResource(id = R.drawable.star_element),
@@ -305,7 +294,7 @@ fun CommodityItem(
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(
-                                    text = commodityItem.feedback.rating.toString(),
+                                    text = productItem.products.feedback.rating.toString(),
                                     style = TextStyle(
                                         fontSize = 9.sp,
                                         color = Color(0xFFF9A249),
@@ -313,7 +302,7 @@ fun CommodityItem(
                                     modifier = Modifier.padding(horizontal = 2.dp)
                                 )
                                 Text(
-                                    text = stringResource(R.string.feedbackCount, commodityItem.feedback.count),
+                                    text = stringResource(R.string.feedbackCount, productItem.products.feedback.count),
                                     style = TextStyle(
                                         fontSize = 9.sp,
                                         color = Color(0xFFA0A1A3),
@@ -345,10 +334,9 @@ fun CommodityItem(
 
 @Composable
 fun CommodityItemsGridScreen(
-    images: List<GoodsImages>,
+    productItems : List<GoodsItems>,
     isFavorite : Boolean,
     addToFavorite: ()->Unit,
-    commodityItems : List<CommodityItem>,
     addToCart : ()->Unit,
     modifier: Modifier = Modifier
 ) {
@@ -357,12 +345,11 @@ fun CommodityItemsGridScreen(
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(13.dp)
     ) {
-        itemsIndexed(commodityItems) {index, commodityItem ->
+        items(items = productItems) { item ->
             CommodityItem(
-                images = if(index in 0..images.lastIndex) images[index].images else GoodsImages().images,
+                productItem  = item,
                 isFavorite = isFavorite,
                 addToFavorite = addToFavorite,
-                commodityItem = commodityItem,
                 addToCart = addToCart,
                 modifier = modifier
 //                    .aspectRatio(0.5f)
@@ -393,41 +380,6 @@ fun Sorting(
             modifier = Modifier
                 .menuAnchor()
         )
-//        TextField(
-//            value = sortType ,
-//            onValueChange = {},
-//            readOnly = true,
-//            singleLine = true,
-//            textStyle = TextStyle(
-//                fontSize = 14.sp,
-//                color = Color(0xFF3E3E3E),
-//            ),
-//            leadingIcon = {
-//                Icon(
-//                    painter = painterResource(R.drawable.icon_sort),
-//                    contentDescription = "Сортировка",
-//                    modifier = Modifier
-//                        .size(24.dp)
-//                )
-//            },
-//            trailingIcon = {
-//                Row (modifier = Modifier.offset(x = 0.dp)){
-//                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
-//                }
-//
-//            },
-//            colors = TextFieldDefaults.colors(
-//                focusedContainerColor = Color.Transparent,
-//                unfocusedContainerColor = Color.Transparent,
-//                disabledTextColor = Color.Transparent,
-//                focusedIndicatorColor = Color.Transparent,
-//                unfocusedIndicatorColor = Color.Transparent,
-//                disabledIndicatorColor = Color.Transparent
-//            ),
-//            modifier = Modifier
-//                .menuAnchor()
-//                .width(250.dp)
-//        )
         ExposedDropdownMenu(
             expanded = isExpanded,
             onDismissRequest = { expandChange() }
