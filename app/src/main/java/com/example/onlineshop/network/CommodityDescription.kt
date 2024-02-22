@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Items(
-    val items: List<CommodityItem>
+    val items: List<CommodityDescription>
 )
 @Serializable
-data class CommodityItem(
+data class CommodityDescription(
     val available: Int,
     val description: String,
     val feedback: Feedback?,

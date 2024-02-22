@@ -8,15 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.onlineshop.data.ProductsInfoRepository
 import com.example.onlineshop.data.UsersRepository
-import com.example.onlineshop.network.CommodityItem
-import com.example.onlineshop.model.GoodsImages
-import com.example.onlineshop.model.GoodsItems
-import com.example.onlineshop.model.allGoodsPhotos
+import com.example.onlineshop.model.CommodityItem
+import com.example.onlineshop.model.CommodityImages
+import com.example.onlineshop.model.allCommodityPhotos
+import com.example.onlineshop.network.CommodityDescription
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -27,9 +25,8 @@ data class CatalogScreenUiState(
     val listOfTypes : List<String> = listOf("По популярности" , "По уменьшению цены" , "По возрастанию цены"),
     val listOfTags : List<String> = listOf("Смотреть все", "Лицо", "Тело", "Загар", "Маски"),
     val currentTag : String = "Смотреть все",
-    val isFavorite: Boolean = false,
-    val listOfProductsOriginal: List<GoodsItems> = listOf(),
-    val listOfProducts: List<GoodsItems> = listOf()
+    val listOfProductsOriginal: List<CommodityItem> = listOf(),
+    val listOfProducts: List<CommodityItem> = listOf()
 )
 
 sealed interface CatalogScreenCommodityItemsUiState {
@@ -66,17 +63,19 @@ class CatalogScreenVIewModel(
         viewModelScope.launch {
             catalogScreenCommodityItemsUiState = try {
                 //Объединяем списки и создаем собственный из картинок и описания
-                val listOfItems : List<CommodityItem> = productsInfoRepository.getProductsInfo().items
-                val listOfImages : List<GoodsImages> = allGoodsPhotos
-                val listOfProducts = mutableListOf<GoodsItems>()
+                val listOfItems : List<CommodityDescription> = productsInfoRepository.getProductsInfo().items
+                val listOfImages : List<CommodityImages> = allCommodityPhotos
+                val listOfFavorite = usersRepository.getFavorites()
+                val listOfProducts = mutableListOf<CommodityItem>()
                 for (i in listOfItems.indices) {
                     val item = listOfItems[i]
+                    val isFavorite: Boolean = item.id in listOfFavorite
                     val images = if (i < listOfImages.size) {
                         listOfImages[i]
                     } else {
-                        GoodsImages()
+                        CommodityImages()
                     }
-                    listOfProducts.add(GoodsItems(products = item, images = images))
+                    listOfProducts.add(CommodityItem(productDescription = item, images = images,isFavourite = isFavorite))
                 }
                 _catalogScreenUiState.update {
                     it.copy(
@@ -95,7 +94,66 @@ class CatalogScreenVIewModel(
             }
         }
     }
-
+    fun saveOrDeleteFromFavorites(commodityItem: CommodityItem){
+        val currentState = catalogScreenUiState.value
+        viewModelScope.launch {
+            if (commodityItem.isFavourite){
+                //Удаляем из БД
+                usersRepository.deleteFromFavorites(commodityItem.productDescription.id)
+                //Создаем новый List для оригинального набора данных
+                val updatedOriginalList = currentState.listOfProductsOriginal.map{ item ->
+                    if (item.productDescription.id == commodityItem.productDescription.id) {
+                        // Создаем копию элемента с обновленным полем isFavourite
+                        item.copy(isFavourite = false)
+                    } else {
+                        item // Оставляем элемент без изменений
+                    }
+                }
+                //Создаем новый List для набора данных который показываем в view
+                val updatedList = currentState.listOfProducts.map{ item ->
+                    if (item.productDescription.id == commodityItem.productDescription.id) {
+                        // Создаем копию элемента с обновленным полем isFavourite
+                        item.copy(isFavourite = false)
+                    } else {
+                        item // Оставляем элемент без изменений
+                    }
+                }
+                _catalogScreenUiState.update {
+                    it.copy(
+                        listOfProductsOriginal = updatedOriginalList,
+                        listOfProducts = updatedList
+                    )
+                }
+            }else{
+                // Записываем в БД
+                usersRepository.insertInFavorite(commodityItem.productDescription.id)
+                //Создаем новый List для оригинального набора данных
+                val updatedOriginalList = currentState.listOfProductsOriginal.map{ item ->
+                    if (item.productDescription.id == commodityItem.productDescription.id) {
+                        // Создаем копию элемента с обновленным полем isFavourite
+                        item.copy(isFavourite = true)
+                    } else {
+                        item // Оставляем элемент без изменений
+                    }
+                }
+                //Создаем новый List для набора данных который показываем в view
+                val updatedList = currentState.listOfProducts.map{ item ->
+                    if (item.productDescription.id == commodityItem.productDescription.id) {
+                        // Создаем копию элемента с обновленным полем isFavourite
+                        item.copy(isFavourite = true)
+                    } else {
+                        item // Оставляем элемент без изменений
+                    }
+                }
+                _catalogScreenUiState.update {
+                    it.copy(
+                        listOfProductsOriginal = updatedOriginalList,
+                        listOfProducts = updatedList
+                    )
+                }
+            }
+        }
+    }
     fun expandChange(){
         _catalogScreenUiState.update {
             it.copy(
@@ -121,31 +179,22 @@ class CatalogScreenVIewModel(
         sortTagItems(tag)
     }
     fun onEraseTagClick(){
-        val currentState = catalogScreenUiState.value
         _catalogScreenUiState.update {
             it.copy(
-                currentTag = "",
-                listOfProducts = it.listOfProductsOriginal
+                currentTag = ""
             )
         }
-        sortItems(currentState.sortType)
+        //берем состояние после его обновления
+        sortTagItems(catalogScreenUiState.value.currentTag)
     }
 
     private fun sortTagItems(tag : String){
         val currentState = catalogScreenUiState.value
         when (tag) {
-            "Смотреть все" ->{
-                _catalogScreenUiState.update {
-                    it.copy(
-                        listOfProducts = it.listOfProductsOriginal
-                    )
-                }
-                sortItems(currentState.sortType)
-            }
             "Лицо" ->{
                 _catalogScreenUiState.update { it ->
                     it.copy(
-                        listOfProducts = it.listOfProductsOriginal.filter { it.products.tags.contains("face") }
+                        listOfProducts = it.listOfProductsOriginal.filter { it.productDescription.tags.contains("face") }
                     )
                 }
                 sortItems(currentState.sortType)
@@ -153,7 +202,7 @@ class CatalogScreenVIewModel(
             "Тело" ->{
                 _catalogScreenUiState.update { it ->
                     it.copy(
-                        listOfProducts = it.listOfProductsOriginal.filter { it.products.tags.contains("body") }
+                        listOfProducts = it.listOfProductsOriginal.filter { it.productDescription.tags.contains("body") }
                     )
                 }
                 sortItems(currentState.sortType)
@@ -161,7 +210,7 @@ class CatalogScreenVIewModel(
             "Загар"->{
                 _catalogScreenUiState.update { it ->
                     it.copy(
-                        listOfProducts = it.listOfProductsOriginal.filter { it.products.tags.contains("suntan") }
+                        listOfProducts = it.listOfProductsOriginal.filter { it.productDescription.tags.contains("suntan") }
                     )
                 }
                 sortItems(currentState.sortType)
@@ -169,7 +218,15 @@ class CatalogScreenVIewModel(
             "Маски"->{
                 _catalogScreenUiState.update { it ->
                     it.copy(
-                        listOfProducts = it.listOfProductsOriginal.filter { it.products.tags.contains("mask") }
+                        listOfProducts = it.listOfProductsOriginal.filter { it.productDescription.tags.contains("mask") }
+                    )
+                }
+                sortItems(currentState.sortType)
+            }
+            else ->{
+                _catalogScreenUiState.update {
+                    it.copy(
+                        listOfProducts = it.listOfProductsOriginal
                     )
                 }
                 sortItems(currentState.sortType)
@@ -182,7 +239,7 @@ class CatalogScreenVIewModel(
                 _catalogScreenUiState.update { it ->
                     it.copy(
                         listOfProducts = it.listOfProducts.sortedByDescending {
-                            it.products.feedback?.rating ?: 0.0
+                            it.productDescription.feedback?.rating ?: 0.0
                         }
                     )
                 }
@@ -191,7 +248,7 @@ class CatalogScreenVIewModel(
                 _catalogScreenUiState.update { it ->
                     it.copy(
                         listOfProducts = it.listOfProducts.sortedByDescending {
-                            it.products.price.priceWithDiscount.toInt()
+                            it.productDescription.price.priceWithDiscount.toInt()
                         }
                     )
                 }
@@ -199,8 +256,8 @@ class CatalogScreenVIewModel(
             "По возрастанию цены" -> {
                 _catalogScreenUiState.update { it ->
                     it.copy(
-                        listOfProducts = it.listOfProducts.sortedBy {
-                            it.products.price.priceWithDiscount.toInt()
+                        listOfProducts  = it.listOfProducts.sortedBy {
+                            it.productDescription.price.priceWithDiscount.toInt()
                         }
                     )
                 }

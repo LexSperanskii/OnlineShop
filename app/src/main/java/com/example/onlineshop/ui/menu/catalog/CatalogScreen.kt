@@ -58,7 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
-import com.example.onlineshop.model.GoodsItems
+import com.example.onlineshop.model.CommodityItem
 import com.example.onlineshop.ui.AppViewModelProvider
 import com.example.onlineshop.ui.OnlineShopTopAppBar
 import com.example.onlineshop.ui.menu.NavigationBottomAppBar
@@ -110,9 +110,8 @@ fun CatalogScreen(
                 is CatalogScreenCommodityItemsUiState.Success ->
                     CommodityItemsGridScreen(
                         productItems = catalogScreenUiState.listOfProducts,
-                        isFavorite = catalogScreenUiState.isFavorite,
-                        addToFavorite = {},
-                        addToCart = {},
+                        onHeartSignClick = {catalogScreenVIewModel.saveOrDeleteFromFavorites(it)},
+                        addToCart = {}, //Не функциональная кнопка
                         modifier = Modifier.fillMaxSize()
                     )
                 is CatalogScreenCommodityItemsUiState.Error ->
@@ -149,7 +148,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PagerImage(
-    productItem : GoodsItems,
+    productItem : CommodityItem,
     modifier: Modifier = Modifier
 ){
     val pagerState = rememberPagerState(pageCount = {productItem.images.listOfImage.size})
@@ -188,9 +187,8 @@ fun PagerImage(
 
 @Composable
 fun CommodityItem(
-    productItem : GoodsItems,
-    isFavorite : Boolean,
-    addToFavorite: ()->Unit,
+    productItem : CommodityItem,
+    onHeartSignClick: (CommodityItem)->Unit,
     addToCart : ()->Unit,
     modifier: Modifier = Modifier
 ) {
@@ -210,13 +208,13 @@ fun CommodityItem(
                         productItem = productItem
                     )
                     IconButton(
-                        onClick = addToFavorite,
+                        onClick = {onHeartSignClick(productItem)},
                         modifier = Modifier
                             .align(Alignment.TopEnd)
 
                     ) {
                         Image(
-                            painter = if(isFavorite) painterResource(id = R.drawable.heart_filled) else painterResource(id = R.drawable.heart_outlined) ,
+                            painter = if(productItem.isFavourite) painterResource(id = R.drawable.heart_filled) else painterResource(id = R.drawable.heart_outlined) ,
                             contentDescription = null,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier.size(24.dp)
@@ -231,7 +229,7 @@ fun CommodityItem(
                         .fillMaxSize()
                     ) {
                         Text(
-                            text = stringResource(R.string.price_with_sign,productItem.products.price.price, productItem.products.price.unit ),
+                            text = stringResource(R.string.price_with_sign,productItem.productDescription.price.price, productItem.productDescription.price.unit ),
                             style = TextStyle(
                                 fontSize = 9.sp,
                                 color = Color(0xFFA0A1A3),
@@ -244,7 +242,7 @@ fun CommodityItem(
                             modifier = Modifier.padding(bottom = 2.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.price_with_sign, productItem.products.price.priceWithDiscount, productItem.products.price.unit ),
+                                text = stringResource(R.string.price_with_sign, productItem.productDescription.price.priceWithDiscount, productItem.productDescription.price.unit ),
                                 style = TextStyle(
                                     fontSize = 14.sp,
                                     color = Color(0xFF000000),
@@ -261,7 +259,7 @@ fun CommodityItem(
                                     .width(34.dp)
                             ){
                                 Text(
-                                    text = stringResource(R.string.discount, productItem.products.price.discount),
+                                    text = stringResource(R.string.discount, productItem.productDescription.price.discount),
                                     style = TextStyle(
                                         fontSize = 9.sp,
                                         color = Color(0xFFFFFFFF),
@@ -270,7 +268,7 @@ fun CommodityItem(
                             }
                         }
                         Text(
-                            text = productItem.products.title,
+                            text = productItem.productDescription.title,
                             style = TextStyle(
                                 fontSize = 12.sp,
                                 color = Color(0xFF000000),
@@ -278,14 +276,14 @@ fun CommodityItem(
                             modifier = Modifier.padding(bottom = 2.dp)
                         )
                         Text(
-                            text = productItem.products.subtitle,
+                            text = productItem.productDescription.subtitle,
                             style = TextStyle(
                                 fontSize = 10.sp,
                                 color = Color(0xFF3E3E3E),
                             ),
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
-                        if (productItem.products.feedback!=null){
+                        if (productItem.productDescription.feedback!=null){
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Image(
                                     painter = painterResource(id = R.drawable.star_element),
@@ -294,7 +292,7 @@ fun CommodityItem(
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(
-                                    text = productItem.products.feedback.rating.toString(),
+                                    text = productItem.productDescription.feedback.rating.toString(),
                                     style = TextStyle(
                                         fontSize = 9.sp,
                                         color = Color(0xFFF9A249),
@@ -302,7 +300,7 @@ fun CommodityItem(
                                     modifier = Modifier.padding(horizontal = 2.dp)
                                 )
                                 Text(
-                                    text = stringResource(R.string.feedbackCount, productItem.products.feedback.count),
+                                    text = stringResource(R.string.feedbackCount, productItem.productDescription.feedback.count),
                                     style = TextStyle(
                                         fontSize = 9.sp,
                                         color = Color(0xFFA0A1A3),
@@ -334,9 +332,8 @@ fun CommodityItem(
 
 @Composable
 fun CommodityItemsGridScreen(
-    productItems : List<GoodsItems>,
-    isFavorite : Boolean,
-    addToFavorite: ()->Unit,
+    productItems : List<CommodityItem>,
+    onHeartSignClick: (CommodityItem)->Unit,
     addToCart : ()->Unit,
     modifier: Modifier = Modifier
 ) {
@@ -348,8 +345,7 @@ fun CommodityItemsGridScreen(
         items(items = productItems) { item ->
             CommodityItem(
                 productItem  = item,
-                isFavorite = isFavorite,
-                addToFavorite = addToFavorite,
+                onHeartSignClick = onHeartSignClick,
                 addToCart = addToCart,
                 modifier = modifier
 //                    .aspectRatio(0.5f)

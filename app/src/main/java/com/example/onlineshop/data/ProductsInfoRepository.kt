@@ -1,6 +1,5 @@
 package com.example.onlineshop.data
 
-import com.example.onlineshop.network.CommodityItem
 import com.example.onlineshop.network.Items
 import com.example.onlineshop.network.OnlineShopApiService
 
