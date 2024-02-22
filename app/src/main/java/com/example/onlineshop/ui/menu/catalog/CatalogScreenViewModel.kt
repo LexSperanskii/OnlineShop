@@ -1,6 +1,5 @@
 package com.example.onlineshop.ui.menu.catalog
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,8 +12,10 @@ import com.example.onlineshop.model.CommodityImages
 import com.example.onlineshop.model.allCommodityPhotos
 import com.example.onlineshop.network.CommodityDescription
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -41,11 +42,36 @@ class CatalogScreenVIewModel(
     private val productsInfoRepository: ProductsInfoRepository
 ) : ViewModel() {
 
-    private val _catalogScreenUiState = MutableStateFlow(CatalogScreenUiState())
-    var catalogScreenUiState: StateFlow<CatalogScreenUiState> = _catalogScreenUiState.asStateFlow()
-
     var catalogScreenCommodityItemsUiState: CatalogScreenCommodityItemsUiState by mutableStateOf(CatalogScreenCommodityItemsUiState.Loading)
         private set
+
+    private val _catalogScreenUiState = MutableStateFlow(CatalogScreenUiState())
+    var catalogScreenUiState: StateFlow<CatalogScreenUiState> = _catalogScreenUiState
+        .combine(usersRepository.getFavorites()) { localState, favorite ->
+            localState.copy(
+                listOfProductsOriginal = localState.listOfProductsOriginal.map { item ->
+                    if (item.productDescription.id in favorite) {
+                        // Создаем копию элемента с обновленным полем isFavourite
+                        item.copy(isFavourite = true)
+                    } else {
+                        item.copy(isFavourite = false)
+                    }
+                },
+                listOfProducts = localState.listOfProducts.map { item ->
+                    if (item.productDescription.id in favorite) {
+                        // Создаем копию элемента с обновленным полем isFavourite
+                        item.copy(isFavourite = true)
+                    } else {
+                        item.copy(isFavourite = false)
+                    }
+                }
+            )
+    } //для преобразования Flow в StateFlow.
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = CatalogScreenUiState()
+        )
 
     init {
         getCommodityItemsInfo()
@@ -57,23 +83,20 @@ class CatalogScreenVIewModel(
         viewModelScope.launch {
             catalogScreenCommodityItemsUiState = try {
                 //получаем List с описанием товарных элементов
-                val listOfItems : List<CommodityDescription> = productsInfoRepository.getProductsInfo().items
+                val listOfDescriptions : List<CommodityDescription> = productsInfoRepository.getProductsInfo().items
                 //Получаем List картинок
                 val listOfImages : List<CommodityImages> = allCommodityPhotos
-                //Получаем List с Любмыми товарами
-                val listOfFavorite = usersRepository.getFavorites()
                 //Создаем List Продуктов в который будем содержать и картинки и описание и любимый товар
                 val listOfProducts = mutableListOf<CommodityItem>()
                 //Совединяем все в один List
-                for (i in listOfItems.indices) {
-                    val item = listOfItems[i]
-                    val isFavorite: Boolean = item.id in listOfFavorite
+                for (i in listOfDescriptions.indices) {
+                    val item = listOfDescriptions[i]
                     val images = if (i < listOfImages.size) {
                         listOfImages[i]
                     } else {
                         CommodityImages()
                     }
-                    listOfProducts.add(CommodityItem(productDescription = item, images = images,isFavourite = isFavorite))
+                    listOfProducts.add(CommodityItem(productDescription = item, images = images))
                 }
                 _catalogScreenUiState.update {
                     it.copy(
@@ -93,62 +116,13 @@ class CatalogScreenVIewModel(
         }
     }
     fun saveOrDeleteFromFavorites(commodityItem: CommodityItem){
-        val currentState = catalogScreenUiState.value
         viewModelScope.launch {
             if (commodityItem.isFavourite){
                 //Удаляем из БД
                 usersRepository.deleteFromFavorites(commodityItem.productDescription.id)
-                //Создаем новый List для оригинального набора данных
-                val updatedOriginalList = currentState.listOfProductsOriginal.map{ item ->
-                    if (item.productDescription.id == commodityItem.productDescription.id) {
-                        // Создаем копию элемента с обновленным полем isFavourite
-                        item.copy(isFavourite = false)
-                    } else {
-                        item // Оставляем элемент без изменений
-                    }
-                }
-                //Создаем новый List для набора данных который показываем в view
-                val updatedList = currentState.listOfProducts.map{ item ->
-                    if (item.productDescription.id == commodityItem.productDescription.id) {
-                        // Создаем копию элемента с обновленным полем isFavourite
-                        item.copy(isFavourite = false)
-                    } else {
-                        item // Оставляем элемент без изменений
-                    }
-                }
-                _catalogScreenUiState.update {
-                    it.copy(
-                        listOfProductsOriginal = updatedOriginalList,
-                        listOfProducts = updatedList
-                    )
-                }
             }else{
                 // Записываем в БД
                 usersRepository.insertInFavorite(commodityItem.productDescription.id)
-                //Создаем новый List для оригинального набора данных
-                val updatedOriginalList = currentState.listOfProductsOriginal.map{ item ->
-                    if (item.productDescription.id == commodityItem.productDescription.id) {
-                        // Создаем копию элемента с обновленным полем isFavourite
-                        item.copy(isFavourite = true)
-                    } else {
-                        item // Оставляем элемент без изменений
-                    }
-                }
-                //Создаем новый List для набора данных который показываем в view
-                val updatedList = currentState.listOfProducts.map{ item ->
-                    if (item.productDescription.id == commodityItem.productDescription.id) {
-                        // Создаем копию элемента с обновленным полем isFavourite
-                        item.copy(isFavourite = true)
-                    } else {
-                        item // Оставляем элемент без изменений
-                    }
-                }
-                _catalogScreenUiState.update {
-                    it.copy(
-                        listOfProductsOriginal = updatedOriginalList,
-                        listOfProducts = updatedList
-                    )
-                }
             }
         }
     }

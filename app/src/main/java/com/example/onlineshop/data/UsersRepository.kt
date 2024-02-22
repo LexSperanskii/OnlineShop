@@ -2,6 +2,7 @@ package com.example.onlineshop.data
 
 import com.example.onlineshop.model.Favorite
 import com.example.onlineshop.model.User
+import kotlinx.coroutines.flow.Flow
 
 interface UsersRepository {
     suspend fun countUser(name: String, lastName: String, phone: String): Int
@@ -9,5 +10,5 @@ interface UsersRepository {
     fun getUser(): User?//Flow<User?>
     suspend fun insertInFavorite(id: String)
     suspend fun deleteFromFavorites(id: String)
-    suspend fun getFavorites(): List<String> //Flow<List<Favorite>>
+    fun getFavorites(): Flow<List<String>>
 }

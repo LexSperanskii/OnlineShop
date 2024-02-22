@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.onlineshop.model.Favorite
 import com.example.onlineshop.model.User
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -22,5 +23,5 @@ interface UserDao {
     @Query("DELETE FROM favorite WHERE id=:id")
     suspend fun deleteFromFavorites(id: String)
     @Query("SELECT * FROM favorite")
-    suspend fun getFavorites(): List<String>  //Flow<List<Favorite>>
+    fun getFavorites(): Flow<List<String>>
 }
