@@ -49,12 +49,6 @@ class CatalogScreenVIewModel(
 
     init {
         getCommodityItemsInfo()
-//        catalogScreenUiState
-//            .onEach { uiState ->
-//                sortTagItems(uiState.currentTag)
-//                sortItems(uiState.sortType)
-//            }
-//            .launchIn(viewModelScope)
     }
     /**
      * Gets Items information from the API Retrofit
@@ -62,11 +56,15 @@ class CatalogScreenVIewModel(
     private fun getCommodityItemsInfo() {
         viewModelScope.launch {
             catalogScreenCommodityItemsUiState = try {
-                //Объединяем списки и создаем собственный из картинок и описания
+                //получаем List с описанием товарных элементов
                 val listOfItems : List<CommodityDescription> = productsInfoRepository.getProductsInfo().items
+                //Получаем List картинок
                 val listOfImages : List<CommodityImages> = allCommodityPhotos
+                //Получаем List с Любмыми товарами
                 val listOfFavorite = usersRepository.getFavorites()
+                //Создаем List Продуктов в который будем содержать и картинки и описание и любимый товар
                 val listOfProducts = mutableListOf<CommodityItem>()
+                //Совединяем все в один List
                 for (i in listOfItems.indices) {
                     val item = listOfItems[i]
                     val isFavorite: Boolean = item.id in listOfFavorite
