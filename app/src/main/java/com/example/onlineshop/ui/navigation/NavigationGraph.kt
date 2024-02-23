@@ -1,6 +1,10 @@
 package com.example.onlineshop.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -11,6 +15,7 @@ import com.example.onlineshop.ui.menu.CartScreen
 import com.example.onlineshop.ui.menu.catalog.CatalogScreen
 import com.example.onlineshop.ui.menu.GeneralScreen
 import com.example.onlineshop.ui.menu.SalesScreen
+import com.example.onlineshop.ui.productScreen.ProductScreen
 import com.example.onlineshop.ui.registrationScreen.RegistrationScreen
 
 /**
@@ -28,32 +33,41 @@ fun OnlineShopNavHost(
     ) {
         composable(route = RegistrationDestination.route) {
             RegistrationScreen(
-                title = stringResource(RegistrationDestination.title),
+                title = RegistrationDestination.title,
                 navigateToGeneral = {navController.navigate(BottomBarScreens.GeneralDestination.route)},
                 navigateToCatalog = {navController.navigate(BottomBarScreens.CatalogDestination.route)}
             )
         }
+        composable(route = ProductDestination.route) {
+            ProductScreen(
+                title = ProductDestination.title,
+                navController = navController,
+                navigateBack = {navController.popBackStack()},
+                previousRoute = BottomBarScreens.CatalogDestination.route
+            )
+        }
         composable(route = BottomBarScreens.GeneralDestination.route) {
             GeneralScreen(
-                title = stringResource(BottomBarScreens.GeneralDestination.title),
+                title = BottomBarScreens.GeneralDestination.title,
                 navController = navController
             )
         }
         composable(route = BottomBarScreens.CatalogDestination.route) {
             CatalogScreen(
-                title = stringResource(BottomBarScreens.CatalogDestination.title),
+                title = BottomBarScreens.CatalogDestination.title,
+                navigateToProductPage = {navController.navigate(ProductDestination.route)},
                 navController = navController
             )
         }
         composable(route = BottomBarScreens.CartDestination.route) {
             CartScreen(
-                title = stringResource(BottomBarScreens.CartDestination.title),
+                title = BottomBarScreens.CartDestination.title,
                 navController = navController
             )
         }
         composable(route = BottomBarScreens.SalesDestination.route) {
             SalesScreen(
-                title = stringResource(BottomBarScreens.SalesDestination.title),
+                title = BottomBarScreens.SalesDestination.title,
                 navController = navController
             )
         }

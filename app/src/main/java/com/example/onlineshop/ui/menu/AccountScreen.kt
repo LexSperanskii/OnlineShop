@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
-import com.example.onlineshop.ui.OnlineShopTopAppBar
 
 @Composable
 fun AccountScreen(
@@ -22,6 +21,7 @@ fun AccountScreen(
         topBar = {
             OnlineShopTopAppBar(
                 title = stringResource(R.string.accountTitle),
+                navigateBack = {}
             )
         },
         bottomBar = {

@@ -42,14 +42,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.onlineshop.R
 import com.example.onlineshop.ui.AppViewModelProvider
-import com.example.onlineshop.ui.OnlineShopTopAppBar
+import com.example.onlineshop.ui.menu.OnlineShopTopAppBar
 import com.example.onlineshop.ui.navigation.RegistrationDestination
 import com.example.onlineshop.ui.theme.OnlineShopTheme
 
 
 @Composable
 fun RegistrationScreen(
-    title: String,
+    title: Int,
     navigateToGeneral : () -> Unit,
     navigateToCatalog : () -> Unit,
     registrationScreenVIewModel: RegistrationScreenVIewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -65,7 +65,8 @@ fun RegistrationScreen(
     Scaffold(
         topBar = {
             OnlineShopTopAppBar(
-                title = title,
+                title = stringResource(id = title),
+                navigateBack = {}
             )
         }
     ) { innerPadding ->
@@ -419,7 +420,7 @@ fun RegistrationBodyPreview() {
 fun RegistrationScreenPreview() {
     OnlineShopTheme {
         RegistrationScreen(
-            title = stringResource(RegistrationDestination.title),
+            title = RegistrationDestination.title,
             navigateToGeneral = {},
             navigateToCatalog = {},
         )

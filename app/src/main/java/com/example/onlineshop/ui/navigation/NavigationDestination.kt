@@ -11,6 +11,10 @@ object RegistrationDestination : NavigationDestination {
     override val route = "registration"
     override val title = R.string.registration
 }
+object ProductDestination : NavigationDestination {
+    override val route = "product"
+    override val title = R.string.product
+}
 
 sealed class BottomBarScreens(
     val route: String,

@@ -21,25 +21,3 @@ import com.example.onlineshop.ui.navigation.OnlineShopNavHost
 fun OnlineShopApp(navController: NavHostController = rememberNavController()) {
     OnlineShopNavHost(navController = navController)
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun OnlineShopTopAppBar(
-    title: String,
-    modifier: Modifier = Modifier,
-) {
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = title,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    color = Color(0xFF000000
-                    ),
-                ),
-                modifier = Modifier
-                    .height(21.dp)
-            )},
-        modifier = modifier,
-    )
-}

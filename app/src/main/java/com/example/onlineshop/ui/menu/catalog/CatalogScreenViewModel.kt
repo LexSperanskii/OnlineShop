@@ -69,7 +69,7 @@ class CatalogScreenVIewModel(
     } //для преобразования Flow в StateFlow.
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.WhileSubscribed(5_000), //Преобразование будет запущено, когда есть хотя бы один подписчик на StateFlow, и будет продолжаться до тех пор, пока есть подписчики. Время жизни этой операции составляет 5 секунд (5000 миллисекунд
             initialValue = CatalogScreenUiState()
         )
 

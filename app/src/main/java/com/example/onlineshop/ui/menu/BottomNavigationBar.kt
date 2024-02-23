@@ -14,9 +14,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.onlineshop.ui.navigation.BottomBarScreens
 
+
 @Composable
 fun NavigationBottomAppBar(
     navController: NavHostController,
+    previousRoute : String = ""
 ) {
     val items = listOf(
         BottomBarScreens.GeneralDestination,
@@ -30,7 +32,11 @@ fun NavigationBottomAppBar(
     NavigationBar() {
         items.forEach { screen ->
             val isSelected = currentDestination?.hierarchy?.any {
-                it.route == screen.route
+                //Для того чтобы подсвечивалось красным экран с которого мы перешли
+                if (previousRoute != "")
+                    previousRoute == screen.route
+                else
+                    it.route == screen.route
             }
             NavigationBarItem(
                 selected = isSelected == true,

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">OnlineShop</string>
     <string name="registration">Вход</string>
+    <string name="product">Карточка товара</string>
     <string name="general">Главная</string>
     <string name="catalog">Каталог</string>
     <string name="cart">Корзина</string>
@@ -12,4 +13,6 @@
     <string name="feedbackCount">(%d)</string>
     <string name="loading">Загрузка</string>
     <string name="loading_failed">Загрузка не удалась</string>
+    <string name="back_button">Кнопка назад</string>
+    <string name="icon_share">Иконка поделиться</string>
 </resources>

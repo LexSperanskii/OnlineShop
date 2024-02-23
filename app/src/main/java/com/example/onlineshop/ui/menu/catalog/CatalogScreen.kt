@@ -60,15 +60,16 @@ import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
 import com.example.onlineshop.ui.AppViewModelProvider
-import com.example.onlineshop.ui.OnlineShopTopAppBar
 import com.example.onlineshop.ui.menu.NavigationBottomAppBar
+import com.example.onlineshop.ui.menu.OnlineShopTopAppBar
 import com.example.onlineshop.ui.theme.OnlineShopTheme
 
 
 @Composable
 fun CatalogScreen(
     navController: NavHostController,
-    title :String,
+    title :Int,
+    navigateToProductPage : () -> Unit,
     modifier: Modifier = Modifier,
     catalogScreenVIewModel: CatalogScreenVIewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -77,7 +78,8 @@ fun CatalogScreen(
     Scaffold(
         topBar = {
             OnlineShopTopAppBar(
-                title = title,
+                title = stringResource(id = title),
+                navigateBack = {}
             )
         },
         bottomBar = {
@@ -110,8 +112,9 @@ fun CatalogScreen(
                 is CatalogScreenCommodityItemsUiState.Success ->
                     CommodityItemsGridScreen(
                         productItems = catalogScreenUiState.listOfProducts,
-                        onHeartSignClick = {catalogScreenVIewModel.saveOrDeleteFromFavorites(it)},
+                        onHeartSignClick = { catalogScreenVIewModel.saveOrDeleteFromFavorites(it) },
                         addToCart = {}, //Не функциональная кнопка
+                        onCardClick = {navigateToProductPage()},
                         modifier = Modifier.fillMaxSize()
                     )
                 is CatalogScreenCommodityItemsUiState.Error ->
@@ -190,13 +193,15 @@ fun CommodityItem(
     productItem : CommodityItem,
     onHeartSignClick: (CommodityItem)->Unit,
     addToCart : ()->Unit,
+    onCardClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .height(287.dp)
             .width(168.dp)
-            .padding(3.dp),
+            .padding(3.dp)
+            .clickable(onClick = onCardClick),
         shape = MaterialTheme.shapes.small,
         colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFFFF)),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -335,6 +340,7 @@ fun CommodityItemsGridScreen(
     productItems : List<CommodityItem>,
     onHeartSignClick: (CommodityItem)->Unit,
     addToCart : ()->Unit,
+    onCardClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -347,6 +353,7 @@ fun CommodityItemsGridScreen(
                 productItem  = item,
                 onHeartSignClick = onHeartSignClick,
                 addToCart = addToCart,
+                onCardClick = onCardClick ,
                 modifier = modifier
 //                    .aspectRatio(0.5f)
             )
