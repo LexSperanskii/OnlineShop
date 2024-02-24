@@ -9,10 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.onlineshop.ui.navigation.BottomBarScreens
+import com.example.onlineshop.ui.navigation.AccountDestination
+import com.example.onlineshop.ui.navigation.CartDestination
+import com.example.onlineshop.ui.navigation.CatalogDestination
+import com.example.onlineshop.ui.navigation.GeneralDestination
+import com.example.onlineshop.ui.navigation.SalesDestination
 
 
 @Composable
@@ -21,11 +24,11 @@ fun NavigationBottomAppBar(
     previousRoute : String = ""
 ) {
     val items = listOf(
-        BottomBarScreens.GeneralDestination,
-        BottomBarScreens.CatalogDestination,
-        BottomBarScreens.CartDestination,
-        BottomBarScreens.SalesDestination,
-        BottomBarScreens.AccountDestination
+        GeneralDestination,
+        CatalogDestination,
+        CartDestination,
+        SalesDestination,
+        AccountDestination
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

@@ -7,6 +7,10 @@ interface NavigationDestination {
     val route: String
     val title: Int
 }
+interface NavigationDestinationForBottomBar : NavigationDestination {
+    val icon : Int
+    val tint : Color
+}
 object RegistrationDestination : NavigationDestination {
     override val route = "registration"
     override val title = R.string.registration
@@ -14,46 +18,80 @@ object RegistrationDestination : NavigationDestination {
 object ProductDestination : NavigationDestination {
     override val route = "product"
     override val title = R.string.product
+//    const val itemIdArg = "itemId"
+//    val routeWithArgs = "$route/{$itemIdArg}"
+}
+object GeneralDestination : NavigationDestinationForBottomBar {
+    override val route = "general"
+    override val title = R.string.general
+    override val icon = R.drawable.icon_home
+    override val tint = Color.Red
+}
+object CatalogDestination : NavigationDestinationForBottomBar{
+    override val route = "catalog"
+    override val title = R.string.catalog
+    override val icon = R.drawable.icon_catalog
+    override val tint = Color.Red
+}
+object CartDestination : NavigationDestinationForBottomBar {
+    override val route = "cart"
+    override val title = R.string.cart
+    override val icon = R.drawable.icon_cart
+    override val tint = Color.Red
+}
+object SalesDestination : NavigationDestinationForBottomBar {
+    override val route = "sales"
+    override val title = R.string.sales
+    override val icon = R.drawable.icon_sales
+    override val tint = Color.Red
+}
+object AccountDestination : NavigationDestinationForBottomBar {
+    override val route = "account"
+    override val title = R.string.account
+    override val icon = R.drawable.icon_account
+    override val tint = Color.Red
 }
 
-sealed class BottomBarScreens(
-    val route: String,
-    val title: Int,
-    val icon: Int,
-    val tint : Color
-) {
-    object GeneralDestination : BottomBarScreens(
-        route = "general",
-        title = R.string.general,
-        icon = R.drawable.icon_home,
-        tint = Color.Red
-    )
-    object CatalogDestination : BottomBarScreens(
-        route = "catalog",
-        title = R.string.catalog,
-        icon = R.drawable.icon_catalog,
-        tint = Color.Red
-    )
-    object CartDestination : BottomBarScreens(
-        route = "cart",
-        title = R.string.cart,
-        icon = R.drawable.icon_cart,
-        tint = Color.Red
-    )
-    object SalesDestination : BottomBarScreens(
-        route = "sales",
-        title = R.string.sales,
-        icon = R.drawable.icon_sales,
-        tint = Color.Red
-    )
-    object AccountDestination : BottomBarScreens(
-        route = "account",
-        title = R.string.account,
-        icon = R.drawable.icon_account,
-        tint = Color.Red
-    )
 
-}
+//sealed class BottomBarScreens(
+//    val route: String,
+//    val title: Int,
+//    val icon: Int,
+//    val tint : Color
+//) {
+//    object GeneralDestination : BottomBarScreens(
+//        route = "general",
+//        title = R.string.general,
+//        icon = R.drawable.icon_home,
+//        tint = Color.Red
+//    )
+//    object CatalogDestination : BottomBarScreens(
+//        route = "catalog",
+//        title = R.string.catalog,
+//        icon = R.drawable.icon_catalog,
+//        tint = Color.Red
+//    )
+//    object CartDestination : BottomBarScreens(
+//        route = "cart",
+//        title = R.string.cart,
+//        icon = R.drawable.icon_cart,
+//        tint = Color.Red
+//    )
+//    object SalesDestination : BottomBarScreens(
+//        route = "sales",
+//        title = R.string.sales,
+//        icon = R.drawable.icon_sales,
+//        tint = Color.Red
+//    )
+//    object AccountDestination : BottomBarScreens(
+//        route = "account",
+//        title = R.string.account,
+//        icon = R.drawable.icon_account,
+//        tint = Color.Red
+//    )
+//}
+
+
 //sealed class NavigationDestination(
 //    val route: String,
 //    val title: Int

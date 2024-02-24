@@ -27,7 +27,8 @@ data class CatalogScreenUiState(
     val listOfTags : List<String> = listOf("Смотреть все", "Лицо", "Тело", "Загар", "Маски"),
     val currentTag : String = "Смотреть все",
     val listOfProductsOriginal: List<CommodityItem> = listOf(),
-    val listOfProducts: List<CommodityItem> = listOf()
+    val listOfProducts: List<CommodityItem> = listOf(),
+    val commodityItem: CommodityItem = CommodityItem()
 )
 
 sealed interface CatalogScreenCommodityItemsUiState {
@@ -37,7 +38,7 @@ sealed interface CatalogScreenCommodityItemsUiState {
 }
 
 
-class CatalogScreenVIewModel(
+class CatalogScreenViewModel(
     private val usersRepository: UsersRepository,
     private val productsInfoRepository: ProductsInfoRepository
 ) : ViewModel() {
@@ -124,6 +125,13 @@ class CatalogScreenVIewModel(
                 // Записываем в БД
                 usersRepository.insertInFavorite(commodityItem.productDescription.id)
             }
+        }
+    }
+    fun saveCommodityItem(item:CommodityItem){
+        _catalogScreenUiState.update {
+            it.copy(
+                commodityItem = item
+            )
         }
     }
     fun expandChange(){

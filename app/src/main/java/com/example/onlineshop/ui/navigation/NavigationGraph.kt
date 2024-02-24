@@ -1,21 +1,18 @@
 package com.example.onlineshop.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.onlineshop.ui.menu.AccountScreen
 import com.example.onlineshop.ui.menu.CartScreen
 import com.example.onlineshop.ui.menu.catalog.CatalogScreen
 import com.example.onlineshop.ui.menu.GeneralScreen
 import com.example.onlineshop.ui.menu.SalesScreen
-import com.example.onlineshop.ui.productScreen.ProductScreen
+import com.example.onlineshop.ui.menu.catalog.ProductScreen
 import com.example.onlineshop.ui.registrationScreen.RegistrationScreen
 
 /**
@@ -34,44 +31,51 @@ fun OnlineShopNavHost(
         composable(route = RegistrationDestination.route) {
             RegistrationScreen(
                 title = RegistrationDestination.title,
-                navigateToGeneral = {navController.navigate(BottomBarScreens.GeneralDestination.route)},
-                navigateToCatalog = {navController.navigate(BottomBarScreens.CatalogDestination.route)}
+                navigateToGeneral = {navController.navigate(GeneralDestination.route)},
+                navigateToCatalog = {navController.navigate(CatalogDestination.route)}
             )
         }
-        composable(route = ProductDestination.route) {
+        composable(
+            route = ProductDestination.route,
+//            route = ProductDestination.routeWithArgs, //Нужно чтобы прокинуть состояние с одного экрана на другой
+//            arguments = listOf(navArgument(ProductDestination.itemIdArg) {
+//                type = NavType.StringType
+//            })
+        ) {
             ProductScreen(
                 title = ProductDestination.title,
                 navController = navController,
                 navigateBack = {navController.popBackStack()},
-                previousRoute = BottomBarScreens.CatalogDestination.route
+                previousRoute = CatalogDestination.route
             )
         }
-        composable(route = BottomBarScreens.GeneralDestination.route) {
+        composable(route = GeneralDestination.route) {
             GeneralScreen(
-                title = BottomBarScreens.GeneralDestination.title,
+                title = GeneralDestination.title,
                 navController = navController
             )
         }
-        composable(route = BottomBarScreens.CatalogDestination.route) {
+        composable(route = CatalogDestination.route) {
             CatalogScreen(
-                title = BottomBarScreens.CatalogDestination.title,
-                navigateToProductPage = {navController.navigate(ProductDestination.route)},
+                title = CatalogDestination.title,
+//                navigateToProductPage = { navController.navigate("${ProductDestination.route}/${it}")},
+                navigateToProductPage = { navController.navigate(ProductDestination.route) },
                 navController = navController
             )
         }
-        composable(route = BottomBarScreens.CartDestination.route) {
+        composable(route = CartDestination.route) {
             CartScreen(
-                title = BottomBarScreens.CartDestination.title,
+                title = CartDestination.title,
                 navController = navController
             )
         }
-        composable(route = BottomBarScreens.SalesDestination.route) {
+        composable(route = SalesDestination.route) {
             SalesScreen(
-                title = BottomBarScreens.SalesDestination.title,
+                title = SalesDestination.title,
                 navController = navController
             )
         }
-        composable(route = BottomBarScreens.AccountDestination.route) {
+        composable(route = AccountDestination.route) {
             AccountScreen(
                 navController = navController
             )

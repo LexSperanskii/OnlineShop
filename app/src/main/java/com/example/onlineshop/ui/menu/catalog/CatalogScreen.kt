@@ -71,7 +71,7 @@ fun CatalogScreen(
     title :Int,
     navigateToProductPage : () -> Unit,
     modifier: Modifier = Modifier,
-    catalogScreenVIewModel: CatalogScreenVIewModel = viewModel(factory = AppViewModelProvider.Factory)
+    catalogScreenVIewModel: CatalogScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val catalogScreenUiState = catalogScreenVIewModel.catalogScreenUiState.collectAsState().value
     val catalogScreenCommodityItemsUiState = catalogScreenVIewModel.catalogScreenCommodityItemsUiState
@@ -114,11 +114,16 @@ fun CatalogScreen(
                         productItems = catalogScreenUiState.listOfProducts,
                         onHeartSignClick = { catalogScreenVIewModel.saveOrDeleteFromFavorites(it) },
                         addToCart = {}, //Не функциональная кнопка
-                        onCardClick = {navigateToProductPage()},
+                        onCardClick = {
+                            catalogScreenVIewModel.saveCommodityItem(it)
+                            navigateToProductPage()
+                        },
                         modifier = Modifier.fillMaxSize()
                     )
                 is CatalogScreenCommodityItemsUiState.Error ->
                     ErrorScreen(modifier = modifier.fillMaxSize())
+
+                else -> {}
             }
         }
     }
@@ -291,7 +296,7 @@ fun CommodityItem(
                         if (productItem.productDescription.feedback!=null){
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Image(
-                                    painter = painterResource(id = R.drawable.star_element),
+                                    painter = painterResource(id = R.drawable.ic_star),
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier.size(16.dp)
@@ -340,7 +345,7 @@ fun CommodityItemsGridScreen(
     productItems : List<CommodityItem>,
     onHeartSignClick: (CommodityItem)->Unit,
     addToCart : ()->Unit,
-    onCardClick: () -> Unit,
+    onCardClick: (CommodityItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -353,7 +358,7 @@ fun CommodityItemsGridScreen(
                 productItem  = item,
                 onHeartSignClick = onHeartSignClick,
                 addToCart = addToCart,
-                onCardClick = onCardClick ,
+                onCardClick = {onCardClick(item)},
                 modifier = modifier
 //                    .aspectRatio(0.5f)
             )

@@ -2,11 +2,13 @@ package com.example.onlineshop.ui
 
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.onlineshop.OnlineShopApplication
-import com.example.onlineshop.ui.menu.catalog.CatalogScreenVIewModel
+import com.example.onlineshop.ui.menu.catalog.CatalogScreenViewModel
+import com.example.onlineshop.ui.productScreen.ProductScreenViewModel
 import com.example.onlineshop.ui.registrationScreen.RegistrationScreenVIewModel
 
 
@@ -19,7 +21,14 @@ object AppViewModelProvider {
             RegistrationScreenVIewModel( onlineShopApplication().container.usersRepository )
         }
         initializer {
-            CatalogScreenVIewModel(
+            CatalogScreenViewModel(
+                usersRepository = onlineShopApplication().container.usersRepository,
+                productsInfoRepository = onlineShopApplication().container.productsInfoRepository
+            )
+        }
+        initializer {
+            ProductScreenViewModel(
+                this.createSavedStateHandle(),
                 usersRepository = onlineShopApplication().container.usersRepository,
                 productsInfoRepository = onlineShopApplication().container.productsInfoRepository
             )
