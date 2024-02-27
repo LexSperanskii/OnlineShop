@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.menu
+package com.example.onlineshop.ui.menu.AccountScreen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
+import com.example.onlineshop.ui.menu.NavigationBottomAppBar
+import com.example.onlineshop.ui.menu.OnlineShopTopAppBar
 
 @Composable
 fun AccountScreen(

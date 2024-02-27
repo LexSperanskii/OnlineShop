@@ -2,17 +2,18 @@ package com.example.onlineshop.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.example.onlineshop.ui.menu.AccountScreen
+import com.example.onlineshop.ui.AppViewModelProvider
+import com.example.onlineshop.ui.menu.AccountScreen.AccountScreen
 import com.example.onlineshop.ui.menu.CartScreen
-import com.example.onlineshop.ui.menu.catalog.CatalogScreen
+import com.example.onlineshop.ui.menu.catalogScreen.CatalogScreen
 import com.example.onlineshop.ui.menu.GeneralScreen
 import com.example.onlineshop.ui.menu.SalesScreen
-import com.example.onlineshop.ui.menu.catalog.ProductScreen
+import com.example.onlineshop.ui.menu.catalogScreen.CatalogProductScreenViewModel
+import com.example.onlineshop.ui.menu.catalogScreen.ProductScreen
 import com.example.onlineshop.ui.registrationScreen.RegistrationScreen
 
 /**
@@ -23,6 +24,7 @@ fun OnlineShopNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
+    val catalogProductScreenViewModel: CatalogProductScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
     NavHost(
         navController = navController,
         startDestination = RegistrationDestination.route,
@@ -46,7 +48,8 @@ fun OnlineShopNavHost(
                 title = ProductDestination.title,
                 navController = navController,
                 navigateBack = {navController.popBackStack()},
-                previousRoute = CatalogDestination.route
+                previousRoute = CatalogDestination.route,
+                catalogProductScreenViewModel = catalogProductScreenViewModel
             )
         }
         composable(route = GeneralDestination.route) {
@@ -60,7 +63,8 @@ fun OnlineShopNavHost(
                 title = CatalogDestination.title,
 //                navigateToProductPage = { navController.navigate("${ProductDestination.route}/${it}")},
                 navigateToProductPage = { navController.navigate(ProductDestination.route) },
-                navController = navController
+                navController = navController,
+                catalogProductScreenViewModel = catalogProductScreenViewModel
             )
         }
         composable(route = CartDestination.route) {

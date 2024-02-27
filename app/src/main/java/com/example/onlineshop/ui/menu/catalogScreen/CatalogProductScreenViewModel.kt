@@ -1,5 +1,6 @@
-package com.example.onlineshop.ui.menu.catalog
+package com.example.onlineshop.ui.menu.catalogScreen
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.onlineshop.data.ProductsInfoRepository
 import com.example.onlineshop.data.UsersRepository
-import com.example.onlineshop.model.CommodityItem
 import com.example.onlineshop.model.CommodityImages
+import com.example.onlineshop.model.CommodityItem
 import com.example.onlineshop.model.allCommodityPhotos
 import com.example.onlineshop.network.CommodityDescription
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 
+sealed interface CatalogScreenNetworkUiState {
+    object Success : CatalogScreenNetworkUiState
+    object Error : CatalogScreenNetworkUiState
+    object Loading : CatalogScreenNetworkUiState
+}
 data class CatalogScreenUiState(
     val isExpanded : Boolean = false,
     val sortType : String = "По популярности",
@@ -28,24 +34,30 @@ data class CatalogScreenUiState(
     val currentTag : String = "Смотреть все",
     val listOfProductsOriginal: List<CommodityItem> = listOf(),
     val listOfProducts: List<CommodityItem> = listOf(),
-    val commodityItem: CommodityItem = CommodityItem()
+)
+data class ProductScreenUiState(
+    val commodityItem: CommodityItem = CommodityItem(),
+    val isShowInfo: Boolean = true,
+    val isShowCompound: Boolean = false,
 )
 
-sealed interface CatalogScreenCommodityItemsUiState {
-    object Success : CatalogScreenCommodityItemsUiState
-    object Error : CatalogScreenCommodityItemsUiState
-    object Loading : CatalogScreenCommodityItemsUiState
-}
 
-
-class CatalogScreenViewModel(
+class CatalogProductScreenViewModel(
     private val usersRepository: UsersRepository,
     private val productsInfoRepository: ProductsInfoRepository
 ) : ViewModel() {
 
-    var catalogScreenCommodityItemsUiState: CatalogScreenCommodityItemsUiState by mutableStateOf(CatalogScreenCommodityItemsUiState.Loading)
+    /**
+     * State для состояния Сети
+     */
+    var catalogScreenNetworkUiState: CatalogScreenNetworkUiState by mutableStateOf(
+        CatalogScreenNetworkUiState.Loading
+    )
         private set
 
+    /**
+     * State для экарана с товарами
+     */
     private val _catalogScreenUiState = MutableStateFlow(CatalogScreenUiState())
     var catalogScreenUiState: StateFlow<CatalogScreenUiState> = _catalogScreenUiState
         .combine(usersRepository.getFavorites()) { localState, favorite ->
@@ -67,12 +79,30 @@ class CatalogScreenViewModel(
                     }
                 }
             )
-    } //для преобразования Flow в StateFlow.
+        } //для преобразования Flow в StateFlow.
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000), //Преобразование будет запущено, когда есть хотя бы один подписчик на StateFlow, и будет продолжаться до тех пор, пока есть подписчики. Время жизни этой операции составляет 5 секунд (5000 миллисекунд
             initialValue = CatalogScreenUiState()
         )
+
+    /**
+     * State для выбранного товара
+     */
+    private val _productScreenUiState = MutableStateFlow(ProductScreenUiState())
+    var productScreenUiState: StateFlow<ProductScreenUiState> = _productScreenUiState
+        .combine(usersRepository.getFavorites()) { localState, favorite ->
+            Log.d("test",localState.commodityItem.productDescription.id)
+            val isFavourite = localState.commodityItem.productDescription.id in favorite
+            localState.copy(
+                commodityItem = localState.commodityItem.copy(isFavourite = isFavourite)
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = ProductScreenUiState()
+        )
+
 
     init {
         getCommodityItemsInfo()
@@ -82,8 +112,8 @@ class CatalogScreenViewModel(
      */
     private fun getCommodityItemsInfo() {
         viewModelScope.launch {
-            catalogScreenCommodityItemsUiState = try {
-                //получаем List с описанием товарных элементов
+            catalogScreenNetworkUiState = try {
+                //получаем List с описанием товарных элементов из сети
                 val listOfDescriptions : List<CommodityDescription> = productsInfoRepository.getProductsInfo().items
                 //Получаем List картинок
                 val listOfImages : List<CommodityImages> = allCommodityPhotos
@@ -110,9 +140,9 @@ class CatalogScreenViewModel(
                 sortTagItems(currentState.currentTag)
                 sortItems(currentState.sortType)
                 //состояние загрузки
-                CatalogScreenCommodityItemsUiState.Success
+                CatalogScreenNetworkUiState.Success
             } catch (e: IOException) {
-                CatalogScreenCommodityItemsUiState.Error
+                CatalogScreenNetworkUiState.Error
             }
         }
     }
@@ -127,10 +157,24 @@ class CatalogScreenViewModel(
             }
         }
     }
-    fun saveCommodityItem(item:CommodityItem){
-        _catalogScreenUiState.update {
+    fun chooseCommodityItem(item:CommodityItem) {
+        _productScreenUiState.update {
             it.copy(
                 commodityItem = item
+            )
+        }
+    }
+    fun hideShowInfo(){
+        _productScreenUiState.update {
+            it.copy(
+                isShowInfo = !it.isShowInfo
+            )
+        }
+    }
+    fun hideShowCompoundInfo(){
+        _productScreenUiState.update {
+            it.copy(
+                isShowCompound = !it.isShowCompound
             )
         }
     }

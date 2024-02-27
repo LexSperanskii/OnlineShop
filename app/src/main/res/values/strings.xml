@@ -16,14 +16,25 @@
     <string name="back_button">Кнопка назад</string>
     <string name="icon_share">Иконка поделиться</string>
     <string name="description">Описание</string>
+    <string name="hide">Скрыть</string>
+    <string name="show">Подробнее</string>
+    <string name="characteristics">Характеристики</string>
+    <string name="compound">Состав</string>
+    <string name="add_to_cart">Добавить в корзину</string>
     <plurals name="available_products">
-        <item quantity="one">Доступен для заказа %1$s штука</item>
-        <item quantity="few">Доступны для заказа %1$s штуки</item>
-        <item quantity="many">Доступны для заказа %1$s штук</item>
+        <item quantity="zero">Доступен для заказа %d штук</item>
+        <item quantity="one">Доступен для заказа %d штука</item>
+        <item quantity="two">Доступен для заказа %d штуки</item>
+        <item quantity="few">Доступны для заказа %d штуки</item>
+        <item quantity="many">Доступны для заказа %d штук</item>
+        <item quantity="other">Доступны для заказа %d штук</item>
     </plurals>
-        <plurals name="feedbacks">
-        <item quantity="one">%1$s отзыв</item>
-        <item quantity="few">%1$s отзыва</item>
-        <item quantity="many">%1$s отзывов</item>
+    <plurals name="feedbacks">
+        <item quantity="zero">%d отзывов</item>
+        <item quantity="one">%d отзыв</item>
+        <item quantity="two">%d отзыва</item>
+        <item quantity="few">%d отзыва</item>
+        <item quantity="many">%d отзывов</item>
+        <item quantity="other">%d отзывов</item>
     </plurals>
 </resources>

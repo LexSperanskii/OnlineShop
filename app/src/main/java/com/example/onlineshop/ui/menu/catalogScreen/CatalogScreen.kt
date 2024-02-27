@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.menu.catalog
+package com.example.onlineshop.ui.menu.catalogScreen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -55,11 +55,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
-import com.example.onlineshop.ui.AppViewModelProvider
 import com.example.onlineshop.ui.menu.NavigationBottomAppBar
 import com.example.onlineshop.ui.menu.OnlineShopTopAppBar
 import com.example.onlineshop.ui.theme.OnlineShopTheme
@@ -71,10 +69,11 @@ fun CatalogScreen(
     title :Int,
     navigateToProductPage : () -> Unit,
     modifier: Modifier = Modifier,
-    catalogScreenVIewModel: CatalogScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    catalogProductScreenViewModel: CatalogProductScreenViewModel
+//    catalogProductScreenViewModel: CatalogProductScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val catalogScreenUiState = catalogScreenVIewModel.catalogScreenUiState.collectAsState().value
-    val catalogScreenCommodityItemsUiState = catalogScreenVIewModel.catalogScreenCommodityItemsUiState
+    val catalogScreenUiState = catalogProductScreenViewModel.catalogScreenUiState.collectAsState().value
+    val catalogScreenNetworkUiState = catalogProductScreenViewModel.catalogScreenNetworkUiState
     Scaffold(
         topBar = {
             OnlineShopTopAppBar(
@@ -94,33 +93,33 @@ fun CatalogScreen(
             SortingRow(
                 isExpanded = catalogScreenUiState.isExpanded,
                 sortType = catalogScreenUiState.sortType,
-                expandChange = {catalogScreenVIewModel.expandChange()},
+                expandChange = {catalogProductScreenViewModel.expandChange()},
                 listOfTypes = catalogScreenUiState.listOfTypes,
-                onDropdownMenuItemClick = {catalogScreenVIewModel.onDropdownMenuItemClick(it)},
+                onDropdownMenuItemClick = {catalogProductScreenViewModel.onDropdownMenuItemClick(it)},
                 modifier = Modifier.fillMaxWidth()
             )
             TagRow(
                 listOfTags = catalogScreenUiState.listOfTags,
                 currentTag = catalogScreenUiState.currentTag,
-                onTagClick = { catalogScreenVIewModel.onTagClick(it) },
-                onEraseTagClick = {catalogScreenVIewModel.onEraseTagClick()},
+                onTagClick = { catalogProductScreenViewModel.onTagClick(it) },
+                onEraseTagClick = {catalogProductScreenViewModel.onEraseTagClick()},
                 modifier = Modifier.fillMaxWidth()
             )
-            when (catalogScreenCommodityItemsUiState) {
-                is CatalogScreenCommodityItemsUiState.Loading ->
+            when (catalogScreenNetworkUiState) {
+                is CatalogScreenNetworkUiState.Loading ->
                     LoadingScreen(modifier = modifier.fillMaxSize())
-                is CatalogScreenCommodityItemsUiState.Success ->
+                is CatalogScreenNetworkUiState.Success ->
                     CommodityItemsGridScreen(
                         productItems = catalogScreenUiState.listOfProducts,
-                        onHeartSignClick = { catalogScreenVIewModel.saveOrDeleteFromFavorites(it) },
+                        onHeartSignClick = { catalogProductScreenViewModel.saveOrDeleteFromFavorites(it) },
                         addToCart = {}, //Не функциональная кнопка
                         onCardClick = {
-                            catalogScreenVIewModel.saveCommodityItem(it)
+                            catalogProductScreenViewModel.chooseCommodityItem(it)
                             navigateToProductPage()
                         },
                         modifier = Modifier.fillMaxSize()
                     )
-                is CatalogScreenCommodityItemsUiState.Error ->
+                is CatalogScreenNetworkUiState.Error ->
                     ErrorScreen(modifier = modifier.fillMaxSize())
 
                 else -> {}
