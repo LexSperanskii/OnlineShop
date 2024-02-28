@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">OnlineShop</string>
     <string name="registration">Вход</string>
+    <string name="exit">Выйти</string>
     <string name="product">Карточка товара</string>
     <string name="general">Главная</string>
     <string name="catalog">Каталог</string>
@@ -21,6 +22,12 @@
     <string name="characteristics">Характеристики</string>
     <string name="compound">Состав</string>
     <string name="add_to_cart">Добавить в корзину</string>
+    <string name="favorite">Избранное</string>
+    <string name="shops">Магазины</string>
+    <string name="feedback">Обратная связь</string>
+    <string name="offer">Оферта</string>
+    <string name="purchase_return">Возврат товара</string>
+    <string name="account_name_surname">%1$s %2$s</string>
     <plurals name="available_products">
         <item quantity="zero">Доступен для заказа %d штук</item>
         <item quantity="one">Доступен для заказа %d штука</item>
@@ -36,5 +43,13 @@
         <item quantity="few">%d отзыва</item>
         <item quantity="many">%d отзывов</item>
         <item quantity="other">%d отзывов</item>
+    </plurals>
+    <plurals name="account_quantity_favorite_items">
+        <item quantity="zero">%d товаров</item>
+        <item quantity="one">%d товар</item>
+        <item quantity="two">%d товара</item>
+        <item quantity="few">%d товара</item>
+        <item quantity="many">%d товаров</item>
+        <item quantity="other">%d товаров</item>
     </plurals>
 </resources>

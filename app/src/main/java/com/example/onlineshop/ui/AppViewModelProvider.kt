@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.onlineshop.OnlineShopApplication
+import com.example.onlineshop.ui.menu.accountScreen.AccountScreenViewModel
 import com.example.onlineshop.ui.menu.catalogScreen.CatalogProductScreenViewModel
 import com.example.onlineshop.ui.registrationScreen.RegistrationScreenVIewModel
 
@@ -22,6 +23,11 @@ object AppViewModelProvider {
             CatalogProductScreenViewModel(
                 usersRepository = onlineShopApplication().container.usersRepository,
                 productsInfoRepository = onlineShopApplication().container.productsInfoRepository
+            )
+        }
+        initializer {
+            AccountScreenViewModel(
+                usersRepository = onlineShopApplication().container.usersRepository
             )
         }
     }

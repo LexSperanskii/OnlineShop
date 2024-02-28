@@ -70,7 +70,6 @@ fun CatalogScreen(
     navigateToProductPage : () -> Unit,
     modifier: Modifier = Modifier,
     catalogProductScreenViewModel: CatalogProductScreenViewModel
-//    catalogProductScreenViewModel: CatalogProductScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val catalogScreenUiState = catalogProductScreenViewModel.catalogScreenUiState.collectAsState().value
     val catalogScreenNetworkUiState = catalogProductScreenViewModel.catalogScreenNetworkUiState
@@ -121,8 +120,6 @@ fun CatalogScreen(
                     )
                 is CatalogScreenNetworkUiState.Error ->
                     ErrorScreen(modifier = modifier.fillMaxSize())
-
-                else -> {}
             }
         }
     }
@@ -496,7 +493,6 @@ fun TagRow(
                         Icon(
                             Icons.Filled.Close,
                             contentDescription = "Delete",
-//                            modifier = Modifier.size(8.dp)
                         )
                     }
                 }

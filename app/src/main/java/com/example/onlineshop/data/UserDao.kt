@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.onlineshop.model.Favorite
 import com.example.onlineshop.model.User
 import kotlinx.coroutines.flow.Flow
 
@@ -14,9 +13,11 @@ interface UserDao {
     suspend fun countUser(name: String, lastName: String, phone: String): Int
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(user: User)
-
     @Query("SELECT * FROM users ORDER BY id DESC LIMIT 1")
-    fun getUser() : User? //Flow<User>
+    fun getUser() : User
+    @Query("DELETE FROM users")
+    suspend fun deleteAllUsers()
+
 
     @Query("INSERT INTO favorite VALUES (:id)")
     suspend fun insertInFavorite(id: String)
@@ -24,4 +25,8 @@ interface UserDao {
     suspend fun deleteFromFavorites(id: String)
     @Query("SELECT * FROM favorite")
     fun getFavorites(): Flow<List<String>>
+    @Query("SELECT COUNT(*) FROM favorite")
+    suspend fun getQuantityOfFavorites(): Int
+    @Query("DELETE FROM favorite")
+    suspend fun deleteAllFromFavorites()
 }

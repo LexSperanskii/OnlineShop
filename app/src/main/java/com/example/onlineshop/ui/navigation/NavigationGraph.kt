@@ -3,16 +3,17 @@ package com.example.onlineshop.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.onlineshop.ui.AppViewModelProvider
-import com.example.onlineshop.ui.menu.AccountScreen.AccountScreen
 import com.example.onlineshop.ui.menu.CartScreen
-import com.example.onlineshop.ui.menu.catalogScreen.CatalogScreen
 import com.example.onlineshop.ui.menu.GeneralScreen
 import com.example.onlineshop.ui.menu.SalesScreen
+import com.example.onlineshop.ui.menu.accountScreen.AccountScreen
 import com.example.onlineshop.ui.menu.catalogScreen.CatalogProductScreenViewModel
+import com.example.onlineshop.ui.menu.catalogScreen.CatalogScreen
 import com.example.onlineshop.ui.menu.catalogScreen.ProductScreen
 import com.example.onlineshop.ui.registrationScreen.RegistrationScreen
 
@@ -37,13 +38,7 @@ fun OnlineShopNavHost(
                 navigateToCatalog = {navController.navigate(CatalogDestination.route)}
             )
         }
-        composable(
-            route = ProductDestination.route,
-//            route = ProductDestination.routeWithArgs, //Нужно чтобы прокинуть состояние с одного экрана на другой
-//            arguments = listOf(navArgument(ProductDestination.itemIdArg) {
-//                type = NavType.StringType
-//            })
-        ) {
+        composable(route = ProductDestination.route) {
             ProductScreen(
                 title = ProductDestination.title,
                 navController = navController,
@@ -61,7 +56,6 @@ fun OnlineShopNavHost(
         composable(route = CatalogDestination.route) {
             CatalogScreen(
                 title = CatalogDestination.title,
-//                navigateToProductPage = { navController.navigate("${ProductDestination.route}/${it}")},
                 navigateToProductPage = { navController.navigate(ProductDestination.route) },
                 navController = navController,
                 catalogProductScreenViewModel = catalogProductScreenViewModel
@@ -81,7 +75,16 @@ fun OnlineShopNavHost(
         }
         composable(route = AccountDestination.route) {
             AccountScreen(
-                navController = navController
+                navController = navController,
+                navigateToExit = {
+                    navController.navigate(RegistrationDestination.route){
+                        // Указываем точку в стеке, до которой нужно "выплюнуть" все фрагменты
+                        popUpTo(navController.graph.findStartDestination().id)
+                        // Определяем, что целевой фрагмент будет повторно использован,
+                        // если уже находится на вершине стека
+                        launchSingleTop = true
+                    }
+                }
             )
         }
     }

@@ -55,7 +55,6 @@ fun ProductScreen(
     modifier: Modifier = Modifier,
     previousRoute: String,
     catalogProductScreenViewModel: CatalogProductScreenViewModel
-//    catalogProductScreenViewModel: CatalogProductScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val productScreenUiState = catalogProductScreenViewModel.productScreenUiState.collectAsState().value
 
@@ -496,44 +495,46 @@ fun AddToCartButton(
     addToCartButton: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        contentAlignment = Alignment.Center ,
-        modifier = modifier
-            .clip(MaterialTheme.shapes.small)
-            .background(Color(0xFFD62F89))
-            .height(51.dp)
-            .fillMaxWidth()
-            .clickable { addToCartButton() }
-    ){
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.price_with_sign, productItem.productDescription.price.priceWithDiscount, productItem.productDescription.price.unit ),
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    color = Color(0xFFFFFFFF),
-                ),
-                modifier = Modifier
-            )
-            Text(
-                text = stringResource(R.string.price_with_sign,productItem.productDescription.price.price, productItem.productDescription.price.unit ),
-                style = TextStyle(
-                    fontSize = 10.sp,
-                    color = Color(0xFFFFFFFF),
-                    textDecoration = TextDecoration.LineThrough
-                ),
-                modifier = Modifier.padding(start = 9.dp)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = stringResource(R.string.add_to_cart),
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    color = Color(0xFFFFFFFF),
+    Column(modifier = modifier) {
+        Box(
+            contentAlignment = Alignment.Center ,
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.small)
+                .background(Color(0xFFD62F89))
+                .height(51.dp)
+                .fillMaxWidth()
+                .clickable { addToCartButton() }
+        ){
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.price_with_sign, productItem.productDescription.price.priceWithDiscount, productItem.productDescription.price.unit ),
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = Color(0xFFFFFFFF),
+                    ),
+                    modifier = Modifier
                 )
-            )
+                Text(
+                    text = stringResource(R.string.price_with_sign,productItem.productDescription.price.price, productItem.productDescription.price.unit ),
+                    style = TextStyle(
+                        fontSize = 10.sp,
+                        color = Color(0xFFFFFFFF),
+                        textDecoration = TextDecoration.LineThrough
+                    ),
+                    modifier = Modifier.padding(start = 9.dp)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = stringResource(R.string.add_to_cart),
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = Color(0xFFFFFFFF),
+                    )
+                )
+            }
         }
     }
 }

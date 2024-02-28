@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.onlineshop.model.User
 import com.example.onlineshop.data.UsersRepository
+import com.example.onlineshop.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,17 +29,29 @@ class RegistrationScreenVIewModel(private val usersRepository: UsersRepository):
     var uiState : StateFlow<RegistrationScreenUiState> = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO){
-            val user = usersRepository.getUser()
-            _uiState.update {
-                it.copy(
-                    id = user?.id ?: 0,
-                    name = user?.name ?: "",
-                    lastName = user?.lastName ?: "",
-                    number = user?.phone ?: ""
-                )
-            }
+        var user = User()
+        viewModelScope.launch(Dispatchers.IO) {
+            user = usersRepository.getUser()
         }
+        _uiState.update {
+            it.copy(
+                id = user.id,
+                name = user.name,
+                lastName = user.lastName,
+                number = user.phone
+            )
+        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val user = usersRepository.getUser()
+//            _uiState.update {
+//                it.copy(
+//                    id = user.id,
+//                    name = user.name,
+//                    lastName = user.lastName,
+//                    number = user.phone
+//                )
+//            }
+//        }
     }
     fun updateNameField(name: String){
         if (name.all { it.isLetter() && it.code in 0x0400..0x04FF}){
