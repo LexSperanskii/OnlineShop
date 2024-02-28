@@ -59,7 +59,7 @@ import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
 import com.example.onlineshop.ui.menu.NavigationBottomAppBar
-import com.example.onlineshop.ui.menu.OnlineShopTopAppBar
+import com.example.onlineshop.ui.menu.TopAppBarNameOnly
 import com.example.onlineshop.ui.theme.OnlineShopTheme
 
 
@@ -75,9 +75,8 @@ fun CatalogScreen(
     val catalogScreenNetworkUiState = catalogProductScreenViewModel.catalogScreenNetworkUiState
     Scaffold(
         topBar = {
-            OnlineShopTopAppBar(
-                title = stringResource(id = title),
-                navigateBack = {}
+            TopAppBarNameOnly(
+                currentDestinationTitle = stringResource(title),
             )
         },
         bottomBar = {

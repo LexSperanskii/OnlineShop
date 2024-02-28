@@ -26,14 +26,15 @@ class AccountScreenViewModel(
         viewModelScope.launch(Dispatchers.IO){
             val quantity = usersRepository.getQuantityOfFavorites()
             val user = usersRepository.getUser()
-            _uiState.update {
-                it.copy(
-                    accountName = user?.name ?: "",
-                    accountSurname = user?.lastName ?: "",
-                    accountPhoneNumber = user?.phone ?: "",
-                    favoritesQuantity = quantity
-                )
-            }
+            if (user != null)
+                _uiState.update {
+                    it.copy(
+                        accountName = user.name,
+                        accountSurname = user.lastName,
+                        accountPhoneNumber = user.phone,
+                        favoritesQuantity = quantity
+                    )
+                }
         }
     }
 

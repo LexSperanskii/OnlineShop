@@ -18,8 +18,10 @@ object RegistrationDestination : NavigationDestination {
 object ProductDestination : NavigationDestination {
     override val route = "product"
     override val title = R.string.product
-//    const val itemIdArg = "itemId"
-//    val routeWithArgs = "$route/{$itemIdArg}"
+}
+object FavoritesDestination : NavigationDestination {
+    override val route = "favorite"
+    override val title = R.string.favorite
 }
 object GeneralDestination : NavigationDestinationForBottomBar {
     override val route = "general"

@@ -16,25 +16,26 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,10 +43,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.onlineshop.R
 import com.example.onlineshop.ui.AppViewModelProvider
-import com.example.onlineshop.ui.menu.OnlineShopTopAppBar
+import com.example.onlineshop.ui.menu.TopAppBarNameOnly
 import com.example.onlineshop.ui.navigation.RegistrationDestination
 import com.example.onlineshop.ui.theme.OnlineShopTheme
-
 
 @Composable
 fun RegistrationScreen(
@@ -56,17 +56,102 @@ fun RegistrationScreen(
 ) {
     val registrationUiState = registrationScreenVIewModel.uiState.collectAsState().value
 
+    //Для Форматирования строки вывода Номера телефона и правильного расположения курсора
+    val phoneNumber: String = registrationUiState.number
+    val textFieldValueState = when (phoneNumber.length){
+        2 -> {
+            TextFieldValue(
+                text = "${phoneNumber[0]}${phoneNumber[1]} xxx xxx-xx-xx",
+                selection = TextRange(2)
+            )
+        }
+
+        3 -> {
+            TextFieldValue(
+                text = "${phoneNumber[0]}${phoneNumber[1]} ${phoneNumber[2]}xx xxx-xx-xx",
+                selection = TextRange(4)
+            )
+        }
+
+        4 -> {
+            TextFieldValue(
+                text = "${phoneNumber[0]}${phoneNumber[1]} ${phoneNumber[2]}${phoneNumber[3]}x xxx-xx-xx",
+                selection = TextRange(5)
+            )
+        }
+
+        5 -> {
+            TextFieldValue(
+                text = "${phoneNumber[0]}${phoneNumber[1]} ${phoneNumber[2]}${phoneNumber[3]}${phoneNumber[4]} xxx-xx-xx",
+                selection = TextRange(6)
+            )
+        }
+
+        6 -> {
+            TextFieldValue(
+                text = "${phoneNumber[0]}${phoneNumber[1]} ${phoneNumber[2]}${phoneNumber[3]}${phoneNumber[4]} ${phoneNumber[5]}xx-xx-xx",
+                selection = TextRange(8)
+            )
+        }
+
+        7 -> {
+            TextFieldValue(
+                text =  "${phoneNumber[0]}${phoneNumber[1]} ${phoneNumber[2]}${phoneNumber[3]}${phoneNumber[4]} ${phoneNumber[5]}${phoneNumber[6]}x-xx-xx",
+                selection = TextRange(9)
+            )
+        }
+
+        8 -> {
+            TextFieldValue(
+                text =  "${phoneNumber[0]}${phoneNumber[1]} ${phoneNumber[2]}${phoneNumber[3]}${phoneNumber[4]} ${phoneNumber[5]}${phoneNumber[6]}${phoneNumber[7]}-xx-xx",
+                selection = TextRange(10)
+            )
+        }
+
+        9 -> {
+            TextFieldValue(
+                text = "${phoneNumber[0]}${phoneNumber[1]} ${phoneNumber[2]}${phoneNumber[3]}${phoneNumber[4]} ${phoneNumber[5]}${phoneNumber[6]}${phoneNumber[7]}-${phoneNumber[8]}x-xx",
+                selection = TextRange(12)
+            )
+        }
+
+        10 -> {
+            TextFieldValue(
+                text = "${phoneNumber[0]}${phoneNumber[1]} ${phoneNumber[2]}${phoneNumber[3]}${phoneNumber[4]} ${phoneNumber[5]}${phoneNumber[6]}${phoneNumber[7]}-${phoneNumber[8]}${phoneNumber[9]}-xx",
+                selection = TextRange(13)
+            )
+        }
+
+        11 -> {
+            TextFieldValue(
+                text = "${phoneNumber[0]}${phoneNumber[1]} ${phoneNumber[2]}${phoneNumber[3]}${phoneNumber[4]} ${phoneNumber[5]}${phoneNumber[6]}${phoneNumber[7]}-${phoneNumber[8]}${phoneNumber[9]}-${phoneNumber[10]}x",
+                selection = TextRange(15)
+            )
+        }
+
+        12 -> {
+            TextFieldValue(
+                text = "${phoneNumber[0]}${phoneNumber[1]} ${phoneNumber[2]}${phoneNumber[3]}${phoneNumber[4]} ${phoneNumber[5]}${phoneNumber[6]}${phoneNumber[7]}-${phoneNumber[8]}${phoneNumber[9]}-${phoneNumber[10]}${phoneNumber[11]}",
+                selection = TextRange(16)
+            )
+        }
+        else -> {
+            TextFieldValue(
+                text = phoneNumber,
+                selection = TextRange(0)
+            )
+        }
+    }
+
     LaunchedEffect(registrationUiState.id) {
         if (registrationUiState.name.isNotBlank() && registrationUiState.lastName.isNotBlank() && registrationUiState.number.isNotBlank()) {
             navigateToCatalog()
         }
     }
-
     Scaffold(
         topBar = {
-            OnlineShopTopAppBar(
-                title = stringResource(id = title),
-                navigateBack = {}
+            TopAppBarNameOnly(
+                currentDestinationTitle = stringResource(title),
             )
         }
     ) { innerPadding ->
@@ -87,7 +172,7 @@ fun RegistrationScreen(
             onEraseLastNameClick = {
                 registrationScreenVIewModel.onEraseLastNameClick()
             },
-            number = registrationScreenVIewModel.formatPhoneNumber(registrationUiState.number),
+            number = textFieldValueState,
             isErrorNumber = registrationUiState.numberIsError,
             onNumberValueChange = {
                 registrationScreenVIewModel.updateNumberField(it)
@@ -117,7 +202,7 @@ fun RegistrationScreen(
 fun RegistrationBody(
     nameField : String,
     lastNameField : String,
-    number : String,
+    number : TextFieldValue,
     onNameFieldValueChange: (String)->Unit,
     onLastNameFieldValueChange: (String)->Unit,
     onNumberValueChange: (String)->Unit,
@@ -222,8 +307,6 @@ fun RegistrationBody(
     }
 
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationField(
     text : String,
@@ -308,12 +391,96 @@ fun RegistrationField(
         }
     }
 }
+@Composable
+fun NumberRegistrationField(
+    text: TextFieldValue,
+    placeholder: String,
+    onValueChange: (String)->Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    onNumberFieldClick : ()->Unit = {},
+    isError: Boolean,
+    onEraseItemClick : () -> Unit,
+    modifier: Modifier = Modifier
+){
+    Column(
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(
+                    top = dimensionResource(id = R.dimen.padding_medium),
+                    start = dimensionResource(id = R.dimen.padding_medium),
+                    end = dimensionResource(id = R.dimen.padding_medium)
+                )
+        ) {
+            TextField(
+                value = text,
+                textStyle = TextStyle(
+                    fontSize = 16.sp,
+                    color = Color(0xFF000000),
+                ),
+                onValueChange = { onValueChange(it.text) },
+                singleLine = true,
+                trailingIcon = {
+                    if (text.text != "") {
+                        IconButton(
+                            onClick = onEraseItemClick,
+                        ) {
+                            Icon(
+                                Icons.Filled.Close,
+                                contentDescription = "Delete",
+                                modifier = modifier
+                                    .height(13.dp)
+                                    .width(13.dp)
+                            )
+                        }
+                    }
+                },
+                placeholder = {
+                    Text(
+                        text = placeholder,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            color = Color(0xFFA0A1A3),
+                        )
+                    )
+                },
+                shape = MaterialTheme.shapes.small,
+                colors = TextFieldDefaults.colors(   //textFieldColors
+                    disabledTextColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                ),
+                keyboardOptions = keyboardOptions,
+                interactionSource = remember { MutableInteractionSource() }
+                    .also { interactionSource ->
+                        LaunchedEffect(interactionSource) {
+                            interactionSource.interactions.collect {
+                                if (it is PressInteraction.Release) {
+                                    onNumberFieldClick()
+                                }
+                            }
+                        }
+                    },
+                modifier = Modifier
+                    .height(50.dp)
+                    .width(343.dp)
+                    .border(
+                        width = if (isError) 2.dp else 0.dp,
+                        color = if (isError) Color.Red else Color.Transparent,
+                        shape = MaterialTheme.shapes.small
+                    )
+            )
+        }
+    }
+}
 
 @Composable
 fun RegistrationForm(
     nameField : String,
     lastNameField : String,
-    number : String,
+    number : TextFieldValue,
     onNameFieldValueChange: (String)->Unit,
     onLastNameFieldValueChange: (String)->Unit,
     onNumberValueChange: (String)->Unit,
@@ -343,7 +510,7 @@ fun RegistrationForm(
             isError = isErrorLastName,
             onEraseItemClick = onEraseLastNameClick
         )
-        RegistrationField(
+        NumberRegistrationField(
             text = number,
             placeholder = "Номер телефона",
             onValueChange = onNumberValueChange,
@@ -376,7 +543,7 @@ fun RegistrationFormPreview() {
         RegistrationForm(
             nameField = "",
             lastNameField = "",
-            number = "",
+            number = TextFieldValue(),
             onNameFieldValueChange = {},
             onLastNameFieldValueChange = {},
             onNumberValueChange = {},
@@ -398,7 +565,7 @@ fun RegistrationBodyPreview() {
         RegistrationBody(
             nameField = "",
             lastNameField = "",
-            number = "",
+            number = TextFieldValue(),
             onNameFieldValueChange = {},
             onLastNameFieldValueChange = {},
             onNumberValueChange = {},

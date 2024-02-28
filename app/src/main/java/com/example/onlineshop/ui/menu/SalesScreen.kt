@@ -19,9 +19,8 @@ fun SalesScreen(
 ) {
     Scaffold(
         topBar = {
-            OnlineShopTopAppBar(
-                title = stringResource(id = title),
-                navigateBack = {}
+            TopAppBarNameOnly(
+                currentDestinationTitle = stringResource(title),
             )
         },
         bottomBar = {

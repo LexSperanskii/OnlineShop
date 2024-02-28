@@ -45,13 +45,13 @@ import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
 import com.example.onlineshop.ui.menu.NavigationBottomAppBar
-import com.example.onlineshop.ui.menu.OnlineShopTopAppBar
+import com.example.onlineshop.ui.menu.TopAppBarBackAndShare
 
 @Composable
 fun ProductScreen(
-    title :Int,
     navController: NavHostController,
-    navigateBack: ()->Unit,
+    onClickNavigateBack: ()->Unit,
+    onCLickShare: ()->Unit,
     modifier: Modifier = Modifier,
     previousRoute: String,
     catalogProductScreenViewModel: CatalogProductScreenViewModel
@@ -60,14 +60,16 @@ fun ProductScreen(
 
     Scaffold(
         topBar = {
-            OnlineShopTopAppBar(
-                title = stringResource(id = title),
-                navigateBack = navigateBack,
-                canNavigateBack = true
+            TopAppBarBackAndShare(
+                onClickNavigateBack = onClickNavigateBack,
+                onCLickShare = onCLickShare
             )
         },
         bottomBar = {
-            NavigationBottomAppBar(navController, previousRoute = previousRoute)
+            NavigationBottomAppBar(
+                navController = navController,
+                previousRoute = previousRoute
+            )
         }
     ) { innerPadding ->
         Column(modifier = modifier.padding(innerPadding)) {

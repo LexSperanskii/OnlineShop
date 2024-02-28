@@ -33,21 +33,37 @@ import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.ui.AppViewModelProvider
 import com.example.onlineshop.ui.menu.NavigationBottomAppBar
-import com.example.onlineshop.ui.menu.OnlineShopTopAppBar
+import com.example.onlineshop.ui.menu.TopAppBarNameOnly
+import com.example.onlineshop.ui.navigation.FavoritesDestination
 
 @Composable
 fun AccountScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     navigateToExit: ()->Unit,
+    navigateToFavorites: ()->Unit,
     accountScreenViewModel: AccountScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val accountUiState = accountScreenViewModel.uiState.collectAsState().value
+    val formattedPhoneNumber = if (accountUiState.accountPhoneNumber.length == 12) {
+        buildString {
+            append(accountUiState.accountPhoneNumber.substring(0, 2)) // Добавляем код страны
+            append(" ")
+            append(accountUiState.accountPhoneNumber.substring(2, 5)) // Добавляем первые три цифры номера
+            append(" ")
+            append(accountUiState.accountPhoneNumber.substring(5, 8)) // Добавляем первые три цифры номера
+            append("-")
+            append(accountUiState.accountPhoneNumber.substring(8, 10)) // Добавляем две цифры перед дефисом
+            append("-")
+            append(accountUiState.accountPhoneNumber.substring(10)) // Добавляем две последние цифры номера
+        }
+    } else {
+        accountUiState.accountPhoneNumber
+    }
     Scaffold(
         topBar = {
-            OnlineShopTopAppBar(
-                title = stringResource(R.string.accountTitle),
-                navigateBack = {}
+            TopAppBarNameOnly(
+                currentDestinationTitle = stringResource(id = R.string.accountTitle),
             )
         },
         bottomBar = {
@@ -55,17 +71,6 @@ fun AccountScreen(
         }
     ) { innerPadding ->
         Column(modifier = modifier.padding(innerPadding)) {
-            val formattedPhoneNumber = if(accountUiState.accountPhoneNumber.length == 12) { buildString {
-                append(accountUiState.accountPhoneNumber.substring(0, 2)) // Добавляем код страны
-                append(" ")
-                append(accountUiState.accountPhoneNumber.substring(2, 5)) // Добавляем первые три цифры номера
-                append(" ")
-                append(accountUiState.accountPhoneNumber.substring(5, 8)) // Добавляем первые три цифры номера
-                append("-")
-                append(accountUiState.accountPhoneNumber.substring(8, 10)) // Добавляем две цифры перед дефисом
-                append("-")
-                append(accountUiState.accountPhoneNumber.substring(10)) // Добавляем две последние цифры номера
-            }}else { "какая то лажа!"}
             AccountScreenBody(
                 accountName = stringResource(id = R.string.account_name_surname, accountUiState.accountName, accountUiState.accountSurname),
                 accountNumber = formattedPhoneNumber,
@@ -78,7 +83,7 @@ fun AccountScreen(
                     accountScreenViewModel.deleteUserAndFavorites()
                     navigateToExit()
                 },
-                navigateToFavorites = {}
+                navigateToFavorites = navigateToFavorites
             )
         }
     }
@@ -113,7 +118,7 @@ fun AccountScreenBody(
             leadingIconTint = Color(0xFFD62F89),
             trailingIcon = painterResource(id = R.drawable.ic_arrow_forward),
             trailingIconTint = Color(0xFF000000),
-            name = stringResource(id = R.string.favorite),
+            name = stringResource(id = FavoritesDestination.title),
             description = favoriteDescription,
             navigateClick = navigateToFavorites,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -202,14 +207,14 @@ fun AccountCard(
                         )
                     )
                     if (description != "")
-                    Text(
-                        text = description,
-                        style = TextStyle(
-                            fontSize = 10.sp,
-                            color = Color(0xFFA0A1A3),
-                        ),
-                        modifier = Modifier.padding(top = 6.dp)
-                    )
+                        Text(
+                            text = description,
+                            style = TextStyle(
+                                fontSize = 10.sp,
+                                color = Color(0xFFA0A1A3),
+                            ),
+                            modifier = Modifier.padding(top = 6.dp)
+                        )
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(

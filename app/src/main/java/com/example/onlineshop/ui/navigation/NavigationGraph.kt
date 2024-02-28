@@ -15,6 +15,7 @@ import com.example.onlineshop.ui.menu.accountScreen.AccountScreen
 import com.example.onlineshop.ui.menu.catalogScreen.CatalogProductScreenViewModel
 import com.example.onlineshop.ui.menu.catalogScreen.CatalogScreen
 import com.example.onlineshop.ui.menu.catalogScreen.ProductScreen
+import com.example.onlineshop.ui.menu.favoriteScreen.FavoritesScreen
 import com.example.onlineshop.ui.registrationScreen.RegistrationScreen
 
 /**
@@ -26,6 +27,7 @@ fun OnlineShopNavHost(
     modifier: Modifier = Modifier,
 ) {
     val catalogProductScreenViewModel: CatalogProductScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
     NavHost(
         navController = navController,
         startDestination = RegistrationDestination.route,
@@ -40,11 +42,19 @@ fun OnlineShopNavHost(
         }
         composable(route = ProductDestination.route) {
             ProductScreen(
-                title = ProductDestination.title,
                 navController = navController,
-                navigateBack = {navController.popBackStack()},
                 previousRoute = CatalogDestination.route,
+                onClickNavigateBack = {navController.popBackStack()},
+                onCLickShare = {},
                 catalogProductScreenViewModel = catalogProductScreenViewModel
+            )
+        }
+        composable(route = FavoritesDestination.route) {
+            FavoritesScreen(
+                title = FavoritesDestination.title,
+                previousRoute = AccountDestination.route,
+                onClickNavigateBack = {navController.popBackStack()},
+                navController = navController
             )
         }
         composable(route = GeneralDestination.route) {
@@ -80,11 +90,12 @@ fun OnlineShopNavHost(
                     navController.navigate(RegistrationDestination.route){
                         // Указываем точку в стеке, до которой нужно "выплюнуть" все фрагменты
                         popUpTo(navController.graph.findStartDestination().id)
-                        // Определяем, что целевой фрагмент будет повторно использован,
+                        // Определяем, что целевой фрагмент НЕ будет повторно использован,
                         // если уже находится на вершине стека
-                        launchSingleTop = true
+                        launchSingleTop = false
                     }
-                }
+                },
+                navigateToFavorites = { navController.navigate(FavoritesDestination.route)}
             )
         }
     }
