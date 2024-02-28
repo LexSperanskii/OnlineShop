@@ -28,9 +28,9 @@ class AccountScreenViewModel(
             val user = usersRepository.getUser()
             _uiState.update {
                 it.copy(
-                    accountName = user.name,
-                    accountSurname = user.lastName,
-                    accountPhoneNumber = user.phone,
+                    accountName = user?.name ?: "",
+                    accountSurname = user?.lastName ?: "",
+                    accountPhoneNumber = user?.phone ?: "",
                     favoritesQuantity = quantity
                 )
             }

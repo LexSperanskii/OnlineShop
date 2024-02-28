@@ -14,7 +14,7 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(user: User)
     @Query("SELECT * FROM users ORDER BY id DESC LIMIT 1")
-    fun getUser() : User
+    fun getUser() : User?
     @Query("DELETE FROM users")
     suspend fun deleteAllUsers()
 

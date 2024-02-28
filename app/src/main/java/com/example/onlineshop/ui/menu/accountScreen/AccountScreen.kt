@@ -55,15 +55,17 @@ fun AccountScreen(
         }
     ) { innerPadding ->
         Column(modifier = modifier.padding(innerPadding)) {
-            val formattedPhoneNumber = buildString {
+            val formattedPhoneNumber = if(accountUiState.accountPhoneNumber.length == 12) { buildString {
                 append(accountUiState.accountPhoneNumber.substring(0, 2)) // Добавляем код страны
                 append(" ")
                 append(accountUiState.accountPhoneNumber.substring(2, 5)) // Добавляем первые три цифры номера
+                append(" ")
+                append(accountUiState.accountPhoneNumber.substring(5, 8)) // Добавляем первые три цифры номера
                 append("-")
-                append(accountUiState.accountPhoneNumber.substring(5, 7)) // Добавляем две цифры перед дефисом
+                append(accountUiState.accountPhoneNumber.substring(8, 10)) // Добавляем две цифры перед дефисом
                 append("-")
-                append(accountUiState.accountPhoneNumber.substring(7,)) // Добавляем две последние цифры номера
-            }
+                append(accountUiState.accountPhoneNumber.substring(10)) // Добавляем две последние цифры номера
+            }}else { "какая то лажа!"}
             AccountScreenBody(
                 accountName = stringResource(id = R.string.account_name_surname, accountUiState.accountName, accountUiState.accountSurname),
                 accountNumber = formattedPhoneNumber,

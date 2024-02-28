@@ -29,29 +29,17 @@ class RegistrationScreenVIewModel(private val usersRepository: UsersRepository):
     var uiState : StateFlow<RegistrationScreenUiState> = _uiState.asStateFlow()
 
     init {
-        var user = User()
         viewModelScope.launch(Dispatchers.IO) {
-            user = usersRepository.getUser()
+            val user = usersRepository.getUser()
+            _uiState.update {
+                it.copy(
+                    id = user?.id ?: 0,
+                    name = user?.name ?: "",
+                    lastName = user?.lastName ?: "",
+                    number = user?.phone?: ""
+                )
+            }
         }
-        _uiState.update {
-            it.copy(
-                id = user.id,
-                name = user.name,
-                lastName = user.lastName,
-                number = user.phone
-            )
-        }
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val user = usersRepository.getUser()
-//            _uiState.update {
-//                it.copy(
-//                    id = user.id,
-//                    name = user.name,
-//                    lastName = user.lastName,
-//                    number = user.phone
-//                )
-//            }
-//        }
     }
     fun updateNameField(name: String){
         if (name.all { it.isLetter() && it.code in 0x0400..0x04FF}){
