@@ -20,7 +20,7 @@ class AccountScreenViewModel(
     private val usersRepository: UsersRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(AccountScreenUiState())
-    var uiState : StateFlow<AccountScreenUiState> = _uiState.asStateFlow()
+    val uiState : StateFlow<AccountScreenUiState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO){

@@ -74,11 +74,13 @@ fun AccountScreen(
             AccountScreenBody(
                 accountName = stringResource(id = R.string.account_name_surname, accountUiState.accountName, accountUiState.accountSurname),
                 accountNumber = formattedPhoneNumber,
-                favoriteDescription = LocalContext.current.resources.getQuantityString(
-                    R.plurals.account_quantity_favorite_items,
-                    accountUiState.favoritesQuantity,
-                    accountUiState.favoritesQuantity
-                ),
+                favoriteDescription = if (accountUiState.favoritesQuantity != 0){
+                    LocalContext.current.resources.getQuantityString(
+                        R.plurals.account_quantity_favorite_items,
+                        accountUiState.favoritesQuantity,
+                        accountUiState.favoritesQuantity
+                    )
+                } else "",
                 navigateToExit = {
                     accountScreenViewModel.deleteUserAndFavorites()
                     navigateToExit()

@@ -25,7 +25,7 @@ data class RegistrationScreenUiState(
 class RegistrationScreenVIewModel(private val usersRepository: UsersRepository): ViewModel() {
 
     private val _uiState = MutableStateFlow(RegistrationScreenUiState())
-    var uiState : StateFlow<RegistrationScreenUiState> = _uiState.asStateFlow()
+    val uiState : StateFlow<RegistrationScreenUiState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {

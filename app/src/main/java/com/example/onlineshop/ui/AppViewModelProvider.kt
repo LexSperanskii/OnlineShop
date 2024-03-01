@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.onlineshop.OnlineShopApplication
 import com.example.onlineshop.ui.menu.accountScreen.AccountScreenViewModel
 import com.example.onlineshop.ui.menu.catalogScreen.CatalogProductScreenViewModel
+import com.example.onlineshop.ui.menu.favoriteScreen.FavoriteScreenViewModel
 import com.example.onlineshop.ui.registrationScreen.RegistrationScreenVIewModel
 
 
@@ -28,6 +29,12 @@ object AppViewModelProvider {
         initializer {
             AccountScreenViewModel(
                 usersRepository = onlineShopApplication().container.usersRepository
+            )
+        }
+        initializer {
+            FavoriteScreenViewModel(
+                usersRepository = onlineShopApplication().container.usersRepository,
+                productsInfoRepository = onlineShopApplication().container.productsInfoRepository
             )
         }
     }

@@ -1,6 +1,5 @@
 package com.example.onlineshop.ui.menu.catalogScreen
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -59,7 +58,7 @@ class CatalogProductScreenViewModel(
      * State для экарана с товарами
      */
     private val _catalogScreenUiState = MutableStateFlow(CatalogScreenUiState())
-    var catalogScreenUiState: StateFlow<CatalogScreenUiState> = _catalogScreenUiState
+    val catalogScreenUiState: StateFlow<CatalogScreenUiState> = _catalogScreenUiState
         .combine(usersRepository.getFavorites()) { localState, favorite ->
             localState.copy(
                 listOfProductsOriginal = localState.listOfProductsOriginal.map { item ->
@@ -90,9 +89,8 @@ class CatalogProductScreenViewModel(
      * State для выбранного товара
      */
     private val _productScreenUiState = MutableStateFlow(ProductScreenUiState())
-    var productScreenUiState: StateFlow<ProductScreenUiState> = _productScreenUiState
+    val productScreenUiState: StateFlow<ProductScreenUiState> = _productScreenUiState
         .combine(usersRepository.getFavorites()) { localState, favorite ->
-            Log.d("test",localState.commodityItem.productDescription.id)
             val isFavourite = localState.commodityItem.productDescription.id in favorite
             localState.copy(
                 commodityItem = localState.commodityItem.copy(isFavourite = isFavourite)
