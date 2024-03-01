@@ -6,3 +6,4 @@ To enter registration data correctly, you need to enter them in Cyrillic (Russia
 ![image_3](https://github.com/serSosochny/OnlineShop/assets/81870716/1eb2afdb-28dc-4afd-9503-43aaadb55b9b)
 ![image_4](https://github.com/serSosochny/OnlineShop/assets/81870716/ca6ef617-9a2e-4d4d-9d4a-fcc980a93921)
 ![image_5](https://github.com/serSosochny/OnlineShop/assets/81870716/69744d12-729d-4abb-8a5d-256f0608e0f7)
+[ТЗ на разработку.docx](https://github.com/serSosochny/OnlineShop/files/14456080/default.docx)
