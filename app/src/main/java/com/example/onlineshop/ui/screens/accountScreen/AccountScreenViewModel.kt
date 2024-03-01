@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.menu.accountScreen
+package com.example.onlineshop.ui.screens.accountScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,6 +19,7 @@ data class AccountScreenUiState(
 class AccountScreenViewModel(
     private val usersRepository: UsersRepository,
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(AccountScreenUiState())
     val uiState : StateFlow<AccountScreenUiState> = _uiState.asStateFlow()
 
@@ -37,7 +38,6 @@ class AccountScreenViewModel(
                 }
         }
     }
-
     fun deleteUserAndFavorites(){
         viewModelScope.launch(Dispatchers.IO){
             usersRepository.deleteAllFromFavorites()

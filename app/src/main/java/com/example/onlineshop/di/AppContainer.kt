@@ -1,12 +1,12 @@
 package com.example.onlineshop.di
 
 import android.content.Context
-import com.example.onlineshop.data.NetworkProductsInfoRepository
 import com.example.onlineshop.data.OfflineUsersRepository
-import com.example.onlineshop.data.ProductsInfoRepository
 import com.example.onlineshop.data.UsersDatabase
 import com.example.onlineshop.data.UsersRepository
-import com.example.onlineshop.network.OnlineShopApiService
+import com.example.onlineshop.data.network.NetworkProductsInfoRepository
+import com.example.onlineshop.data.network.OnlineShopApiService
+import com.example.onlineshop.data.network.ProductsInfoRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType

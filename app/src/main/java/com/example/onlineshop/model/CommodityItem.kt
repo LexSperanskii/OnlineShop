@@ -1,7 +1,5 @@
 package com.example.onlineshop.model
 
-import com.example.onlineshop.network.CommodityDescription
-
 /**
  * Дата Класс для отображения его во View
  */

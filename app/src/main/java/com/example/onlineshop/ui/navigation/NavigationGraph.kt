@@ -8,15 +8,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.onlineshop.ui.AppViewModelProvider
-import com.example.onlineshop.ui.menu.CartScreen
-import com.example.onlineshop.ui.menu.GeneralScreen
-import com.example.onlineshop.ui.menu.SalesScreen
-import com.example.onlineshop.ui.menu.accountScreen.AccountScreen
-import com.example.onlineshop.ui.menu.catalogScreen.CatalogProductScreenViewModel
-import com.example.onlineshop.ui.menu.catalogScreen.CatalogScreen
-import com.example.onlineshop.ui.menu.catalogScreen.ProductScreen
-import com.example.onlineshop.ui.menu.favoriteScreen.FavoritesScreen
-import com.example.onlineshop.ui.registrationScreen.RegistrationScreen
+import com.example.onlineshop.ui.screens.CartScreen
+import com.example.onlineshop.ui.screens.GeneralScreen
+import com.example.onlineshop.ui.screens.SalesScreen
+import com.example.onlineshop.ui.screens.accountScreen.AccountScreen
+import com.example.onlineshop.ui.screens.catalogAndProductScreen.CatalogProductScreenViewModel
+import com.example.onlineshop.ui.screens.catalogAndProductScreen.CatalogScreen
+import com.example.onlineshop.ui.screens.catalogAndProductScreen.ProductScreen
+import com.example.onlineshop.ui.screens.favoriteScreen.FavoritesScreen
+import com.example.onlineshop.ui.screens.registrationScreen.RegistrationScreen
 
 /**
  * Provides Navigation graph for the application.

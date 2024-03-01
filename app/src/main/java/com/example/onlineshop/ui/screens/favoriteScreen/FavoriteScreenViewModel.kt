@@ -1,16 +1,16 @@
-package com.example.onlineshop.ui.menu.favoriteScreen
+package com.example.onlineshop.ui.screens.favoriteScreen
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.onlineshop.data.ProductsInfoRepository
 import com.example.onlineshop.data.UsersRepository
+import com.example.onlineshop.data.network.ProductsInfoRepository
+import com.example.onlineshop.model.CommodityDescription
 import com.example.onlineshop.model.CommodityImages
 import com.example.onlineshop.model.CommodityItem
 import com.example.onlineshop.model.allCommodityPhotos
-import com.example.onlineshop.network.CommodityDescription
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -69,7 +69,7 @@ class FavoriteScreenViewModel(
     /**
      * Gets Items information from the API Retrofit
      */
-    private fun getCommodityItemsInfo() {
+    fun getCommodityItemsInfo() {
         viewModelScope.launch {
             favoriteScreenNetworkUiState = try {
                 //получаем List с описанием товарных элементов из сети

@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.menu.favoriteScreen
+package com.example.onlineshop.ui.screens.favoriteScreen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -31,11 +31,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.onlineshop.model.CommodityItem
 import com.example.onlineshop.ui.AppViewModelProvider
-import com.example.onlineshop.ui.menu.NavigationBottomAppBar
-import com.example.onlineshop.ui.menu.TopAppBarBackAndName
-import com.example.onlineshop.ui.menu.catalogScreen.CommodityItemsGridScreen
-import com.example.onlineshop.ui.menu.catalogScreen.ErrorScreen
-import com.example.onlineshop.ui.menu.catalogScreen.LoadingScreen
+import com.example.onlineshop.ui.screens.NavigationBottomAppBar
+import com.example.onlineshop.ui.screens.TopAppBarBackAndName
+import com.example.onlineshop.ui.screens.catalogAndProductScreen.CommodityItemsGridScreen
+import com.example.onlineshop.ui.screens.catalogAndProductScreen.ErrorScreen
+import com.example.onlineshop.ui.screens.catalogAndProductScreen.LoadingScreen
 import kotlinx.coroutines.launch
 
 enum class FavoriteScreenTabs(val text: String){
@@ -74,8 +74,9 @@ fun FavoritesScreen(
         ) {
             FavoritesScreenBodyWithTabs(
                 favoriteScreenNetworkUiState = favoriteScreenNetworkUiState,
-                favoriteScreenUiState = favoriteScreenUiState,
-                onHeartSignClick = { favoriteScreenViewModel.deleteFromFavorites(it) }
+                productItems = favoriteScreenUiState.listOfProducts,
+                onHeartSignClick = { favoriteScreenViewModel.deleteFromFavorites(it) },
+                retryAction = {favoriteScreenViewModel.getCommodityItemsInfo()}
             )
         }
     }
@@ -85,8 +86,9 @@ fun FavoritesScreen(
 @Composable
 fun FavoritesScreenBodyWithTabs(
     favoriteScreenNetworkUiState: FavoriteScreenNetworkUiState,
-    favoriteScreenUiState: FavoriteScreenUiState,
+    productItems: List<CommodityItem>,
     onHeartSignClick: (CommodityItem)->Unit,
+    retryAction: () -> Unit,
     modifier: Modifier = Modifier
 ){
     val scope = rememberCoroutineScope()
@@ -96,7 +98,6 @@ fun FavoritesScreenBodyWithTabs(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
     ) {
         TabRow(
             selectedTabIndex = selectedTabIndex.value,
@@ -106,6 +107,7 @@ fun FavoritesScreenBodyWithTabs(
             modifier = Modifier
                 .clip(MaterialTheme.shapes.small)
                 .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         ) {
             FavoriteScreenTabs.values().forEachIndexed { index, currentTab ->
                 Tab(
@@ -146,8 +148,9 @@ fun FavoritesScreenBodyWithTabs(
             when (page) {
                 0 -> FavoritesScreenBody(
                     favoriteScreenNetworkUiState = favoriteScreenNetworkUiState,
-                    favoriteScreenUiState = favoriteScreenUiState,
-                    onHeartSignClick = onHeartSignClick
+                    productItems = productItems,
+                    onHeartSignClick = onHeartSignClick,
+                    retryAction = retryAction
                 )
                 1 -> BrandsScreen()
             }
@@ -158,8 +161,9 @@ fun FavoritesScreenBodyWithTabs(
 @Composable
 fun FavoritesScreenBody(
     favoriteScreenNetworkUiState: FavoriteScreenNetworkUiState,
-    favoriteScreenUiState: FavoriteScreenUiState,
+    productItems: List<CommodityItem>,
     onHeartSignClick: (CommodityItem)->Unit,
+    retryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -169,15 +173,18 @@ fun FavoritesScreenBody(
 
             is FavoriteScreenNetworkUiState.Success ->
                 CommodityItemsGridScreen(
-                    productItems = favoriteScreenUiState.listOfProducts,
+                    productItems = productItems,
                     onHeartSignClick = onHeartSignClick,
                     addToCart = {}, //Не функциональная кнопка
-                    onCardClick = {},
+                    onCardClick = {},//Не функциональная кнопка
                     modifier = Modifier.fillMaxSize()
                 )
 
             is FavoriteScreenNetworkUiState.Error ->
-                ErrorScreen(modifier = modifier.fillMaxSize())
+                ErrorScreen(
+                    retryAction = retryAction,
+                    modifier = modifier.fillMaxSize()
+                )
         }
     }
 }

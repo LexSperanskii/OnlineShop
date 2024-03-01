@@ -1,7 +1,6 @@
-package com.example.onlineshop.ui.menu.catalogScreen
+package com.example.onlineshop.ui.screens.catalogAndProductScreen
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,8 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
-import com.example.onlineshop.ui.menu.NavigationBottomAppBar
-import com.example.onlineshop.ui.menu.TopAppBarBackAndShare
+import com.example.onlineshop.ui.screens.NavigationBottomAppBar
+import com.example.onlineshop.ui.screens.TopAppBarBackAndShare
 
 @Composable
 fun ProductScreen(
@@ -177,10 +175,10 @@ fun PagerBox(
                 .align(Alignment.TopEnd)
 
         ) {
-            Image(
-                painter = if(productItem.isFavourite) painterResource(id = R.drawable.heart_filled) else painterResource(id = R.drawable.heart_outlined) ,
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
+            Icon(
+                painter = if(productItem.isFavourite) painterResource(id = R.drawable.ic_heart_filled) else painterResource(id = R.drawable.ic_heart_outlined) ,
+                contentDescription = stringResource(id = R.string.add_to_favorites),
+                tint = Color(0xFFD62F89),
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -190,10 +188,10 @@ fun PagerBox(
                 .align(Alignment.BottomStart)
 
         ) {
-            Image(
+            Icon(
                 painter = painterResource(id = R.drawable.ic_question),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
+                contentDescription = stringResource(R.string.info),
+                tint = Color(0xFFDEDEDE),
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -363,7 +361,7 @@ fun DescriptionPart(
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(
                         Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = "Delete",
+                        contentDescription = stringResource(R.string.arrow_forward),
                         tint = Color(0xFF000000),
                         modifier = Modifier
                             .size(24.dp)
@@ -462,10 +460,10 @@ fun Compound(
                 modifier = Modifier
 
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.copy),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_copy),
+                    contentDescription = stringResource(R.string.copy),
+                    tint = Color(0xFFA0A1A3),
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -554,21 +552,21 @@ fun RatingBar(
         repeat(filledStars) {
             Icon(
                 painter = painterResource(R.drawable.ic_star_filled),
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.raiting),
                 tint = starsColor
             )
         }
         if (halfStar) {
             Icon(
                 painter = painterResource(R.drawable.ic_star_half),
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.raiting),
                 tint = starsColor
             )
         }
         repeat(unfilledStars) {
             Icon(
                 painter = painterResource(R.drawable.ic_star_outlined),
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.raiting),
                 tint = starsColor
             )
         }

@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.menu
+package com.example.onlineshop.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

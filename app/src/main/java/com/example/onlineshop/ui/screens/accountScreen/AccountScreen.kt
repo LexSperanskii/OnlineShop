@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.menu.accountScreen
+package com.example.onlineshop.ui.screens.accountScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,8 +32,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.ui.AppViewModelProvider
-import com.example.onlineshop.ui.menu.NavigationBottomAppBar
-import com.example.onlineshop.ui.menu.TopAppBarNameOnly
+import com.example.onlineshop.ui.screens.NavigationBottomAppBar
+import com.example.onlineshop.ui.screens.TopAppBarNameOnly
 import com.example.onlineshop.ui.navigation.FavoritesDestination
 
 @Composable
@@ -106,7 +106,7 @@ fun AccountScreenBody(
             .padding(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 32.dp)
     ) {
         AccountCard(
-            leadingIcon = painterResource(id = R.drawable.icon_account),
+            leadingIcon = painterResource(id = R.drawable.ic_account),
             leadingIconTint = Color(0xFF333333),
             trailingIcon = painterResource(R.drawable.ic_exit),
             trailingIconTint = Color(0xFF333333),
@@ -116,7 +116,7 @@ fun AccountScreenBody(
             modifier = Modifier.padding(bottom = 24.dp)
         )
         AccountCard(
-            leadingIcon = painterResource(id = R.drawable.heart_outlined),
+            leadingIcon = painterResource(id = R.drawable.ic_heart_outlined),
             leadingIconTint = Color(0xFFD62F89),
             trailingIcon = painterResource(id = R.drawable.ic_arrow_forward),
             trailingIconTint = Color(0xFF000000),

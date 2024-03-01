@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.menu
+package com.example.onlineshop.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 
 @Composable
-fun GeneralScreen(
+fun SalesScreen(
     navController: NavHostController,
     title :Int,
     modifier: Modifier = Modifier
@@ -33,17 +33,10 @@ fun GeneralScreen(
                 .padding(innerPadding)
         ) {
             Text(
-                text = "Главная",
+                text = "Акции",
                 modifier = Modifier.align(Alignment.Center)
             )
         }
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun GeneralScreenPreview() {
-//    OnlineShopTheme {
-//        GeneralScreen()
-//    }
-//}

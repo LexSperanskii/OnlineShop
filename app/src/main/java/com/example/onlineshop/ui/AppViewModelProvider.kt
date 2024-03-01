@@ -6,10 +6,10 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.onlineshop.OnlineShopApplication
-import com.example.onlineshop.ui.menu.accountScreen.AccountScreenViewModel
-import com.example.onlineshop.ui.menu.catalogScreen.CatalogProductScreenViewModel
-import com.example.onlineshop.ui.menu.favoriteScreen.FavoriteScreenViewModel
-import com.example.onlineshop.ui.registrationScreen.RegistrationScreenVIewModel
+import com.example.onlineshop.ui.screens.accountScreen.AccountScreenViewModel
+import com.example.onlineshop.ui.screens.catalogAndProductScreen.CatalogProductScreenViewModel
+import com.example.onlineshop.ui.screens.favoriteScreen.FavoriteScreenViewModel
+import com.example.onlineshop.ui.screens.registrationScreen.RegistrationScreenVIewModel
 
 
 /**

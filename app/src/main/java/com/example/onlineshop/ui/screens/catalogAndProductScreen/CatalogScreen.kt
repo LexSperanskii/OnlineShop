@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.menu.catalogScreen
+package com.example.onlineshop.ui.screens.catalogAndProductScreen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -58,8 +58,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
-import com.example.onlineshop.ui.menu.NavigationBottomAppBar
-import com.example.onlineshop.ui.menu.TopAppBarNameOnly
+import com.example.onlineshop.ui.screens.NavigationBottomAppBar
+import com.example.onlineshop.ui.screens.TopAppBarNameOnly
 import com.example.onlineshop.ui.theme.OnlineShopTheme
 
 
@@ -118,14 +118,17 @@ fun CatalogScreen(
                         modifier = Modifier.fillMaxSize()
                     )
                 is CatalogScreenNetworkUiState.Error ->
-                    ErrorScreen(modifier = modifier.fillMaxSize())
+                    ErrorScreen(
+                        retryAction = {catalogProductScreenViewModel.getCommodityItemsInfo()},
+                        modifier = modifier.fillMaxSize()
+                    )
             }
         }
     }
 }
 
 @Composable
-fun ErrorScreen(modifier: Modifier = Modifier) {
+fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -135,6 +138,9 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
             painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
         )
         Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
+        Button(onClick = retryAction) {
+            Text(stringResource(R.string.retry))
+        }
     }
 }
 
@@ -142,7 +148,7 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Image(
         modifier = modifier.size(200.dp),
-        painter = painterResource(R.drawable.loading_img),
+        painter = painterResource(R.drawable.ic_loading_img),
         contentDescription = stringResource(R.string.loading)
     )
 }
@@ -163,7 +169,7 @@ fun PagerImage(
         ) { page ->
             Image(
                 painter = painterResource(id = productItem.images.listOfImage[page]),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.product_image),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Fit
             )
@@ -218,10 +224,10 @@ fun CommodityItem(
                             .align(Alignment.TopEnd)
 
                     ) {
-                        Image(
-                            painter = if(productItem.isFavourite) painterResource(id = R.drawable.heart_filled) else painterResource(id = R.drawable.heart_outlined) ,
-                            contentDescription = null,
-                            contentScale = ContentScale.Fit,
+                        Icon(
+                            painter = if(productItem.isFavourite) painterResource(id = R.drawable.ic_heart_filled) else painterResource(id = R.drawable.ic_heart_outlined) ,
+                            contentDescription = stringResource(R.string.add_to_favorites),
+                            tint = Color(0xFFD62F89),
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -290,10 +296,10 @@ fun CommodityItem(
                         )
                         if (productItem.productDescription.feedback!=null){
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Image(
+                                Icon(
                                     painter = painterResource(id = R.drawable.ic_star),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
+                                    contentDescription = stringResource(R.string.raiting),
+                                    tint = Color(0xFFF9A249),
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(
@@ -319,12 +325,12 @@ fun CommodityItem(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .wrapContentHeight()
-                            .clickable { addToCart }
+                            .clickable { addToCart() }
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.add_to_cart_plus_sign),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
+                            painter = painterResource(id = R.drawable.ic_add_to_cart_plus_sign),
+                            contentDescription = stringResource(id = R.string.add_to_cart),
+                            contentScale = ContentScale.Fit,
                             modifier = Modifier
                                 .size(32.dp)
                         )
@@ -355,7 +361,7 @@ fun CommodityItemsGridScreen(
                 addToCart = addToCart,
                 onCardClick = {onCardClick(item)},
                 modifier = modifier
-//                    .aspectRatio(0.5f)
+//                    .aspectRatio(0.5f) //сделать прямоугольным
             )
         }
     }
@@ -412,8 +418,8 @@ fun SortingRow(
             .padding(horizontal = 16.dp)
     ) {
         Icon(
-            painter = painterResource(R.drawable.icon_sort),
-            contentDescription = "Сортировка",
+            painter = painterResource(R.drawable.ic_sort),
+            contentDescription = stringResource(R.string.sort),
             modifier = Modifier
                 .size(24.dp)
                 .padding(end = 4.dp)
@@ -428,13 +434,13 @@ fun SortingRow(
         if (isExpanded) {
             Icon(
                 imageVector = Icons.Default.KeyboardArrowUp,
-                contentDescription = "Фильтр",
+                contentDescription = stringResource(R.string.close),
                 modifier = Modifier.size(24.dp)
             )
         } else {
             Icon(
                 imageVector = Icons.Default.KeyboardArrowDown,
-                contentDescription = "Фильтр",
+                contentDescription = stringResource(R.string.open),
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -443,12 +449,12 @@ fun SortingRow(
             horizontalArrangement = Arrangement.End,
         ) {
             Icon(
-                painter = painterResource(R.drawable.icon_filter),
-                contentDescription = "Фильтр",
+                painter = painterResource(R.drawable.ic_filter),
+                contentDescription = stringResource(R.string.filter),
                 modifier = Modifier.size(24.dp)
             )
             Text(
-                text = "Фильтры",
+                text = stringResource(R.string.filters),
                 fontSize = 14.sp,
                 color = Color(0xFF3E3E3E)
             )
@@ -491,7 +497,7 @@ fun TagRow(
                     ) {
                         Icon(
                             Icons.Filled.Close,
-                            contentDescription = "Delete",
+                            contentDescription = stringResource(R.string.delete),
                         )
                     }
                 }

@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.registrationScreen
+package com.example.onlineshop.ui.screens.registrationScreen
 
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel

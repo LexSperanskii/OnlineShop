@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.menu
+package com.example.onlineshop.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 
 @Composable
-fun SalesScreen(
+fun CartScreen(
     navController: NavHostController,
     title :Int,
     modifier: Modifier = Modifier
@@ -33,7 +33,7 @@ fun SalesScreen(
                 .padding(innerPadding)
         ) {
             Text(
-                text = "Акции",
+                text = "Корзина",
                 modifier = Modifier.align(Alignment.Center)
             )
         }

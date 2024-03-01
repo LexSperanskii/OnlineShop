@@ -1,7 +1,6 @@
-package com.example.onlineshop.data
+package com.example.onlineshop.data.network
 
-import com.example.onlineshop.network.Items
-import com.example.onlineshop.network.OnlineShopApiService
+import com.example.onlineshop.model.Items
 
 
 interface ProductsInfoRepository {

@@ -1,4 +1,4 @@
-package com.example.onlineshop.ui.registrationScreen
+package com.example.onlineshop.ui.screens.registrationScreen
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.onlineshop.R
 import com.example.onlineshop.ui.AppViewModelProvider
-import com.example.onlineshop.ui.menu.TopAppBarNameOnly
+import com.example.onlineshop.ui.screens.TopAppBarNameOnly
 import com.example.onlineshop.ui.navigation.RegistrationDestination
 import com.example.onlineshop.ui.theme.OnlineShopTheme
 
@@ -143,6 +143,7 @@ fun RegistrationScreen(
         }
     }
 
+    //для того чтобы сразу переходить на экран Каталог если в БД была запись аккаунта
     LaunchedEffect(registrationUiState.id) {
         if (registrationUiState.name.isNotBlank() && registrationUiState.lastName.isNotBlank() && registrationUiState.number.isNotBlank()) {
             navigateToCatalog()
@@ -266,7 +267,7 @@ fun RegistrationBody(
 
                 ) {
                     Text(
-                        text = "Войти",
+                        text = stringResource(R.string.enter),
                         style = TextStyle(
                             fontSize = 14.sp,
                             color = Color(0xFFFFFFFF),
@@ -282,7 +283,7 @@ fun RegistrationBody(
                 .fillMaxSize()
         ) {
             Text(
-                text = "Нажимая кнопку “Войти”, Вы принимаете",
+                text = stringResource(R.string.commertial_conditions_one),
                 style = TextStyle(
                     fontSize = 10.sp,
                     lineHeight = 11.sp,
@@ -293,7 +294,7 @@ fun RegistrationBody(
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "условия программы лояльности",
+                text = stringResource(R.string.commertial_conditions_two),
                 style = TextStyle(
                     fontSize = 10.sp,
                     lineHeight = 11.sp,
@@ -344,7 +345,7 @@ fun RegistrationField(
                         ) {
                             Icon(
                                 Icons.Filled.Close,
-                                contentDescription = "Delete",
+                                contentDescription = stringResource(id = R.string.delete),
                                 modifier = modifier
                                     .height(13.dp)
                                     .width(13.dp)
@@ -362,7 +363,7 @@ fun RegistrationField(
                     )
                 },
                 shape = MaterialTheme.shapes.small,
-                colors = TextFieldDefaults.colors(   //textFieldColors
+                colors = TextFieldDefaults.colors(
                     disabledTextColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -446,7 +447,7 @@ fun NumberRegistrationField(
                     )
                 },
                 shape = MaterialTheme.shapes.small,
-                colors = TextFieldDefaults.colors(   //textFieldColors
+                colors = TextFieldDefaults.colors(
                     disabledTextColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -498,21 +499,21 @@ fun RegistrationForm(
     ) {
         RegistrationField(
             text = nameField,
-            placeholder = "Имя",
+            placeholder = stringResource(R.string.name),
             onValueChange = onNameFieldValueChange,
             isError = isErrorName,
             onEraseItemClick = onEraseNameClick
         )
         RegistrationField(
             text = lastNameField,
-            placeholder = "Фамилия",
+            placeholder = stringResource(R.string.sername),
             onValueChange = onLastNameFieldValueChange,
             isError = isErrorLastName,
             onEraseItemClick = onEraseLastNameClick
         )
         NumberRegistrationField(
             text = number,
-            placeholder = "Номер телефона",
+            placeholder = stringResource(R.string.phone_number),
             onValueChange = onNumberValueChange,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             onNumberFieldClick = onNumberFieldClick,

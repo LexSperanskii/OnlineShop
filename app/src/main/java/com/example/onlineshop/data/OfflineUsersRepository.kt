@@ -4,12 +4,15 @@ import com.example.onlineshop.model.User
 import kotlinx.coroutines.flow.Flow
 
 class OfflineUsersRepository(private val userDao: UserDao) : UsersRepository {
+    /**
+     * Для таблицы users
+     */
     override suspend fun insertUser(user: User) = userDao.insert(user)
     override suspend fun getUser(): User? = userDao.getUser()
     override suspend fun deleteAllUsers() = userDao.deleteAllUsers()
 
     /**
-     * Для таблицы Favorite
+     * Для таблицы favorite
      */
     override suspend fun insertInFavorite(id: String) = userDao.insertInFavorite(id)
     override suspend fun deleteFromFavorites(id: String) = userDao.deleteFromFavorites(id)
