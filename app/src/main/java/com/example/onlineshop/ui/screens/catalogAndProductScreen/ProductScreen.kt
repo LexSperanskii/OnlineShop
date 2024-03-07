@@ -552,21 +552,21 @@ fun RatingBar(
         repeat(filledStars) {
             Icon(
                 painter = painterResource(R.drawable.ic_star_filled),
-                contentDescription = stringResource(id = R.string.raiting),
+                contentDescription = stringResource(id = R.string.rating),
                 tint = starsColor
             )
         }
         if (halfStar) {
             Icon(
                 painter = painterResource(R.drawable.ic_star_half),
-                contentDescription = stringResource(id = R.string.raiting),
+                contentDescription = stringResource(id = R.string.rating),
                 tint = starsColor
             )
         }
         repeat(unfilledStars) {
             Icon(
                 painter = painterResource(R.drawable.ic_star_outlined),
-                contentDescription = stringResource(id = R.string.raiting),
+                contentDescription = stringResource(id = R.string.rating),
                 tint = starsColor
             )
         }

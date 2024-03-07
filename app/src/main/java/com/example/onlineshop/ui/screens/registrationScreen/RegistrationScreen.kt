@@ -283,7 +283,7 @@ fun RegistrationBody(
                 .fillMaxSize()
         ) {
             Text(
-                text = stringResource(R.string.commertial_conditions_one),
+                text = stringResource(R.string.commercial_conditions_one),
                 style = TextStyle(
                     fontSize = 10.sp,
                     lineHeight = 11.sp,
@@ -294,7 +294,7 @@ fun RegistrationBody(
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = stringResource(R.string.commertial_conditions_two),
+                text = stringResource(R.string.commercial_conditions_two),
                 style = TextStyle(
                     fontSize = 10.sp,
                     lineHeight = 11.sp,
@@ -506,7 +506,7 @@ fun RegistrationForm(
         )
         RegistrationField(
             text = lastNameField,
-            placeholder = stringResource(R.string.sername),
+            placeholder = stringResource(R.string.surname),
             onValueChange = onLastNameFieldValueChange,
             isError = isErrorLastName,
             onEraseItemClick = onEraseLastNameClick

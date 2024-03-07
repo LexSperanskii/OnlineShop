@@ -298,7 +298,7 @@ fun CommodityItem(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.ic_star),
-                                    contentDescription = stringResource(R.string.raiting),
+                                    contentDescription = stringResource(R.string.rating),
                                     tint = Color(0xFFF9A249),
                                     modifier = Modifier.size(16.dp)
                                 )
