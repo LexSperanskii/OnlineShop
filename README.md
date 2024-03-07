@@ -1,5 +1,5 @@
 The project was made according to technical specifications. Some decisions are subject to change.
-To enter registration data correctly, you need to enter them in Cyrillic (Russian)
+To enter registration data correctly, you need to enter them in Cyrillic (Russian).
 You can copy them from here: Иван Иванов  (spaces are not allowed)
 
 ![image_1](https://github.com/serSosochny/OnlineShop/assets/81870716/c9c069cf-fabd-44dd-af13-e7990481f8b3)
