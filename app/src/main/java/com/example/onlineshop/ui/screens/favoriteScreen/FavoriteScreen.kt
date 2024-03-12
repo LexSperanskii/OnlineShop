@@ -26,6 +26,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
@@ -124,7 +125,7 @@ fun FavoritesScreenBodyWithTabs(
                         Text(
                             text = currentTab.text,
                             style = TextStyle(
-                                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                                fontSize = dimensionResource(id = R.dimen.text_size_16).value.sp,
                             ),
                             modifier = Modifier
                         )

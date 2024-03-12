@@ -269,7 +269,7 @@ fun RegistrationBody(
                     Text(
                         text = stringResource(R.string.enter),
                         style = TextStyle(
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
                             color = colorResource(id = R.color.white),
                         )
                     )
@@ -285,7 +285,7 @@ fun RegistrationBody(
             Text(
                 text = stringResource(R.string.commercial_conditions_one),
                 style = TextStyle(
-                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                    fontSize = dimensionResource(id = R.dimen.text_size_10).value.sp,
                     lineHeight = dimensionResource(R.dimen.size_11).value.sp,
                     color = colorResource(id = R.color.light_grey),
                 ),
@@ -296,7 +296,7 @@ fun RegistrationBody(
             Text(
                 text = stringResource(R.string.commercial_conditions_two),
                 style = TextStyle(
-                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                    fontSize = dimensionResource(id = R.dimen.text_size_10).value.sp,
                     lineHeight = dimensionResource(R.dimen.size_11).value.sp,
                     color = colorResource(id = R.color.light_grey),
                 ),
@@ -333,7 +333,7 @@ fun RegistrationField(
             TextField(
                 value = text,
                 textStyle = TextStyle(
-                    fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                    fontSize = dimensionResource(id = R.dimen.text_size_16).value.sp,
                     color = colorResource(id = R.color.black),
                 ),
                 onValueChange = { onValueChange(it) },
@@ -357,7 +357,7 @@ fun RegistrationField(
                     Text(
                         text = placeholder,
                         style = TextStyle(
-                            fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                            fontSize = dimensionResource(id = R.dimen.text_size_16).value.sp,
                             color = colorResource(id = R.color.light_grey),
                         )
                     )
@@ -419,7 +419,7 @@ fun NumberRegistrationField(
             TextField(
                 value = text,
                 textStyle = TextStyle(
-                    fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                    fontSize = dimensionResource(id = R.dimen.text_size_16).value.sp,
                     color = colorResource(id = R.color.black),
                 ),
                 onValueChange = { onValueChange(it.text) },
@@ -443,7 +443,7 @@ fun NumberRegistrationField(
                     Text(
                         text = placeholder,
                         style = TextStyle(
-                            fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                            fontSize = dimensionResource(id = R.dimen.text_size_16).value.sp,
                             color = colorResource(id = R.color.light_grey),
                         )
                     )

@@ -28,6 +28,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
@@ -209,7 +210,7 @@ fun AccountCard(
                     Text(
                         text = name,
                         style = TextStyle(
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
                             color = colorResource(id = R.color.black),
                         )
                     )
@@ -217,7 +218,7 @@ fun AccountCard(
                         Text(
                             text = description,
                             style = TextStyle(
-                                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                fontSize = dimensionResource(id = R.dimen.text_size_10).value.sp,
                                 color = colorResource(id = R.color.light_grey),
                             ) ,
                             modifier = Modifier.padding(top = dimensionResource(R.dimen.size_6))
@@ -253,7 +254,7 @@ fun ExitButton(
         Text(
             text = stringResource(R.string.exit),
             style = TextStyle(
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
                 color = colorResource(R.color.black),
             ),
             modifier = Modifier

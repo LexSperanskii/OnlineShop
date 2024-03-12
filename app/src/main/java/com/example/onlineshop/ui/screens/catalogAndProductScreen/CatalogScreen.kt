@@ -54,6 +54,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
@@ -241,7 +242,7 @@ fun CommodityItem(
                         Text(
                             text = stringResource(R.string.price_with_sign,productItem.productDescription.price.price, productItem.productDescription.price.unit ),
                             style = TextStyle(
-                                fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                fontSize = dimensionResource(id = R.dimen.text_size_9).value.sp,
                                 color = colorResource(id = R.color.light_grey),
                                 textDecoration = TextDecoration.LineThrough
                             ),
@@ -254,7 +255,7 @@ fun CommodityItem(
                             Text(
                                 text = stringResource(R.string.price_with_sign, productItem.productDescription.price.priceWithDiscount, productItem.productDescription.price.unit ),
                                 style = TextStyle(
-                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                    fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
                                     color = colorResource(id = R.color.black),
                                 ),
                                 modifier = Modifier
@@ -271,7 +272,7 @@ fun CommodityItem(
                                 Text(
                                     text = stringResource(R.string.discount, productItem.productDescription.price.discount),
                                     style = TextStyle(
-                                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                        fontSize = dimensionResource(id = R.dimen.text_size_9).value.sp,
                                         color = colorResource(id = R.color.white),
                                     )
                                 )
@@ -280,7 +281,7 @@ fun CommodityItem(
                         Text(
                             text = productItem.productDescription.title,
                             style = TextStyle(
-                                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                                fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                                 color = colorResource(id = R.color.black),
                             ),
                             modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_2))
@@ -288,7 +289,7 @@ fun CommodityItem(
                         Text(
                             text = productItem.productDescription.subtitle,
                             style = TextStyle(
-                                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                fontSize = dimensionResource(id = R.dimen.text_size_10).value.sp,
                                 color = colorResource(id = R.color.grey),
                             ),
                             modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_4))
@@ -304,7 +305,7 @@ fun CommodityItem(
                                 Text(
                                     text = productItem.productDescription.feedback.rating.toString(),
                                     style = TextStyle(
-                                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                        fontSize =  dimensionResource(id = R.dimen.text_size_9).value.sp,
                                         color = colorResource(id = R.color.yellow),
                                     ),
                                     modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.size_2))
@@ -312,7 +313,7 @@ fun CommodityItem(
                                 Text(
                                     text = stringResource(R.string.feedbackCount, productItem.productDescription.feedback.count),
                                     style = TextStyle(
-                                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                        fontSize = dimensionResource(id = R.dimen.text_size_9).value.sp,
                                         color = colorResource(id = R.color.light_grey),
                                     ),
                                     modifier = Modifier
@@ -383,7 +384,7 @@ fun Sorting(
     ) {
         Text(
             text = sortType,
-            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
             color = colorResource(id = R.color.grey),
             modifier = Modifier
                 .menuAnchor()
@@ -454,7 +455,7 @@ fun SortingRow(
             )
             Text(
                 text = stringResource(R.string.filters),
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
                 color = colorResource(id = R.color.grey)
             )
         }
@@ -486,7 +487,7 @@ fun TagRow(
                     Text(
                         text = tag,
                         style = TextStyle(
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
                             color = colorResource(id = R.color.white),
                         )
                     )
@@ -511,7 +512,7 @@ fun TagRow(
                     Text(
                         text = tag,
                         style = TextStyle(
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
                             color = colorResource(id = R.color.light_grey),
                         )
                     )

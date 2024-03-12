@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
@@ -211,7 +212,7 @@ fun NamePart(
         Text(
             text = productItem.productDescription.title,
             style = TextStyle(
-                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_16).value.sp,
                 color = colorResource(id = R.color.light_grey),
             ),
             modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_8))
@@ -219,7 +220,7 @@ fun NamePart(
         Text(
             text = productItem.productDescription.subtitle,
             style = TextStyle(
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_20).value.sp,
                 color = colorResource(id = R.color.black),
             ),
             modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_10))
@@ -231,7 +232,7 @@ fun NamePart(
                 productItem.productDescription.available
             ),
             style = TextStyle(
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                 color = colorResource(id = R.color.light_grey),
             )
         )
@@ -253,7 +254,7 @@ fun RatingRow(
             Text(
                 text = productItem.productDescription.feedback.rating.toString(),
                 style = TextStyle(
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                     color = colorResource(id = R.color.light_grey),
                 ),
                 modifier = Modifier.padding(start = dimensionResource(R.dimen.size_8), end = dimensionResource(R.dimen.size_6))
@@ -271,7 +272,7 @@ fun RatingRow(
                     productItem.productDescription.feedback.count
                 ),
                 style = TextStyle(
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                     color = colorResource(id = R.color.light_grey),
                 ),
                 modifier = Modifier.padding(start = dimensionResource(R.dimen.size_6))
@@ -291,7 +292,7 @@ fun PriceRow(
         Text(
             text = stringResource(R.string.price_with_sign, productItem.productDescription.price.priceWithDiscount, productItem.productDescription.price.unit ),
             style = TextStyle(
-                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_24).value.sp,
                 color = colorResource(id = R.color.black),
             ),
             modifier = Modifier
@@ -299,7 +300,7 @@ fun PriceRow(
         Text(
             text = stringResource(R.string.price_with_sign,productItem.productDescription.price.price, productItem.productDescription.price.unit ),
             style = TextStyle(
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                 color = colorResource(id = R.color.light_grey),
                 textDecoration = TextDecoration.LineThrough
             ),
@@ -316,7 +317,7 @@ fun PriceRow(
             Text(
                 text = stringResource(R.string.discount, productItem.productDescription.price.discount),
                 style = TextStyle(
-                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                    fontSize = dimensionResource(id = R.dimen.text_size_9).value.sp,
                     color = colorResource(id = R.color.white),
                 )
             )
@@ -335,7 +336,7 @@ fun DescriptionPart(
         Text(
             text = stringResource(R.string.description),
             style = TextStyle(
-                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_16).value.sp,
                 color = colorResource(id = R.color.black),
             ),
             modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_16))
@@ -358,7 +359,7 @@ fun DescriptionPart(
                     Text(
                         text = productItem.productDescription.title,
                         style = TextStyle(
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
                             color = colorResource(id = R.color.black),
                         ),
                         modifier = Modifier.padding(start = dimensionResource(R.dimen.size_9))
@@ -377,7 +378,7 @@ fun DescriptionPart(
             Text(
                 text = productItem.productDescription.description,
                 style = TextStyle(
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                     color = colorResource(id = R.color.grey),
                 ),
                 modifier = Modifier.padding(top = dimensionResource(R.dimen.size_8), bottom = dimensionResource(R.dimen.size_10))
@@ -386,7 +387,7 @@ fun DescriptionPart(
         Text(
             text = if(isShowInfo)stringResource(R.string.hide) else stringResource(R.string.show),
             style = TextStyle(
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                 color = colorResource(id = R.color.light_grey),
             ),
             modifier = Modifier
@@ -403,7 +404,7 @@ fun CharacteristicsPart(
         Text(
             text = stringResource(R.string.characteristics),
             style = TextStyle(
-                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_16).value.sp,
                 color = colorResource(id = R.color.black),
             ),
             modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_16))
@@ -418,7 +419,7 @@ fun CharacteristicsPart(
                 Text(
                     text = item.title,
                     style = TextStyle(
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                         color = colorResource(id = R.color.grey),
                     )
                 )
@@ -426,7 +427,7 @@ fun CharacteristicsPart(
                 Text(
                     text = item.value,
                     style = TextStyle(
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                         color = colorResource(id = R.color.grey),
                     )
                 )
@@ -455,7 +456,7 @@ fun Compound(
             Text(
                 text = stringResource(R.string.compound),
                 style = TextStyle(
-                    fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                    fontSize = dimensionResource(id = R.dimen.text_size_16).value.sp,
                     color = colorResource(id = R.color.black),
                 )
             )
@@ -478,7 +479,7 @@ fun Compound(
             maxLines = if (isShowCompound) Int.MAX_VALUE else 2,
             overflow = TextOverflow.Ellipsis,
             style = TextStyle(
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                 color = colorResource(id = R.color.grey),
             ),
             modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_10))
@@ -486,7 +487,7 @@ fun Compound(
         Text(
             text = if(isShowCompound)stringResource(R.string.hide) else stringResource(R.string.show),
             style = TextStyle(
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = dimensionResource(id = R.dimen.text_size_12).value.sp,
                 color = colorResource(id = R.color.light_grey),
             ),
             modifier = Modifier
@@ -517,7 +518,7 @@ fun AddToCartButton(
                 Text(
                     text = stringResource(R.string.price_with_sign, productItem.productDescription.price.priceWithDiscount, productItem.productDescription.price.unit ),
                     style = TextStyle(
-                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
                         color = colorResource(id = R.color.white),
                     ),
                     modifier = Modifier
@@ -525,7 +526,7 @@ fun AddToCartButton(
                 Text(
                     text = stringResource(R.string.price_with_sign,productItem.productDescription.price.price, productItem.productDescription.price.unit ),
                     style = TextStyle(
-                        fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                        fontSize = dimensionResource(id = R.dimen.text_size_10).value.sp,
                         color = colorResource(id = R.color.white),
                         textDecoration = TextDecoration.LineThrough
                     ),
@@ -535,7 +536,7 @@ fun AddToCartButton(
                 Text(
                     text = stringResource(R.string.add_to_cart),
                     style = TextStyle(
-                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        fontSize = dimensionResource(id = R.dimen.text_size_14).value.sp,
                         color = colorResource(id = R.color.white),
                     )
                 )

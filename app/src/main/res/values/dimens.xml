@@ -31,12 +31,12 @@
     <dimen name="size_287">287dp</dimen>
     <dimen name="size_294">294dp</dimen>
     <dimen name="size_343">343dp</dimen>
-<!--    <dimen name="text_size_24">24sp</dimen>-->
-<!--    <dimen name="text_size_20">20sp</dimen>-->
-<!--    <dimen name="text_size_16">16sp</dimen>-->
-<!--    <dimen name="text_size_14">14sp</dimen>-->
-<!--    <dimen name="text_size_12">12sp</dimen>-->
-<!--    <dimen name="text_size_11">11sp</dimen>-->
-<!--    <dimen name="text_size_10">10sp</dimen>-->
-<!--    <dimen name="text_size_9">9sp</dimen>-->
+    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_11">11sp</dimen>
+    <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_9">9sp</dimen>
 </resources>
