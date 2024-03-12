@@ -16,8 +16,14 @@ abstract class UsersDatabase : RoomDatabase() {
         private var Instance: UsersDatabase? = null
         fun getDatabase(context: Context): UsersDatabase {
             // if the Instance is not null, return it, otherwise create a new database instance.
+//            return Instance ?: synchronized(this) {
+//                Room.databaseBuilder(context, UsersDatabase::class.java,"users_database")
+//                    .build()
+//                    .also { Instance = it }
+//            }
+            //double check lock. Если несколько потоков заходят в метод getDatabase и видят Instance равным null, только один из них создаст экземпляр базы данных. Остальные будут ждать, пока первый поток завершит инициализацию и присвоение Instance.
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, UsersDatabase::class.java,"users_database")
+                Instance ?: Room.databaseBuilder(context, UsersDatabase::class.java,"users_database")
                     .build()
                     .also { Instance = it }
             }
