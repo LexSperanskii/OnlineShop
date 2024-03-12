@@ -46,15 +46,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
@@ -135,9 +134,9 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
+            painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = null
         )
-        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
+        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(dimensionResource(R.dimen.size_16)))
         Button(onClick = retryAction) {
             Text(stringResource(R.string.retry))
         }
@@ -147,7 +146,7 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Image(
-        modifier = modifier.size(200.dp),
+        modifier = modifier.size(dimensionResource(R.dimen.size_200)),
         painter = painterResource(R.drawable.ic_loading_img),
         contentDescription = stringResource(R.string.loading)
     )
@@ -181,13 +180,13 @@ fun PagerImage(
             horizontalArrangement = Arrangement.Center
         ) {
             repeat(pagerState.pageCount) { iteration ->
-                val color = if (pagerState.currentPage == iteration) Color(0xFFD62F89) else  Color(0xFFDEDEDE)
+                val color = if (pagerState.currentPage == iteration) colorResource(id = R.color.pink) else  colorResource(id = R.color.light_light_gary)
                 Box(
                     modifier = Modifier
-                        .padding(2.dp)
+                        .padding(dimensionResource(R.dimen.size_2))
                         .clip(CircleShape)
                         .background(color)
-                        .size(4.dp)
+                        .size(dimensionResource(R.dimen.size_4))
                 )
             }
         }
@@ -204,13 +203,13 @@ fun CommodityItem(
 ) {
     Card(
         modifier = modifier
-            .height(287.dp)
-            .width(168.dp)
-            .padding(3.dp)
+            .height(dimensionResource(R.dimen.size_287))
+            .width(dimensionResource(R.dimen.size_168))
+            .padding(dimensionResource(R.dimen.size_3))
             .clickable(onClick = onCardClick),
         shape = MaterialTheme.shapes.small,
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFFFF)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(colorResource(id = R.color.white)),
+        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.size_2))
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.weight(1f)) {
@@ -227,8 +226,8 @@ fun CommodityItem(
                         Icon(
                             painter = if(productItem.isFavourite) painterResource(id = R.drawable.ic_heart_filled) else painterResource(id = R.drawable.ic_heart_outlined) ,
                             contentDescription = stringResource(R.string.add_to_favorites),
-                            tint = Color(0xFFD62F89),
-                            modifier = Modifier.size(24.dp)
+                            tint = colorResource(id = R.color.pink),
+                            modifier = Modifier.size(dimensionResource(R.dimen.size_24))
                         )
                     }
                 }
@@ -236,44 +235,44 @@ fun CommodityItem(
             Column(modifier = Modifier.weight(1f)) {
                 Box (modifier = Modifier.fillMaxSize()){
                     Column(modifier = Modifier
-                        .padding(horizontal = 6.dp)
+                        .padding(horizontal = dimensionResource(R.dimen.size_6))
                         .fillMaxSize()
                     ) {
                         Text(
                             text = stringResource(R.string.price_with_sign,productItem.productDescription.price.price, productItem.productDescription.price.unit ),
                             style = TextStyle(
-                                fontSize = 9.sp,
-                                color = Color(0xFFA0A1A3),
+                                fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                color = colorResource(id = R.color.light_grey),
                                 textDecoration = TextDecoration.LineThrough
                             ),
-                            modifier = Modifier.padding(vertical = 2.dp)
+                            modifier = Modifier.padding(vertical = dimensionResource(R.dimen.size_2))
                         )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(bottom = 2.dp)
+                            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_2))
                         ) {
                             Text(
                                 text = stringResource(R.string.price_with_sign, productItem.productDescription.price.priceWithDiscount, productItem.productDescription.price.unit ),
                                 style = TextStyle(
-                                    fontSize = 14.sp,
-                                    color = Color(0xFF000000),
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                    color = colorResource(id = R.color.black),
                                 ),
                                 modifier = Modifier
                             )
                             Box(
                                 contentAlignment = Alignment.Center ,
                                 modifier = Modifier
-                                    .padding(start = 8.dp)
+                                    .padding(start = dimensionResource(R.dimen.size_8))
                                     .clip(MaterialTheme.shapes.extraSmall)
-                                    .background(Color(0xFFD62F89))
-                                    .height(16.dp)
-                                    .width(34.dp)
+                                    .background(colorResource(id = R.color.pink))
+                                    .height(dimensionResource(R.dimen.size_16))
+                                    .width(dimensionResource(R.dimen.size_34))
                             ){
                                 Text(
                                     text = stringResource(R.string.discount, productItem.productDescription.price.discount),
                                     style = TextStyle(
-                                        fontSize = 9.sp,
-                                        color = Color(0xFFFFFFFF),
+                                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                        color = colorResource(id = R.color.white),
                                     )
                                 )
                             }
@@ -281,40 +280,40 @@ fun CommodityItem(
                         Text(
                             text = productItem.productDescription.title,
                             style = TextStyle(
-                                fontSize = 12.sp,
-                                color = Color(0xFF000000),
+                                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                                color = colorResource(id = R.color.black),
                             ),
-                            modifier = Modifier.padding(bottom = 2.dp)
+                            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_2))
                         )
                         Text(
                             text = productItem.productDescription.subtitle,
                             style = TextStyle(
-                                fontSize = 10.sp,
-                                color = Color(0xFF3E3E3E),
+                                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                color = colorResource(id = R.color.grey),
                             ),
-                            modifier = Modifier.padding(bottom = 4.dp)
+                            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_4))
                         )
                         if (productItem.productDescription.feedback!=null){
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.ic_star),
                                     contentDescription = stringResource(R.string.rating),
-                                    tint = Color(0xFFF9A249),
-                                    modifier = Modifier.size(16.dp)
+                                    tint = colorResource(id = R.color.yellow),
+                                    modifier = Modifier.size(dimensionResource(R.dimen.size_16))
                                 )
                                 Text(
                                     text = productItem.productDescription.feedback.rating.toString(),
                                     style = TextStyle(
-                                        fontSize = 9.sp,
-                                        color = Color(0xFFF9A249),
+                                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                        color = colorResource(id = R.color.yellow),
                                     ),
-                                    modifier = Modifier.padding(horizontal = 2.dp)
+                                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.size_2))
                                 )
                                 Text(
                                     text = stringResource(R.string.feedbackCount, productItem.productDescription.feedback.count),
                                     style = TextStyle(
-                                        fontSize = 9.sp,
-                                        color = Color(0xFFA0A1A3),
+                                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                        color = colorResource(id = R.color.light_grey),
                                     ),
                                     modifier = Modifier
                                 )
@@ -332,7 +331,7 @@ fun CommodityItem(
                             contentDescription = stringResource(id = R.string.add_to_cart),
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
-                                .size(32.dp)
+                                .size(dimensionResource(R.dimen.size_32))
                         )
                     }
                 }
@@ -350,9 +349,9 @@ fun CommodityItemsGridScreen(
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(150.dp),
+        columns = GridCells.Adaptive(dimensionResource(R.dimen.size_150)),
         modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(13.dp)
+        contentPadding = PaddingValues(dimensionResource(R.dimen.size_13))
     ) {
         items(items = productItems) { item ->
             CommodityItem(
@@ -384,8 +383,8 @@ fun Sorting(
     ) {
         Text(
             text = sortType,
-            fontSize = 14.sp,
-            color = Color(0xFF3E3E3E),
+            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            color = colorResource(id = R.color.grey),
             modifier = Modifier
                 .menuAnchor()
         )
@@ -415,14 +414,14 @@ fun SortingRow(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = dimensionResource(R.dimen.size_16))
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_sort),
             contentDescription = stringResource(R.string.sort),
             modifier = Modifier
-                .size(24.dp)
-                .padding(end = 4.dp)
+                .size(dimensionResource(R.dimen.size_24))
+                .padding(end = dimensionResource(R.dimen.size_4))
         )
         Sorting(
             isExpanded = isExpanded,
@@ -435,13 +434,13 @@ fun SortingRow(
             Icon(
                 imageVector = Icons.Default.KeyboardArrowUp,
                 contentDescription = stringResource(R.string.close),
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(dimensionResource(R.dimen.size_24))
             )
         } else {
             Icon(
                 imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = stringResource(R.string.open),
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(dimensionResource(R.dimen.size_24))
             )
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -451,12 +450,12 @@ fun SortingRow(
             Icon(
                 painter = painterResource(R.drawable.ic_filter),
                 contentDescription = stringResource(R.string.filter),
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(dimensionResource(R.dimen.size_24))
             )
             Text(
                 text = stringResource(R.string.filters),
-                fontSize = 14.sp,
-                color = Color(0xFF3E3E3E)
+                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                color = colorResource(id = R.color.grey)
             )
         }
     }
@@ -472,8 +471,8 @@ fun TagRow(
 ) {
     LazyRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        contentPadding = PaddingValues(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.size_6)),
+        contentPadding = PaddingValues(dimensionResource(R.dimen.size_16))
     ) {
         items(items = listOfTags) { tag ->
             if (tag == currentTag){
@@ -481,19 +480,19 @@ fun TagRow(
                     onClick = { onTagClick(tag) },
                     shape = MaterialTheme.shapes.extraLarge,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF52606D),
+                        containerColor = colorResource(id = R.color.grey_blue),
                     )
                 ) {
                     Text(
                         text = tag,
                         style = TextStyle(
-                            fontSize = 14.sp,
-                            color = Color(0xFFFFFFFF),
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            color = colorResource(id = R.color.white),
                         )
                     )
                     IconButton(
                         onClick = onEraseTagClick,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(dimensionResource(R.dimen.size_20))
                     ) {
                         Icon(
                             Icons.Filled.Close,
@@ -506,14 +505,14 @@ fun TagRow(
                     onClick = { onTagClick(tag) },
                     shape = MaterialTheme.shapes.extraLarge,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFF8F8F8),
+                        containerColor = colorResource(id = R.color.white_grey),
                     )
                 ) {
                     Text(
                         text = tag,
                         style = TextStyle(
-                            fontSize = 14.sp,
-                            color = Color(0xFFA0A1A3),
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            color = colorResource(id = R.color.light_grey),
                         )
                     )
                 }

@@ -23,18 +23,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.ui.AppViewModelProvider
+import com.example.onlineshop.ui.navigation.FavoritesDestination
 import com.example.onlineshop.ui.screens.NavigationBottomAppBar
 import com.example.onlineshop.ui.screens.TopAppBarNameOnly
-import com.example.onlineshop.ui.navigation.FavoritesDestination
 
 @Composable
 fun AccountScreen(
@@ -103,63 +103,68 @@ fun AccountScreenBody(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 32.dp)
+            .padding(
+                top = dimensionResource(id = R.dimen.size_24),
+                start = dimensionResource(id = R.dimen.size_16),
+                end = dimensionResource(id = R.dimen.size_16),
+                bottom = dimensionResource(id = R.dimen.size_32)
+            )
     ) {
         AccountCard(
             leadingIcon = painterResource(id = R.drawable.ic_account),
-            leadingIconTint = Color(0xFF333333),
+            leadingIconTint = colorResource(id = R.color.red),
             trailingIcon = painterResource(R.drawable.ic_exit),
-            trailingIconTint = Color(0xFF333333),
+            trailingIconTint = colorResource(id = R.color.red),
             name = accountName,
             description = accountNumber,
             navigateClick = {},
-            modifier = Modifier.padding(bottom = 24.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.size_24))
         )
         AccountCard(
             leadingIcon = painterResource(id = R.drawable.ic_heart_outlined),
-            leadingIconTint = Color(0xFFD62F89),
+            leadingIconTint = colorResource(id = R.color.pink),
             trailingIcon = painterResource(id = R.drawable.ic_arrow_forward),
-            trailingIconTint = Color(0xFF000000),
+            trailingIconTint = colorResource(id = R.color.black),
             name = stringResource(id = FavoritesDestination.title),
             description = favoriteDescription,
             navigateClick = navigateToFavorites,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.size_8))
         )
         AccountCard(
             leadingIcon = painterResource(id = R.drawable.ic_shops),
-            leadingIconTint = Color(0xFFD62F89),
+            leadingIconTint = colorResource(id = R.color.pink),
             trailingIcon = painterResource(id = R.drawable.ic_arrow_forward),
-            trailingIconTint = Color(0xFF000000),
+            trailingIconTint = colorResource(id = R.color.black),
             name = stringResource(id = R.string.shops),
             navigateClick = {},
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.size_8))
         )
         AccountCard(
             leadingIcon = painterResource(id = R.drawable.ic_feedback),
-            leadingIconTint = Color(0xFFF9A249),
+            leadingIconTint = colorResource(id = R.color.yellow),
             trailingIcon = painterResource(id = R.drawable.ic_arrow_forward),
-            trailingIconTint = Color(0xFF000000),
+            trailingIconTint = colorResource(id = R.color.black),
             name = stringResource(id = R.string.feedback),
             navigateClick = {},
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.size_8))
         )
         AccountCard(
             leadingIcon = painterResource(id = R.drawable.ic_offer),
-            leadingIconTint = Color(0xFFA0A1A3),
+            leadingIconTint = colorResource(id = R.color.light_grey),
             trailingIcon = painterResource(id = R.drawable.ic_arrow_forward),
-            trailingIconTint = Color(0xFF000000),
+            trailingIconTint = colorResource(id = R.color.black),
             name = stringResource(id = R.string.offer),
             navigateClick = {},
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.size_8))
         )
         AccountCard(
             leadingIcon = painterResource(id = R.drawable.ic_purchase_return),
-            leadingIconTint = Color(0xFFA0A1A3),
+            leadingIconTint = colorResource(id = R.color.light_grey),
             trailingIcon = painterResource(id = R.drawable.ic_arrow_forward),
-            trailingIconTint = Color(0xFF000000),
+            trailingIconTint = colorResource(id = R.color.black),
             name = stringResource(id = R.string.purchase_return),
             navigateClick = {},
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.size_8))
         )
         Spacer(modifier = Modifier.weight(1f))
         ExitButton(
@@ -184,38 +189,38 @@ fun AccountCard(
             contentAlignment = Alignment.Center ,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.small)
-                .background(Color(0xFFF8F8F8))
-                .height(49.dp)
+                .background(colorResource(R.color.white_grey))
+                .height(dimensionResource(id = R.dimen.size_49))
                 .fillMaxWidth()
                 .clickable { navigateClick() }
         ){
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 8.dp)
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.size_8))
             ) {
                 Icon(
                     painter = leadingIcon,
                     contentDescription = null,
                     tint = leadingIconTint,
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(dimensionResource(id = R.dimen.size_24))
                 )
-                Column(modifier = Modifier.padding(start = 16.dp)) {
+                Column(modifier = Modifier.padding(start = dimensionResource(id = R.dimen.size_16))) {
                     Text(
                         text = name,
                         style = TextStyle(
-                            fontSize = 14.sp,
-                            color = Color(0xFF000000),
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            color = colorResource(id = R.color.black),
                         )
                     )
-                    if (description != "")
+                    if (description.isNotEmpty())
                         Text(
                             text = description,
                             style = TextStyle(
-                                fontSize = 10.sp,
-                                color = Color(0xFFA0A1A3),
-                            ),
-                            modifier = Modifier.padding(top = 6.dp)
+                                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                color = colorResource(id = R.color.light_grey),
+                            ) ,
+                            modifier = Modifier.padding(top = dimensionResource(R.dimen.size_6))
                         )
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -224,7 +229,7 @@ fun AccountCard(
                     contentDescription = null,
                     tint = trailingIconTint,
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(dimensionResource(R.dimen.size_24))
                 )
             }
         }
@@ -240,16 +245,16 @@ fun ExitButton(
         contentAlignment = Alignment.Center ,
         modifier = modifier
             .clip(MaterialTheme.shapes.small)
-            .background(Color(0xFFF8F8F8))
-            .height(51.dp)
+            .background(colorResource(R.color.white_grey))
+            .height(dimensionResource(R.dimen.size_51))
             .fillMaxWidth()
             .clickable { navigateToExit() }
     ) {
         Text(
             text = stringResource(R.string.exit),
             style = TextStyle(
-                fontSize = 14.sp,
-                color = Color(0xFF000000),
+                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                color = colorResource(R.color.black),
             ),
             modifier = Modifier
         )

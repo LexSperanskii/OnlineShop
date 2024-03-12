@@ -36,7 +36,7 @@ fun NavigationBottomAppBar(
         items.forEach { screen ->
             val isSelected = currentDestination?.hierarchy?.any {
                 //Для того чтобы подсвечивалось красным экран с которого мы перешли
-                if (previousRoute != "")
+                if (previousRoute.isNotEmpty())
                     previousRoute == screen.route
                 else
                     it.route == screen.route

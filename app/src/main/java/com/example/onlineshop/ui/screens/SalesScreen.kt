@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.example.onlineshop.R
 
 @Composable
 fun SalesScreen(
@@ -33,7 +34,7 @@ fun SalesScreen(
                 .padding(innerPadding)
         ) {
             Text(
-                text = "Акции",
+                text = stringResource(id = R.string.sales),
                 modifier = Modifier.align(Alignment.Center)
             )
         }

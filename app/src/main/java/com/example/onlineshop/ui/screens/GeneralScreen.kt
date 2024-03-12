@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.example.onlineshop.R
 
 @Composable
 fun GeneralScreen(
@@ -33,7 +34,7 @@ fun GeneralScreen(
                 .padding(innerPadding)
         ) {
             Text(
-                text = "Главная",
+                text = stringResource(id = R.string.general),
                 modifier = Modifier.align(Alignment.Center)
             )
         }

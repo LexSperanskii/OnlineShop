@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -38,13 +39,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.onlineshop.R
 import com.example.onlineshop.ui.AppViewModelProvider
-import com.example.onlineshop.ui.screens.TopAppBarNameOnly
 import com.example.onlineshop.ui.navigation.RegistrationDestination
+import com.example.onlineshop.ui.screens.TopAppBarNameOnly
 import com.example.onlineshop.ui.theme.OnlineShopTheme
 
 @Composable
@@ -189,9 +189,9 @@ fun RegistrationScreen(
             enabled = !registrationUiState.nameIsError &&
                     !registrationUiState.lastNameIsError &&
                     !registrationUiState.numberIsError &&
-                    registrationUiState.name != "" &&
-                    registrationUiState.lastName != "" &&
-                    registrationUiState.number != "",
+                    registrationUiState.name.isNotEmpty() &&
+                    registrationUiState.lastName.isNotEmpty() &&
+                    registrationUiState.number.isNotEmpty(),
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
@@ -221,8 +221,8 @@ fun RegistrationBody(
     Column(
         modifier = modifier
             .padding(
-                top = 113.dp,
-                bottom = 11.dp
+                top = dimensionResource(R.dimen.size_113),
+                bottom = dimensionResource(R.dimen.size_11)
             )
     ) {
         Column(
@@ -248,9 +248,9 @@ fun RegistrationBody(
             Column(
                 modifier = Modifier
                     .padding(
-                        top = dimensionResource(id = R.dimen.padding_extra_large),
-                        start = dimensionResource(id = R.dimen.padding_medium),
-                        end = dimensionResource(id = R.dimen.padding_medium)
+                        top = dimensionResource(id = R.dimen.size_32),
+                        start = dimensionResource(id = R.dimen.size_16),
+                        end = dimensionResource(id = R.dimen.size_16)
                     )
             ) {
                 Button(
@@ -258,19 +258,19 @@ fun RegistrationBody(
                     enabled = enabled,
                     shape = MaterialTheme.shapes.small,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFD62F89),
-                        disabledContainerColor = Color(0xFFFF8AC9)
+                        containerColor = colorResource(id = R.color.pink),
+                        disabledContainerColor = colorResource(id = R.color.light_pink)
                     ), // Задаем цвет фона кнопки
                     modifier = Modifier
-                        .height(51.dp)
-                        .width(343.dp)
+                        .height(dimensionResource(R.dimen.size_51))
+                        .width(dimensionResource(R.dimen.size_343))
 
                 ) {
                     Text(
                         text = stringResource(R.string.enter),
                         style = TextStyle(
-                            fontSize = 14.sp,
-                            color = Color(0xFFFFFFFF),
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            color = colorResource(id = R.color.white),
                         )
                     )
                 }
@@ -285,24 +285,24 @@ fun RegistrationBody(
             Text(
                 text = stringResource(R.string.commercial_conditions_one),
                 style = TextStyle(
-                    fontSize = 10.sp,
-                    lineHeight = 11.sp,
-                    color = Color(0xFFA0A1A3),
+                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                    lineHeight = dimensionResource(R.dimen.size_11).value.sp,
+                    color = colorResource(id = R.color.light_grey),
                 ),
                 modifier = Modifier
-                    .height(13.dp)
+                    .height(dimensionResource(R.dimen.size_13))
             )
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.size_2)))
             Text(
                 text = stringResource(R.string.commercial_conditions_two),
                 style = TextStyle(
-                    fontSize = 10.sp,
-                    lineHeight = 11.sp,
-                    color = Color(0xFFA0A1A3),
+                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                    lineHeight = dimensionResource(R.dimen.size_11).value.sp,
+                    color = colorResource(id = R.color.light_grey),
                 ),
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier
-                    .height(13.dp)
+                    .height(dimensionResource(R.dimen.size_13))
             )
         }
     }
@@ -325,21 +325,21 @@ fun RegistrationField(
         Column(
             modifier = Modifier
                 .padding(
-                    top = dimensionResource(id = R.dimen.padding_medium),
-                    start = dimensionResource(id = R.dimen.padding_medium),
-                    end = dimensionResource(id = R.dimen.padding_medium)
+                    top = dimensionResource(id = R.dimen.size_16),
+                    start = dimensionResource(id = R.dimen.size_16),
+                    end = dimensionResource(id = R.dimen.size_16)
                 )
         ) {
             TextField(
                 value = text,
                 textStyle = TextStyle(
-                    fontSize = 16.sp,
-                    color = Color(0xFF000000),
+                    fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                    color = colorResource(id = R.color.black),
                 ),
                 onValueChange = { onValueChange(it) },
                 singleLine = true,
                 trailingIcon = {
-                    if (text != "") {
+                    if (text.isNotEmpty()) {
                         IconButton(
                             onClick = onEraseItemClick,
                         ) {
@@ -347,8 +347,8 @@ fun RegistrationField(
                                 Icons.Filled.Close,
                                 contentDescription = stringResource(id = R.string.delete),
                                 modifier = modifier
-                                    .height(13.dp)
-                                    .width(13.dp)
+                                    .height(dimensionResource(R.dimen.size_13))
+                                    .width(dimensionResource(R.dimen.size_13))
                             )
                         }
                     }
@@ -357,8 +357,8 @@ fun RegistrationField(
                     Text(
                         text = placeholder,
                         style = TextStyle(
-                            fontSize = 16.sp,
-                            color = Color(0xFFA0A1A3),
+                            fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                            color = colorResource(id = R.color.light_grey),
                         )
                     )
                 },
@@ -381,10 +381,12 @@ fun RegistrationField(
                         }
                     },
                 modifier = Modifier
-                    .height(50.dp)
-                    .width(343.dp)
+                    .height(dimensionResource(R.dimen.size_50))
+                    .width(dimensionResource(R.dimen.size_343))
                     .border(
-                        width = if (isError) 2.dp else 0.dp,
+                        width = if (isError) dimensionResource(R.dimen.size_2) else dimensionResource(
+                            R.dimen.size_0
+                        ),
                         color = if (isError) Color.Red else Color.Transparent,
                         shape = MaterialTheme.shapes.small
                     )
@@ -409,30 +411,30 @@ fun NumberRegistrationField(
         Column(
             modifier = Modifier
                 .padding(
-                    top = dimensionResource(id = R.dimen.padding_medium),
-                    start = dimensionResource(id = R.dimen.padding_medium),
-                    end = dimensionResource(id = R.dimen.padding_medium)
+                    top = dimensionResource(id = R.dimen.size_16),
+                    start = dimensionResource(id = R.dimen.size_16),
+                    end = dimensionResource(id = R.dimen.size_16)
                 )
         ) {
             TextField(
                 value = text,
                 textStyle = TextStyle(
-                    fontSize = 16.sp,
-                    color = Color(0xFF000000),
+                    fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                    color = colorResource(id = R.color.black),
                 ),
                 onValueChange = { onValueChange(it.text) },
                 singleLine = true,
                 trailingIcon = {
-                    if (text.text != "") {
+                    if (text.text.isNotEmpty()) {
                         IconButton(
                             onClick = onEraseItemClick,
                         ) {
                             Icon(
                                 Icons.Filled.Close,
-                                contentDescription = "Delete",
+                                contentDescription = stringResource(id = R.string.delete),
                                 modifier = modifier
-                                    .height(13.dp)
-                                    .width(13.dp)
+                                    .height(dimensionResource(R.dimen.size_13))
+                                    .width(dimensionResource(R.dimen.size_13))
                             )
                         }
                     }
@@ -441,8 +443,8 @@ fun NumberRegistrationField(
                     Text(
                         text = placeholder,
                         style = TextStyle(
-                            fontSize = 16.sp,
-                            color = Color(0xFFA0A1A3),
+                            fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                            color = colorResource(id = R.color.light_grey),
                         )
                     )
                 },
@@ -465,10 +467,10 @@ fun NumberRegistrationField(
                         }
                     },
                 modifier = Modifier
-                    .height(50.dp)
-                    .width(343.dp)
+                    .height(dimensionResource(R.dimen.size_50))
+                    .width(dimensionResource(R.dimen.size_343))
                     .border(
-                        width = if (isError) 2.dp else 0.dp,
+                        width = if (isError) dimensionResource(R.dimen.size_2) else dimensionResource(R.dimen.size_0),
                         color = if (isError) Color.Red else Color.Transparent,
                         shape = MaterialTheme.shapes.small
                     )

@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.example.onlineshop.R
 
 @Composable
 fun CartScreen(
@@ -33,7 +34,7 @@ fun CartScreen(
                 .padding(innerPadding)
         ) {
             Text(
-                text = "Корзина",
+                text = stringResource(id = R.string.cart),
                 modifier = Modifier.align(Alignment.Center)
             )
         }

@@ -32,13 +32,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
@@ -104,49 +104,54 @@ fun ProductScreenBody(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
+            .padding(
+                top = dimensionResource(R.dimen.size_16),
+                start = dimensionResource(R.dimen.size_16),
+                end = dimensionResource(R.dimen.size_16),
+                bottom = dimensionResource(R.dimen.size_8)
+            )
             .verticalScroll(enabled = true, state = rememberScrollState())
     ) {
         PagerBox(
             productItem = productItem,
             onHeartSignClick = onHeartSignClick,
             onQuestionSignClick = onQuestionSignClick,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_16))
         )
         NamePart(
             productItem = productItem,
-            modifier = Modifier.padding(bottom = 10.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_10))
         )
         HorizontalDivider(
-            color = Color(0xFFF8F8F8),
-            thickness = 1.dp,
-            modifier = Modifier.padding(bottom = 10.dp)
+            color = colorResource(id = R.color.white_grey),
+            thickness = dimensionResource(R.dimen.size_1),
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_10))
         )
         RatingRow(
             productItem = productItem,
-            modifier = modifier.padding(bottom = 16.dp)
+            modifier = modifier.padding(bottom = dimensionResource(R.dimen.size_16))
         )
         PriceRow(
             productItem = productItem,
-            modifier = Modifier.padding(start = 5.dp, bottom = 24.dp)
+            modifier = Modifier.padding(start = dimensionResource(R.dimen.size_5), bottom = dimensionResource(R.dimen.size_24))
         )
         DescriptionPart(
             productItem = productItem,
             onBrandButtonClick = onBrandButtonClick,
             isShowInfo = isShowInfo,
             hideShowInfo = hideShowInfo,
-            modifier = Modifier.padding(bottom = 34.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_34))
         )
         CharacteristicsPart(
             productItem = productItem,
-            modifier = Modifier.padding(bottom = 34.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_34))
         )
         Compound(
             productItem = productItem,
             onCopyButtonClick = onCopyButtonClick,
             isShowCompound = isShowCompound,
             hideCompoundInfo = hideCompoundInfo,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_32))
         )
         AddToCartButton(
             productItem = productItem,
@@ -167,7 +172,7 @@ fun PagerBox(
     ) {
         PagerImage(
             productItem = productItem,
-            modifier = Modifier.height(294.dp)
+            modifier = Modifier.height(dimensionResource(R.dimen.size_294))
         )
         IconButton(
             onClick = {onHeartSignClick(productItem)},
@@ -178,8 +183,8 @@ fun PagerBox(
             Icon(
                 painter = if(productItem.isFavourite) painterResource(id = R.drawable.ic_heart_filled) else painterResource(id = R.drawable.ic_heart_outlined) ,
                 contentDescription = stringResource(id = R.string.add_to_favorites),
-                tint = Color(0xFFD62F89),
-                modifier = Modifier.size(24.dp)
+                tint = colorResource(id = R.color.pink),
+                modifier = Modifier.size(dimensionResource(R.dimen.size_24))
             )
         }
         IconButton(
@@ -191,8 +196,8 @@ fun PagerBox(
             Icon(
                 painter = painterResource(id = R.drawable.ic_question),
                 contentDescription = stringResource(R.string.info),
-                tint = Color(0xFFDEDEDE),
-                modifier = Modifier.size(24.dp)
+                tint = colorResource(id = R.color.light_light_gary),
+                modifier = Modifier.size(dimensionResource(R.dimen.size_24))
             )
         }
     }
@@ -206,18 +211,18 @@ fun NamePart(
         Text(
             text = productItem.productDescription.title,
             style = TextStyle(
-                fontSize = 16.sp,
-                color = Color(0xFFA0A1A3),
+                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                color = colorResource(id = R.color.light_grey),
             ),
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_8))
         )
         Text(
             text = productItem.productDescription.subtitle,
             style = TextStyle(
-                fontSize = 20.sp,
-                color = Color(0xFF000000),
+                fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                color = colorResource(id = R.color.black),
             ),
-            modifier = Modifier.padding(bottom = 10.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_10))
         )
         Text(
             text =  LocalContext.current.resources.getQuantityString  (
@@ -226,8 +231,8 @@ fun NamePart(
                 productItem.productDescription.available
             ),
             style = TextStyle(
-                fontSize = 12.sp,
-                color = Color(0xFFA0A1A3),
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                color = colorResource(id = R.color.light_grey),
             )
         )
     }
@@ -248,16 +253,16 @@ fun RatingRow(
             Text(
                 text = productItem.productDescription.feedback.rating.toString(),
                 style = TextStyle(
-                    fontSize = 12.sp,
-                    color = Color(0xFFA0A1A3),
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    color = colorResource(id = R.color.light_grey),
                 ),
-                modifier = Modifier.padding(start = 8.dp, end = 6.dp)
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.size_8), end = dimensionResource(R.dimen.size_6))
             )
             Box(
                 modifier = Modifier
                     .clip(CircleShape)
-                    .background(Color(0xFFA0A1A3))
-                    .size(2.dp)
+                    .background(colorResource(id = R.color.light_grey))
+                    .size(dimensionResource(R.dimen.size_2))
             )
             Text(
                 text =  LocalContext.current.resources.getQuantityString (
@@ -266,10 +271,10 @@ fun RatingRow(
                     productItem.productDescription.feedback.count
                 ),
                 style = TextStyle(
-                    fontSize = 12.sp,
-                    color = Color(0xFFA0A1A3),
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    color = colorResource(id = R.color.light_grey),
                 ),
-                modifier = Modifier.padding(start = 6.dp)
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.size_6))
             )
         }
     }
@@ -286,33 +291,33 @@ fun PriceRow(
         Text(
             text = stringResource(R.string.price_with_sign, productItem.productDescription.price.priceWithDiscount, productItem.productDescription.price.unit ),
             style = TextStyle(
-                fontSize = 24.sp,
-                color = Color(0xFF000000),
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                color = colorResource(id = R.color.black),
             ),
             modifier = Modifier
         )
         Text(
             text = stringResource(R.string.price_with_sign,productItem.productDescription.price.price, productItem.productDescription.price.unit ),
             style = TextStyle(
-                fontSize = 12.sp,
-                color = Color(0xFFA0A1A3),
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                color = colorResource(id = R.color.light_grey),
                 textDecoration = TextDecoration.LineThrough
             ),
-            modifier = Modifier.padding(horizontal = 11.dp)
+            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.size_11))
         )
         Box(
             contentAlignment = Alignment.Center ,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.extraSmall)
-                .background(Color(0xFFD62F89))
-                .height(16.dp)
-                .width(34.dp)
+                .background(colorResource(id = R.color.pink))
+                .height(dimensionResource(R.dimen.size_16))
+                .width(dimensionResource(R.dimen.size_34))
         ){
             Text(
                 text = stringResource(R.string.discount, productItem.productDescription.price.discount),
                 style = TextStyle(
-                    fontSize = 9.sp,
-                    color = Color(0xFFFFFFFF),
+                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                    color = colorResource(id = R.color.white),
                 )
             )
         }
@@ -330,10 +335,10 @@ fun DescriptionPart(
         Text(
             text = stringResource(R.string.description),
             style = TextStyle(
-                fontSize = 16.sp,
-                color = Color(0xFF000000),
+                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                color = colorResource(id = R.color.black),
             ),
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_16))
         )
         if (isShowInfo){
             Box(
@@ -341,48 +346,48 @@ fun DescriptionPart(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.extraSmall)
                     .wrapContentSize()
-                    .background(Color(0xFFF8F8F8))
+                    .background(colorResource(id = R.color.white_grey))
                     .clickable { onBrandButtonClick() }
             ){
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp)
+                        .height(dimensionResource(R.dimen.size_48))
                 ) {
                     Text(
                         text = productItem.productDescription.title,
                         style = TextStyle(
-                            fontSize = 14.sp,
-                            color = Color(0xFF000000),
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            color = colorResource(id = R.color.black),
                         ),
-                        modifier = Modifier.padding(start = 9.dp)
+                        modifier = Modifier.padding(start = dimensionResource(R.dimen.size_9))
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(
                         Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = stringResource(R.string.arrow_forward),
-                        tint = Color(0xFF000000),
+                        tint = colorResource(id = R.color.black),
                         modifier = Modifier
-                            .size(24.dp)
-                            .padding(end = 12.dp),
+                            .size(dimensionResource(R.dimen.size_24))
+                            .padding(end = dimensionResource(R.dimen.size_12)),
                     )
                 }
             }
             Text(
                 text = productItem.productDescription.description,
                 style = TextStyle(
-                    fontSize = 12.sp,
-                    color = Color(0xFF3E3E3E),
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    color = colorResource(id = R.color.grey),
                 ),
-                modifier = Modifier.padding(top = 8.dp, bottom = 10.dp)
+                modifier = Modifier.padding(top = dimensionResource(R.dimen.size_8), bottom = dimensionResource(R.dimen.size_10))
             )
         }
         Text(
             text = if(isShowInfo)stringResource(R.string.hide) else stringResource(R.string.show),
             style = TextStyle(
-                fontSize = 12.sp,
-                color = Color(0xFFA0A1A3),
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                color = colorResource(id = R.color.light_grey),
             ),
             modifier = Modifier
                 .clickable { hideShowInfo() }
@@ -398,37 +403,37 @@ fun CharacteristicsPart(
         Text(
             text = stringResource(R.string.characteristics),
             style = TextStyle(
-                fontSize = 16.sp,
-                color = Color(0xFF000000),
+                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                color = colorResource(id = R.color.black),
             ),
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_16))
         )
         productItem.productDescription.info.forEach { item ->
             Row(
                 verticalAlignment = Alignment.Bottom,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(31.dp)
+                    .height(dimensionResource(R.dimen.size_31))
             ) {
                 Text(
                     text = item.title,
                     style = TextStyle(
-                        fontSize = 12.sp,
-                        color = Color(0xFF3E3E3E),
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        color = colorResource(id = R.color.grey),
                     )
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = item.value,
                     style = TextStyle(
-                        fontSize = 12.sp,
-                        color = Color(0xFF3E3E3E),
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        color = colorResource(id = R.color.grey),
                     )
                 )
             }
             HorizontalDivider(
-                color = Color(0xFFDEDEDE),
-                thickness = 1.dp,
+                color = colorResource(id = R.color.light_light_gary),
+                thickness = dimensionResource(R.dimen.size_1),
                 modifier = Modifier
             )
         }
@@ -445,13 +450,13 @@ fun Compound(
     Column(modifier = modifier) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_16))
         ){
             Text(
                 text = stringResource(R.string.compound),
                 style = TextStyle(
-                    fontSize = 16.sp,
-                    color = Color(0xFF000000),
+                    fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                    color = colorResource(id = R.color.black),
                 )
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -463,8 +468,8 @@ fun Compound(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_copy),
                     contentDescription = stringResource(R.string.copy),
-                    tint = Color(0xFFA0A1A3),
-                    modifier = Modifier.size(24.dp)
+                    tint = colorResource(id = R.color.light_grey),
+                    modifier = Modifier.size(dimensionResource(R.dimen.size_24))
                 )
             }
         }
@@ -473,16 +478,16 @@ fun Compound(
             maxLines = if (isShowCompound) Int.MAX_VALUE else 2,
             overflow = TextOverflow.Ellipsis,
             style = TextStyle(
-                fontSize = 12.sp,
-                color = Color(0xFF3E3E3E),
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                color = colorResource(id = R.color.grey),
             ),
-            modifier = Modifier.padding(bottom = 10.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.size_10))
         )
         Text(
             text = if(isShowCompound)stringResource(R.string.hide) else stringResource(R.string.show),
             style = TextStyle(
-                fontSize = 12.sp,
-                color = Color(0xFFA0A1A3),
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                color = colorResource(id = R.color.light_grey),
             ),
             modifier = Modifier
                 .clickable { hideCompoundInfo() }
@@ -500,38 +505,38 @@ fun AddToCartButton(
             contentAlignment = Alignment.Center ,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.small)
-                .background(Color(0xFFD62F89))
-                .height(51.dp)
+                .background(colorResource(id = R.color.pink))
+                .height(dimensionResource(R.dimen.size_51))
                 .fillMaxWidth()
                 .clickable { addToCartButton() }
         ){
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.size_16))
             ) {
                 Text(
                     text = stringResource(R.string.price_with_sign, productItem.productDescription.price.priceWithDiscount, productItem.productDescription.price.unit ),
                     style = TextStyle(
-                        fontSize = 14.sp,
-                        color = Color(0xFFFFFFFF),
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        color = colorResource(id = R.color.white),
                     ),
                     modifier = Modifier
                 )
                 Text(
                     text = stringResource(R.string.price_with_sign,productItem.productDescription.price.price, productItem.productDescription.price.unit ),
                     style = TextStyle(
-                        fontSize = 10.sp,
-                        color = Color(0xFFFFFFFF),
+                        fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                        color = colorResource(id = R.color.white),
                         textDecoration = TextDecoration.LineThrough
                     ),
-                    modifier = Modifier.padding(start = 9.dp)
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.size_9))
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = stringResource(R.string.add_to_cart),
                     style = TextStyle(
-                        fontSize = 14.sp,
-                        color = Color(0xFFFFFFFF),
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        color = colorResource(id = R.color.white),
                     )
                 )
             }
@@ -543,7 +548,7 @@ fun RatingBar(
     modifier: Modifier = Modifier,
     rating: Double = 0.0,
     stars: Int = 5,
-    starsColor: Color = Color(0xFFF9A249)
+    starsColor: Color = colorResource(id = R.color.yellow)
 ) {
     val filledStars = kotlin.math.floor(rating).toInt()
     val unfilledStars = (stars - kotlin.math.ceil(rating)).toInt()

@@ -47,6 +47,7 @@
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
     <string name="phone_number">Номер телефона</string>
+    <string name="brands">Бренды</string>
     <plurals name="available_products">
         <item quantity="one">Доступно для заказа %d штука</item>
         <item quantity="few">Доступно для заказа %d штуки</item>

@@ -47,6 +47,7 @@
     <string name="name">Name</string>
     <string name="surname">Surname</string>
     <string name="phone_number">Phone number</string>
+    <string name="brands">Brends</string>
     <plurals name="available_products">
         <item quantity="zero">Available to order %d items</item>
         <item quantity="one">Available to order %d item</item>

@@ -22,13 +22,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.onlineshop.R
 import com.example.onlineshop.model.CommodityItem
 import com.example.onlineshop.ui.AppViewModelProvider
 import com.example.onlineshop.ui.screens.NavigationBottomAppBar
@@ -101,19 +101,19 @@ fun FavoritesScreenBodyWithTabs(
     ) {
         TabRow(
             selectedTabIndex = selectedTabIndex.value,
-            containerColor = Color(0xFFF8F8F8),
+            containerColor = colorResource(id = R.color.white_grey),
             indicator = {},
             divider = {},
             modifier = Modifier
                 .clip(MaterialTheme.shapes.small)
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = dimensionResource(R.dimen.size_16))
         ) {
             FavoriteScreenTabs.values().forEachIndexed { index, currentTab ->
                 Tab(
                     selected = selectedTabIndex.value == index,
-                    selectedContentColor = Color(0xFF000000),
-                    unselectedContentColor = Color(0xFFA0A1A3),
+                    selectedContentColor = colorResource(id = R.color.black),
+                    unselectedContentColor = colorResource(id = R.color.light_grey),
                     onClick = {
                         //для анимации прокрутки
                         scope.launch {
@@ -124,18 +124,16 @@ fun FavoritesScreenBodyWithTabs(
                         Text(
                             text = currentTab.text,
                             style = TextStyle(
-                                fontSize = 16.sp,
+                                fontSize = MaterialTheme.typography.titleSmall.fontSize,
                             ),
                             modifier = Modifier
                         )
                     },
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(dimensionResource(R.dimen.size_4))
                         .clip(MaterialTheme.shapes.small)
                         .background(
-                            if (selectedTabIndex.value == index) Color(0xFFFFFFFF) else Color(
-                                0xFFF8F8F8
-                            )
+                            if (selectedTabIndex.value == index) colorResource(id = R.color.white) else colorResource(id = R.color.white_grey)
                         )
 
                 )
@@ -200,7 +198,7 @@ fun BrandsScreen(
             .fillMaxSize()
     ) {
         Text(
-            text = "Бренды",
+            text = stringResource(R.string.brands),
             modifier = Modifier
         )
     }
