@@ -10,7 +10,7 @@ data class UserModel(
     val phone: String,
 )
 @Entity(tableName = "users")
-data class  User(
+data class  UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,

@@ -19,7 +19,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
-
+enum class SortType(val sortType: String) {
+    POPULARITY("По популярности"),
+    PRICE_DESCENDING("По уменьшению цены"),
+    PRICE_ASCENDING("По возрастанию цены")
+}
 sealed interface CatalogScreenNetworkUiState {
     object Success : CatalogScreenNetworkUiState
     object Error : CatalogScreenNetworkUiState
@@ -27,8 +31,8 @@ sealed interface CatalogScreenNetworkUiState {
 }
 data class CatalogScreenUiState(
     val isExpanded : Boolean = false,
-    val sortType : String = "По популярности",
-    val listOfTypes : List<String> = listOf("По популярности" , "По уменьшению цены" , "По возрастанию цены"),
+    val sortType : String = SortType.POPULARITY.sortType,
+    val listOfTypes : List<String> = SortType.values().map { it.sortType },
     val listOfTags : List<String> = listOf("Смотреть все", "Лицо", "Тело", "Загар", "Маски"),
     val currentTag : String = "Смотреть все",
     val listOfProductsOriginal: List<CommodityItem> = listOf(),
@@ -253,33 +257,45 @@ class CatalogProductScreenViewModel(
         }
     }
     private fun sortItems(sortType: String) {
-        when (sortType) {
-            "По популярности" -> {
-                _catalogScreenUiState.update { it ->
-                    it.copy(
-                        listOfProducts = it.listOfProducts.sortedByDescending {
-                            it.productDescription.feedback?.rating ?: 0.0
-                        }
-                    )
+        try {
+            when (enumValueOf<SortType>(sortType)) {
+                SortType.POPULARITY -> {
+                    _catalogScreenUiState.update { it ->
+                        it.copy(
+                            listOfProducts = it.listOfProducts.sortedByDescending {
+                                it.productDescription.feedback?.rating ?: 0.0
+                            }
+                        )
+                    }
+                }
+
+                SortType.PRICE_DESCENDING -> {
+                    _catalogScreenUiState.update { it ->
+                        it.copy(
+                            listOfProducts = it.listOfProducts.sortedByDescending {
+                                it.productDescription.price.priceWithDiscount.toInt()
+                            }
+                        )
+                    }
+                }
+
+                SortType.PRICE_ASCENDING -> {
+                    _catalogScreenUiState.update { it ->
+                        it.copy(
+                            listOfProducts = it.listOfProducts.sortedBy {
+                                it.productDescription.price.priceWithDiscount.toInt()
+                            }
+                        )
+                    }
                 }
             }
-            "По уменьшению цены" -> {
-                _catalogScreenUiState.update { it ->
-                    it.copy(
-                        listOfProducts = it.listOfProducts.sortedByDescending {
-                            it.productDescription.price.priceWithDiscount.toInt()
-                        }
-                    )
-                }
-            }
-            "По возрастанию цены" -> {
-                _catalogScreenUiState.update { it ->
-                    it.copy(
-                        listOfProducts  = it.listOfProducts.sortedBy {
-                            it.productDescription.price.priceWithDiscount.toInt()
-                        }
-                    )
-                }
+        } catch (e: IllegalArgumentException) {
+            _catalogScreenUiState.update { it ->
+                it.copy(
+                    listOfProducts = it.listOfProducts.sortedByDescending {
+                        it.productDescription.feedback?.rating ?: 0.0
+                    }
+                )
             }
         }
     }

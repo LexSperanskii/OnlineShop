@@ -4,7 +4,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.onlineshop.data.UsersRepository
-import com.example.onlineshop.model.User
+import com.example.onlineshop.model.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -157,12 +157,12 @@ class RegistrationScreenVIewModel(private val usersRepository: UsersRepository):
     }
     fun saveUser() {
         viewModelScope.launch(Dispatchers.IO) {
-            usersRepository.insertUser(uiState.value.toUser())
+            usersRepository.insertUser(uiState.value.toUserModel())
         }
     }
 }
 
-fun RegistrationScreenUiState.toUser(): User = User(
+fun RegistrationScreenUiState.toUserModel(): UserModel = UserModel(
     name = name,
     lastName = lastName,
     phone = number

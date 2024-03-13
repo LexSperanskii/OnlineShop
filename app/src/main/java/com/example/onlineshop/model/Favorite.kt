@@ -8,7 +8,7 @@ data class FavoriteModel(
     val id: String = "",
 )
 @Entity(tableName = "favorite")
-data class  Favorite(
+data class  FavoriteEntity(
     @PrimaryKey(autoGenerate = false)
     val id: String = "",
 )

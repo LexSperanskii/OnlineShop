@@ -4,15 +4,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.onlineshop.model.User
+import com.example.onlineshop.model.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(user: User)
+    suspend fun insert(user: UserEntity)
     @Query("SELECT * FROM users ORDER BY id DESC LIMIT 1")
-    suspend fun getUser() : User?
+    suspend fun getUser() : UserEntity?
     @Query("DELETE FROM users")
     suspend fun deleteAllUsers()
 

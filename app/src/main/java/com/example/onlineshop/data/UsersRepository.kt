@@ -1,11 +1,11 @@
 package com.example.onlineshop.data
 
-import com.example.onlineshop.model.User
+import com.example.onlineshop.model.UserModel
 import kotlinx.coroutines.flow.Flow
 
 interface UsersRepository {
-    suspend fun insertUser(user: User)
-    suspend fun getUser(): User?
+    suspend fun insertUser(user: UserModel)
+    suspend fun getUser(): UserModel?
     suspend fun deleteAllUsers()
 
     suspend fun insertInFavorite(id: String)

@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.onlineshop.model.Favorite
-import com.example.onlineshop.model.User
+import com.example.onlineshop.model.FavoriteEntity
+import com.example.onlineshop.model.UserEntity
 
-@Database(entities = [User::class, Favorite::class], version = 1, exportSchema = false)
+@Database(entities = [UserEntity::class, FavoriteEntity::class], version = 1, exportSchema = false)
 abstract class UsersDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
