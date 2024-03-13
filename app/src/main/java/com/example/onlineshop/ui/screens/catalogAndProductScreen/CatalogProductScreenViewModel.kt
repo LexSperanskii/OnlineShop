@@ -257,45 +257,45 @@ class CatalogProductScreenViewModel(
         }
     }
     private fun sortItems(sortType: String) {
-        try {
-            when (enumValueOf<SortType>(sortType)) {
-                SortType.POPULARITY -> {
-                    _catalogScreenUiState.update { it ->
-                        it.copy(
-                            listOfProducts = it.listOfProducts.sortedByDescending {
-                                it.productDescription.feedback?.rating ?: 0.0
-                            }
-                        )
-                    }
-                }
-
-                SortType.PRICE_DESCENDING -> {
-                    _catalogScreenUiState.update { it ->
-                        it.copy(
-                            listOfProducts = it.listOfProducts.sortedByDescending {
-                                it.productDescription.price.priceWithDiscount.toInt()
-                            }
-                        )
-                    }
-                }
-
-                SortType.PRICE_ASCENDING -> {
-                    _catalogScreenUiState.update { it ->
-                        it.copy(
-                            listOfProducts = it.listOfProducts.sortedBy {
-                                it.productDescription.price.priceWithDiscount.toInt()
-                            }
-                        )
-                    }
+        when (SortType.values().find { it.sortType == sortType }) {
+            SortType.POPULARITY -> {
+                _catalogScreenUiState.update { it ->
+                    it.copy(
+                        listOfProducts = it.listOfProducts.sortedByDescending {
+                            it.productDescription.feedback?.rating ?: 0.0
+                        }
+                    )
                 }
             }
-        } catch (e: IllegalArgumentException) {
-            _catalogScreenUiState.update { it ->
-                it.copy(
-                    listOfProducts = it.listOfProducts.sortedByDescending {
-                        it.productDescription.feedback?.rating ?: 0.0
-                    }
-                )
+
+            SortType.PRICE_DESCENDING -> {
+                _catalogScreenUiState.update { it ->
+                    it.copy(
+                        listOfProducts = it.listOfProducts.sortedByDescending {
+                            it.productDescription.price.priceWithDiscount.toInt()
+                        }
+                    )
+                }
+            }
+
+            SortType.PRICE_ASCENDING -> {
+                _catalogScreenUiState.update { it ->
+                    it.copy(
+                        listOfProducts = it.listOfProducts.sortedBy {
+                            it.productDescription.price.priceWithDiscount.toInt()
+                        }
+                    )
+                }
+            }
+
+            else -> {
+                _catalogScreenUiState.update { it ->
+                    it.copy(
+                        listOfProducts = it.listOfProducts.sortedByDescending {
+                            it.productDescription.feedback?.rating ?: 0.0
+                        }
+                    )
+                }
             }
         }
     }
